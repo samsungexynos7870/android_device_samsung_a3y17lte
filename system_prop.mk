@@ -68,6 +68,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
 
+# Charger
+PRODUCT_PRODUCT_PROPERTIES += \
+    ro.charger.enable_suspend=true
+
 # FIFO UI scheduling
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.use_fifo_ui=1
