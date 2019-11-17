@@ -1,0 +1,119 @@
+#
+# Copyright (C) 2019 The LineageOS Project
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+
+# ANT+
+vendor/lib/com.qualcomm.qti.ant@1.0.so
+vendor/lib/libantradio.so
+vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so
+vendor/lib64/com.qualcomm.qti.ant@1.0.so
+vendor/lib64/libantradio.so
+vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
+
+# Audio
+vendor/etc/Tfa9896.cnt
+vendor/lib/libtfa98xx.so
+
+# Bluetooth
+vendor/etc/firmware/nvm_tlv_tf_1.1.bin
+vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
+vendor/bin/hw/android.hardware.bluetooth@1.0-service
+vendor/etc/init/android.hardware.bluetooth@1.0-service.rc
+vendor/lib/hw/android.hardware.bluetooth@1.0-impl.so
+vendor/lib/vendor.samsung.hardware.bluetooth@1.0.so
+vendor/lib64/hw/android.hardware.bluetooth@1.0-impl.so
+vendor/lib64/vendor.samsung.hardware.bluetooth@1.0.so
+
+# Camera
+vendor/firmware/fimc_is_lib.bin
+vendor/firmware/mfc_fw.bin
+vendor/firmware/setfile_imx219.bin
+vendor/firmware/setfile_imx258.bin
+vendor/lib/libexynoscamera.so
+vendor/lib/libexynoscamera3.so
+vendor/lib/libhwjpeg.so
+
+# Fingerprint
+vendor/bin/hw/android.hardware.biometrics.fingerprint@2.1-service.samsung
+vendor/lib/libbauthserver.so
+vendor/lib/libbauthtzcommon.so
+vendor/lib/libegis_fp_normal_sensor_test.so
+vendor/lib/libgf_in_system_lib.so
+vendor/lib/libqfp_sensortest.so
+vendor/lib/libsynaFpSensorTestNwd.so
+
+# Fingerprint - mcRegistry
+vendor/app/mcRegistry/00060308060501020000000000000000.tlbin
+vendor/app/mcRegistry/07010000000000000000000000000000.tlbin
+vendor/app/mcRegistry/07060000000000000000000000000000.tlbin
+vendor/app/mcRegistry/08130000000000000000000000000000.tlbin
+vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin
+vendor/app/mcRegistry/ffffffff000000000000000000000005.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000000a.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000000b.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000000c.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000000d.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000000f.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000013.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000016.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000017.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000019.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000002e.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000002f.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000030.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000038.tlbin
+vendor/app/mcRegistry/ffffffff00000000000000000000003e.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000041.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000045.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000059.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000060.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin
+vendor/app/mcRegistry/ffffffff000000000000000000000077.tlbin
+vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin
+vendor/app/mcRegistry/ffffffffd0000000000000000000000e.tlbin
+vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin
+vendor/app/mcRegistry/ffffffffd00000000000000000000062.tlbin
+vendor/bin/mcDriverDaemon
+vendor/lib/libMcClient.so
+vendor/lib/libMcRegistry.so
+
+# NFC
+vendor/firmware/nfc/sec_s3nrn81_firmware.f
+vendor/firmware/nfc/sec_s3nrn81_firmware.fl
+vendor/etc/nfc/sec_s3nrn81_rfreg.f
+vendor/etc/nfc/sec_s3nrn81_rfreg.fl
+vendor/etc/libnfc-nci.conf
+vendor/etc/libnfc-sec.conf
+vendor/etc/libnfc-sec-hal.conf
+vendor/etc/libnfc-sec-vendor.conf
+vendor/bin/hw/sec.android.hardware.nfc@1.1-service
+vendor/etc/init/sec.android.hardware.nfc@1.1-service.rc
+vendor/lib64/nfc_nci_sec.so
+vendor/lib64/vendor.samsung.hardware.nfc@1.1.so
+
+# Sensors
+vendor/bin/hw/android.hardware.sensors@1.0-service
+vendor/etc/init/android.hardware.sensors@1.0-service.rc
+vendor/lib/hw/sensors.universal7870.so
+
+# Wifi
+vendor/firmware/bdwlan30.bin
+vendor/firmware/bdwlan32.bin
+vendor/firmware/Data.msc
+vendor/firmware/otp30.bin
+vendor/firmware/qwlan30.bin
+vendor/firmware/qwlan30_ibss.bin
+vendor/firmware/utf30.bin
+vendor/firmware/utfbd30.bin
+vendor/firmware/utfbd32.bin
