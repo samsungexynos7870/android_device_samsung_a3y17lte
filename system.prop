@@ -1,0 +1,8 @@
+ro.hardware=samsungexynos7870
+ro.arch=exynos7870
+ro.chipname=exynos7870
+ro.product.brand=samsung
+ro.product.name=a3y17lte
+ro.product.device=a3y17lte
+ro.build.product=a3y17lte
+ro.treble.enabled=true
