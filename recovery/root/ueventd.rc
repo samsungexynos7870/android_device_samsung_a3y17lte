@@ -1,0 +1,297 @@
+subsystem adf
+    devname uevent_devname
+
+subsystem graphics
+    devname uevent_devpath
+    dirname /dev/graphics
+
+subsystem drm
+    devname uevent_devpath
+    dirname /dev/dri
+
+subsystem oncrpc
+    devname uevent_devpath
+    dirname /dev/oncrpc
+
+subsystem adsp
+    devname uevent_devpath
+    dirname /dev/adsp
+
+subsystem msm_camera
+    devname uevent_devpath
+    dirname /dev/msm_camera
+
+subsystem input
+    devname uevent_devpath
+    dirname /dev/input
+
+subsystem mtd
+    devname uevent_devpath
+    dirname /dev/mtd
+
+subsystem sound
+    devname uevent_devpath
+    dirname /dev/snd
+
+# ueventd can only set permissions on device nodes and their associated
+# sysfs attributes, not on arbitrary paths.
+#
+# format for /dev rules: devname mode uid gid
+# format for /sys rules: nodename attr mode uid gid
+# shortcut: "mtd@NN" expands to "/dev/mtd/mtdNN"
+
+/dev/null                 0666   root       root
+/dev/zero                 0666   root       root
+/dev/full                 0666   root       root
+/dev/ptmx                 0666   root       root
+/dev/tty                  0666   root       root
+/dev/random               0666   root       root
+/dev/urandom              0666   root       root
+# Make HW RNG readable by group system to let EntropyMixer read it.
+/dev/hw_random            0440   root       system
+/dev/ashmem               0666   root       root
+/dev/binder               0666   root       root
+/dev/hwbinder             0666   root       root
+/dev/vndbinder            0666   root       root
+/dev/ovr*                 0664   root       system
+/dev/tvr*                 0664   root       system
+
+# Anyone can read the logs, but if they're not in the "logs"
+# group, then they'll only see log entries for their UID.
+/dev/log/*                0666   root       log
+/dev/pmsg0                0222   root       log
+
+# the msm hw3d client device node is world writable/readable.
+/dev/msm_hw3dc            0666   root       root
+
+# gpu driver for adreno200 is globally accessible
+/dev/kgsl                 0666   root       root
+
+# kms driver for drm based gpu
+/dev/dri/*                0666   root       graphics
+
+# these should not be world writable
+/dev/diag                 0660   radio      radio
+/dev/diag_arm9            0660   radio      radio
+/dev/ttyMSM0              0600   bluetooth  bluetooth
+/dev/uhid                 0660   system     bluetooth
+/dev/uinput               0660   system     bluetooth
+/dev/alarm                0664   system     radio
+/dev/power_on_alarm       0660   system     radio
+/dev/rtc0                 0640   system     system
+/dev/tty0                 0660   root       system
+/dev/graphics/*           0660   root       graphics
+/dev/msm_hw3dm            0660   system     graphics
+/dev/input/*              0660   root       input
+/dev/eac                  0660   root       audio
+/dev/cam                  0660   root       camera
+/dev/pmem                 0660   system     graphics
+/dev/pmem_adsp*           0660   system     audio
+/dev/pmem_camera*         0660   system     camera
+/dev/oncrpc/*             0660   root       system
+/dev/adsp/*               0660   system     audio
+/dev/snd/*                0660   system     audio
+/dev/mt9t013              0660   system     system
+/dev/msm_camera/*         0660   system     system
+/dev/akm8976_daemon       0640   compass    system
+/dev/akm8976_aot          0640   compass    system
+/dev/akm8973_daemon       0640   compass    system
+/dev/akm8973_aot          0640   compass    system
+/dev/bma150               0640   compass    system
+/dev/cm3602               0640   compass    system
+/dev/akm8976_pffd         0640   compass    system
+/dev/lightsensor          0640   system     system
+/dev/msm_pcm_out*         0660   system     audio
+/dev/msm_pcm_in*          0660   system     audio
+/dev/msm_pcm_ctl*         0660   system     audio
+/dev/msm_snd*             0660   system     audio
+/dev/msm_mp3*             0660   system     audio
+/dev/audience_a1026*      0660   system     audio
+/dev/tpa2018d1*           0660   system     audio
+/dev/msm_audpre           0660   system     audio
+/dev/msm_audio_ctl        0660   system     audio
+/dev/htc-acoustic         0660   system     audio
+/dev/vdec                 0660   system     audio
+/dev/q6venc               0660   system     audio
+/dev/snd/dsp              0660   system     audio
+/dev/snd/dsp1             0660   system     audio
+/dev/snd/mixer            0660   system     audio
+/dev/smd0                 0640   radio      radio
+/dev/qmi                  0640   radio      radio
+/dev/qmi0                 0640   radio      radio
+/dev/qmi1                 0640   radio      radio
+/dev/qmi2                 0640   radio      radio
+/dev/bus/usb/*            0660   root       usb
+/dev/mtp_usb              0660   root       mtp
+/dev/usb_accessory        0660   root       usb
+/dev/tun                  0660   system     vpn
+
+# CDMA radio interface MUX
+/dev/ts0710mux*           0640   radio      radio
+/dev/ppp                  0660   radio      vpn
+
+# sysfs properties
+/sys/devices/platform/trusty.*      trusty_version        0440  root   log
+/sys/devices/virtual/input/input*   enable      0660  root   input
+/sys/devices/virtual/input/input*   poll_delay  0660  root   input
+/sys/devices/virtual/usb_composite/*   enable      0664  root   system
+/sys/devices/system/cpu/cpu*   cpufreq/scaling_max_freq   0664  system system
+/sys/devices/system/cpu/cpu*   cpufreq/scaling_min_freq   0664  system system
+
+# DVB API device nodes
+/dev/dvb*                 0660   root       system
+
+# uevent.samsungexynos7870.rc
+/dev/mali0                0666   system     system
+/dev/ion                  0666   system     system
+/dev/ump                  0666   system     graphics
+/dev/exynos-mem           0660   system     graphics
+/dev/video0               0660   system     camera
+/dev/video1               0660   system     camera
+/dev/video2               0660   system     camera
+/dev/video3               0660   system     camera
+/dev/video20              0660   system     system
+# media0 is used for GSC, DECON, etc
+/dev/media0               0660   system     camera
+# media1 is used for DECON Ext WB
+/dev/media1               0660   system     graphics
+# Various devices use the v4l-subdev interface
+# We declare all such nodes simultaneously here
+/dev/v4l-subdev0          0660   system     camera
+/dev/v4l-subdev1          0660   system     camera
+/dev/v4l-subdev2          0660   system     camera
+/dev/v4l-subdev3          0660   system     camera
+/dev/v4l-subdev4          0660   system     camera
+/dev/v4l-subdev5          0660   system     camera
+/dev/v4l-subdev6          0660   system     camera
+/dev/v4l-subdev7          0660   system     camera
+/dev/v4l-subdev8          0660   system     camera
+/dev/v4l-subdev9          0660   system     camera
+/dev/v4l-subdev10         0660   system     camera
+/dev/v4l-subdev11         0660   system     camera
+/dev/v4l-subdev12         0660   system     camera
+/dev/v4l-subdev13         0660   system     camera
+/dev/v4l-subdev14         0660   system     camera
+/dev/v4l-subdev15         0660   system     camera
+/dev/v4l-subdev16         0660   system     camera
+/dev/v4l-subdev17         0660   system     camera
+/dev/v4l-subdev18         0660   system     camera
+/dev/v4l-subdev19         0660   system     camera
+# v4l-subdev20 is used for DECON Ext WB
+/dev/v4l-subdev20         0660   system     graphics
+/dev/v4l-subdev21         0660   system     graphics
+
+# gscalers
+/dev/video23              0660   media      graphics
+/dev/video26              0660   media      graphics
+/dev/video24              0660   media      graphics
+/dev/video27              0660   media      graphics
+/dev/video29              0660   media      graphics
+/dev/video30              0660   media      graphics
+# video31 is used for DECON Ext WB
+/dev/video31              0660   media      graphics
+
+# mscalers
+/dev/video50              0660   mediacodec drmrpc
+/dev/video51              0660   media      graphics
+/dev/m2m1shot_scaler0     0660   mediacodec drmrpc
+/dev/m2m1shot_scaler1     0660   cameraserver   cameraserver
+
+/dev/video55              0666   system     graphics
+/dev/fimg2d               0666   system     graphics
+/dev/i2c-2                0660   system     system
+/dev/HPD                  0660   system     system
+
+# mfc
+/dev/video6               0660   mediacodec mediadrm
+/dev/video7               0660   mediacodec mediadrm
+/dev/video8               0660   mediacodec mediadrm
+/dev/video9               0660   mediacodec mediadrm
+
+# camera
+/dev/video100             0660   cameraserver   camera
+/dev/video101             0660   cameraserver   camera
+/dev/video102             0660   cameraserver   camera
+/dev/video103             0660   cameraserver   camera
+/dev/video104             0660   cameraserver   camera
+/dev/video109             0660   cameraserver   camera
+/dev/video110             0660   cameraserver   camera
+/dev/video111             0660   cameraserver   camera
+/dev/video112             0660   cameraserver   camera
+/dev/video120             0660   cameraserver   camera
+/dev/video121             0660   cameraserver   camera
+/dev/video122             0660   cameraserver   camera
+/dev/video130             0660   cameraserver   camera
+/dev/video131             0660   cameraserver   camera
+/dev/video132             0660   cameraserver   camera
+/dev/video140             0660   cameraserver   camera
+/dev/video141             0660   cameraserver   camera
+/dev/video142             0660   cameraserver   camera
+/dev/video150             0660   cameraserver   camera
+/dev/video151             0660   cameraserver   camera
+/dev/video152             0660   cameraserver   camera
+/dev/video160             0660   cameraserver   camera
+/dev/media2               0660   media      media
+
+# hevc
+/dev/video10              0660   media      media
+/dev/video11              0660   media      media
+
+# jpeg
+/dev/video12              0660   cameraserver   media
+
+# audio
+/dev/seiren               0660   system     audio
+
+# MobiCore
+/dev/mobicore             0600   system     system
+/dev/mobicore-user        0666   radio      system
+
+# Secure MEM driver
+/dev/s5p-smem             0660   system     system
+
+# Fingerprint Sensor
+/dev/vfsspi               0660   system     system
+/dev/esfp0                0660   system     system
+/dev/goodix_fp            0660   system     system
+
+# cbd modem block
+/dev/block/mmcblk0p5     0400  radio   system
+
+# for DM tools
+/dev/umts_dm0             0660   radio      radio
+/dev/umts_router          0660   radio      radio
+
+# SIPC RIL
+/dev/umts*            	  0660   system     radio
+/dev/ipc*                 0660   system     radio
+/dev/umts_csd             0660   system     loop_radio
+/dev/smd4                 0660   system     radio
+/dev/ramdump_memshare     0660   system     radio
+/dev/umts_ciq*            0660   system     bridge_rw
+
+# interactive governor parameters
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/timer_rate                  0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/timer_slack                 0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/min_sample_time             0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/hispeed_freq                0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/target_loads                0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/go_hispeed_load             0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/above_hispeed_delay         0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/boost                       0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/boostpulse                  0200    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/input_boost                 0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/boostpulse_duration         0660    system  system
+/sys/devices/system/cpu/cpu*   cpufreq/interactive/io_is_busy                  0660    system  system
+
+# Sensor
+/dev/input/event* 0660 system input
+/sys/devices/virtual/input/input*   enable      0660  system   input
+/sys/devices/virtual/input/input*   poll_delay  0660  system   input
+
+# Sensorhub IIO
+/dev/ssp_sensorhub        0660   system       system
+/dev/iio:device*          0660   system       system
+/sys/devices/13930000.spi/spi_master/spi2/spi2.0/iio:device*    buffer/enable       0660    system    system
+/sys/devices/13930000.spi/spi_master/spi2/spi2.0/iio:device*    buffer/length       0660    system    system
+/sys/bus/iio/devices/iio:device*    0664   system     radio

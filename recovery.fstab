@@ -1,0 +1,35 @@
+#
+# Copyright (C) 2018 The TwrpBuilder Open-Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# mount_point   fstype   device                 device2              	        flags
+
+/boot		    emmc	/dev/block/platform/13540000.dwmmc0/by-name/BOOT	    flags=display="Kernel";backup=1
+/cache		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/CACHE       flags=display="Cache"
+/recovery	    emmc	/dev/block/platform/13540000.dwmmc0/by-name/RECOVERY    flags=display="Recovery";backup=1
+/system	        ext4	/dev/block/platform/13540000.dwmmc0/by-name/SYSTEM      flags=display="System";backup=1
+/system_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM		flags=display="System_image";backup=1;flashimg=1
+/vendor		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/VENDOR      flags=display="Vendor";backup=1;wipeingui
+/vendor_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/VENDOR  	flags=display="Vendor_image";backup=1;flashimg=1
+/data		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/USERDATA    flags=display="Data";encryptable=footer;length=-20480;fileencryption=ice
+/modem		    emmc	/dev/block/platform/13540000.dwmmc0/by-name/RADIO       flags=display="Modem";backup=1
+/efs		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/EFS	        flags=display="EFS";backup=1
+
+# Internal storage
+/storage        ext4   	/data/media/0                  		     		        flags=display="Internal Storage";usermrf;backup=1;fsflags="bind";removable
+
+# Removable storage
+/sdcard1	    vfat	/dev/block/mmcblk1p1    /dev/block/mmcblk1              flags=fsflags=utf8;display="MicroSD";storage;wipeingui;removable
+/usb-otg	    vfat	/dev/block/sda1         /dev/block/sda				    flags=fsflags=utf8;display="USB-Storage";storage;wipeingui;removable
