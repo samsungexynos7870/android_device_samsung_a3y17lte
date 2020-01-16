@@ -52,6 +52,11 @@ PRODUCT_PACKAGES += \
 DEVICE_PACKAGE_OVERLAYS += \
     $(DEVICE_PATH)/overlay
 
+# Ramdisk
+PRODUCT_PACKAGES += \
+    mobicore.rc \
+    wifi_device.rc
+
 # Shims
 PRODUCT_PACKAGES += \
     libbauthtzcommon_shim
@@ -74,8 +79,7 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/WCNSS_cfg.dat:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/WCNSS_cfg.dat \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
-    $(DEVICE_PATH)/configs/init/android.hardware.wifi@1.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi@1.0-service.rc \
-    $(DEVICE_PATH)/configs/init/etc/init.wifi_device.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.wifi_device.rc
+    $(DEVICE_PATH)/configs/init/android.hardware.wifi@1.0-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/android.hardware.wifi@1.0-service.rc
 
 # Properties
 -include $(DEVICE_PATH)/vendor_prop.mk
