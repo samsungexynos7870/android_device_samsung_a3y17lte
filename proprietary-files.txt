@@ -97,10 +97,10 @@ vendor/etc/libnfc-nci.conf
 vendor/etc/libnfc-sec.conf
 vendor/etc/libnfc-sec-hal.conf
 vendor/etc/libnfc-sec-vendor.conf
-vendor/bin/hw/sec.android.hardware.nfc@1.1-service
-vendor/etc/init/sec.android.hardware.nfc@1.1-service.rc
+vendor/bin/hw/sec.android.hardware.nfc@1.2-service
+vendor/etc/init/sec.android.hardware.nfc@1.2-service.rc
 vendor/lib64/nfc_nci_sec.so
-vendor/lib64/vendor.samsung.hardware.nfc@1.1.so
+vendor/lib64/vendor.samsung.hardware.nfc@1.2.so
 
 # Sensors
 vendor/bin/hw/android.hardware.sensors@1.0-service
