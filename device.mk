@@ -60,10 +60,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     hostapd \
-    hostapd_cli \
     libcld80211 \
     libQWiFiSoftApCfg \
-    libwifi-hal-qcom \
+    libwifi-hal \
     libwpa_client \
     wificond \
     wpa_supplicant \
