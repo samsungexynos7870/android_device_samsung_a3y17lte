@@ -38,8 +38,5 @@ TARGET_BOOT_ANIMATION_RES := 720
 TARGET_GAPPS_ARCH := arm64
 
 # Build info
-BUILD_FINGERPRINT :="samsung/beyond2ltexx/beyond2:10/QP1A.190711.020/G975FXXU3BSKO:user/release-keys"
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    TARGET_DEVICE="a3y17lte" \
-    PRODUCT_NAME="lineage_a3y17lte"
+BUILD_FINGERPRINT :="samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys"
 
