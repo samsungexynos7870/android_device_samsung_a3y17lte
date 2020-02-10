@@ -24,11 +24,4 @@ on post-fs-data
     chown wifi root /data/vendor/conn/.ant.info
     chmod 0664 /data/vendor/conn/.ant.info
 
-on boot
-# for wlan FTM app
-service ftm_ptt /system/bin/ftm_ptt -d
-    user root
-    group radio system
-    disabled
-
 
