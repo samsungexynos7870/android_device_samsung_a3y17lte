@@ -29,74 +29,87 @@
 
 #include <stdlib.h>
 
-#include <android-base/file.h>
-#include <android-base/logging.h>
-#include <android-base/properties.h>
-#include <android-base/strings.h>
-
-#include "property_service.h"
-#include "vendor_init.h"
-
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
+#include <android-base/file.h>
+#include <android-base/properties.h>
+#include <android-base/logging.h>
+
+#include "vendor_init.h"
+#include "property_service.h"
 
 using android::base::GetProperty;
-using android::base::ReadFileToString;
-using android::base::Trim;
 using android::init::property_set;
 
-#define SERIAL_NUMBER_FILE "/efs/FactoryApp/serial_no"
-
-// copied from build/tools/releasetools/ota_from_target_files.py
-// but with "." at the end and empty entry
-std::vector<std::string> ro_product_props_default_source_order = {
-    "",
-    "product.",
-    "product_services.",
-    "odm.",
-    "vendor.",
-    "system.",
-};
-
-void property_override(char const prop[], char const value[])
-{	
-	prop_info *pi;
-
-	pi = (prop_info*) __system_property_find(prop);
-	if (pi)
-		__system_property_update(pi, value, strlen(value));
-	else
-		__system_property_add(prop, strlen(prop), value, strlen(value));
+void property_override(const std::string& name, const std::string& value)
+{
+    size_t valuelen = value.size();
+    prop_info* pi = (prop_info*) __system_property_find(name.c_str());
+    if (pi != nullptr) {
+        __system_property_update(pi, value.c_str(), valuelen);
+    }
+    else {
+        int rc = __system_property_add(name.c_str(), name.size(), value.c_str(), valuelen);
+        if (rc < 0) {
+            LOG(ERROR) << "property_set(\"" << name << "\", \"" << value << "\") failed: "
+                       << "__system_property_add failed";
+        }
+    }
 }
 
-void property_override_dual(char const system_prop[],
-		char const vendor_prop[], char const value[])
+void property_override_quad(const std::string& boot_prop, const std::string& product_prop, const std::string& system_prop, const std::string& vendor_prop, const std::string& value)
 {
-	property_override(system_prop, value);
-	property_override(vendor_prop, value);
+    property_override(boot_prop, value);
+    property_override(product_prop, value);
+    property_override(system_prop, value);
+    property_override(vendor_prop, value);
+}
+
+void init_dsds() {
+    property_set("ro.multisim.set_audio_params", "true");
+    property_set("ro.multisim.simslotcount", "2");
+    property_set("persist.radio.multisim.config", "dsds");
 }
 
 void vendor_load_properties()
 {
-	std::string bootloader = GetProperty("ro.bootloader", "");
+    // Init a dummy BT MAC address, will be overwritten later
+    property_set("ro.boot.btmacaddr", "00:00:00:00:00:00");
 
-    if (bootloader.find("A320FL") != std::string::npos) {
+    std::string bootloader = GetProperty("ro.bootloader","");
 
-	    /* SM-A320FL */
-        property_override_dual("ro.product.model", "ro.vendor.product.model", "SM-A320FL");
-        property_override_dual("ro.product.device", "ro.vendor.product.device", "a3y17ltexc");
+    if (bootloader.find("A320FL") == 0) {
+        /* SM-A320FL */
+        property_override_quad("ro.bootimage.build.fingerprint", "ro.build.fingerprint", "ro.odm.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys");
+        property_override("ro.build.description", "a3y17ltexc-user 8.0.0 R16NW A320FLXXS5CSL5 test-keys");
+        property_override_quad("ro.product.model", "ro.product.odm.model", "ro.product.system.model", "ro.product.vendor.model", "SM-A320FL");
+        property_override_quad("ro.product.device", "ro.product.odm.device", "ro.product.system.device", "ro.product.vendor.device", "a3y17lte");
+        property_override_quad("ro.product.name", "ro.product.odm.name", "ro.product.system.name", "ro.product.vendor.name", "a3y17ltexc");
 
-    }else if (bootloader.find("A320FX") != std::string::npos) {
+    } else if (bootloader.find("A320FX") == 0) {
+        /* SM-A320FX */
+        property_override_quad("ro.bootimage.build.fingerprint", "ro.build.fingerprint", "ro.odm.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/a3y17ltexx/a3y17lte:8.0.0/R16NW/A320FXXS5CSK1:user/release-keys");
+        property_override("ro.build.description", "a3y17ltexx-user 8.0.0 R16NW A320FXXS5CSK1 test-keys");
+        property_override_quad("ro.product.model", "ro.product.odm.model", "ro.product.system.model", "ro.product.vendor.model", "SM-A320F");
+        property_override_quad("ro.product.device", "ro.product.odm.device", "ro.product.system.device", "ro.product.vendor.device", "a3y17lte");
+        property_override_quad("ro.product.name", "ro.product.odm.name", "ro.product.system.name", "ro.product.vendor.name", "a3y17ltexx");
 
-	    /* SM-A320F */
-        property_override_dual("ro.product.model", "ro.vendor.product.model", "SM-A320F");
-        property_override_dual("ro.product.device", "ro.vendor.product.device", "a3y17ltexx");
+        init_dsds();
 
-    } else if (bootloader.find("A320Y") != std::string::npos) {
+    } else if (bootloader.find("A320Y") == 0) {
+        /* SM-A320Y */
+        property_override_quad("ro.bootimage.build.fingerprint", "ro.build.fingerprint", "ro.odm.build.fingerprint", "ro.vendor.build.fingerprint", "samsung/a3y17ltedx/a3y17lte:8.0.0/R16NW/A320YDXS6CSK1:user/release-keys");
+        property_override("ro.build.description", "a3y17ltedx-user 8.0.0 R16NW A320YDXS6CSK1 test-keys");
+        property_override_quad("ro.product.model", "ro.product.odm.model", "ro.product.system.model", "ro.product.vendor.model", "SM-A320Y");
+        property_override_quad("ro.product.device", "ro.product.odm.device", "ro.product.system.device", "ro.product.vendor.device", "a3y17lte");
+        property_override_quad("ro.product.name", "ro.product.odm.name", "ro.product.system.name", "ro.product.vendor.name", "a3y17ltedx");
 
-	    /* SM-A320Y */
-        property_override_dual("ro.product.model", "ro.vendor.product.model", "SM-A320Y");
-        property_override_dual("ro.product.device", "ro.vendor.product.device", "a3y17ltedx");
+        init_dsds();
     }
 
+    std::string device = GetProperty("ro.product.device", "");
+    LOG(ERROR) << "Found bootloader id %s setting build properties for %s device\n" << bootloader.c_str() << device.c_str();
 }
+
+
+
