@@ -28,6 +28,7 @@ vendor/lib/libtfa98xx.so
 vendor/etc/firmware/nvm_tlv_tf_1.1.bin
 vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
 vendor/bin/hw/android.hardware.bluetooth@1.0-service
+vendor/bin/wcnss_filter
 vendor/etc/init/android.hardware.bluetooth@1.0-service.rc
 vendor/lib/hw/android.hardware.bluetooth@1.0-impl.so
 vendor/lib/vendor.samsung.hardware.bluetooth@1.0.so
