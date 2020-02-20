@@ -72,6 +72,7 @@ PRODUCT_PACKAGES += \
     libcld80211 \
     libwifi-hal \
     libwpa_client \
+    macloader \
     wificond \
     wpa_supplicant \
     wpa_supplicant.conf
