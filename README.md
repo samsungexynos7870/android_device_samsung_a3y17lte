@@ -7,7 +7,7 @@ It was announced and released in January 2017.
 | Device       | Samsung Galaxy A3 2017                             |
 | -----------: | :----------------------------------------------    |
 | SoC          | Samsung Exynos 7870                                |
-| CPU          | Octa-core, 1600 MHz, ARM Cortex-A53, 64-bit, 14 nm |
+| CPU          | Octa-core, 1586 MHz, ARM Cortex-A53, 64-bit, 14 nm |
 | GPU          | Mali-T830                                          |
 | Memory       | 2GB (LPDDR3X)                                      |
 | Shipped Android version | 6.0.1                                   |
