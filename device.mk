@@ -308,9 +308,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
 
-# ADB
+# ADB and USB configuration
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    persist.sys.usb.config=adb \
+    persist.sys.usb.config=none \
     ro.adb.secure=1 \
     ro.secure=1
 
