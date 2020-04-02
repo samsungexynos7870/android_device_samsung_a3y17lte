@@ -192,10 +192,10 @@ subsystem sound
 /dev/video31              0660   media      graphics
 
 # mscalers
-/dev/video50              0660   media      graphics
+/dev/video50              0660   mediacodec drmrpc
 /dev/video51              0660   media      graphics
 /dev/m2m1shot_scaler0     0660   mediacodec drmrpc
-/dev/m2m1shot_scaler1     0660   mediacodec drmrpc
+/dev/m2m1shot_scaler1     0660   cameraserver   cameraserver
 
 /dev/video55              0666   system     graphics
 /dev/fimg2d               0666   system     graphics
@@ -203,10 +203,10 @@ subsystem sound
 /dev/HPD                  0660   system     system
 
 # mfc
-/dev/video6               0660   mediacodec      mediadrm
-/dev/video7               0660   media      mediadrm
-/dev/video8               0660   media      mediadrm
-/dev/video9               0660   media      mediadrm
+/dev/video6               0660   mediacodec mediadrm
+/dev/video7               0660   mediacodec mediadrm
+/dev/video8               0660   mediacodec mediadrm
+/dev/video9               0660   mediacodec mediadrm
 
 # camera
 /dev/video100             0660   cameraserver   camera
@@ -244,8 +244,8 @@ subsystem sound
 /dev/seiren               0660   system     audio
 
 # MobiCore
-/dev/mobicore             0700   system     system
-/dev/mobicore-user        0666   radio     system
+/dev/mobicore             0600   system     system
+/dev/mobicore-user        0666   radio      system
 
 # Secure MEM driver
 /dev/s5p-smem             0660   system     system
@@ -263,18 +263,12 @@ subsystem sound
 /dev/umts_router          0660   radio      radio
 
 # SIPC RIL
-/dev/umts_boot0           0660   radio      radio
-/dev/umts_ipc0            0660   radio      radio
-# /dev/umts_ipc1            0660   radio      radio
-/dev/umts_rfs0            0660   radio      radio
-
-# Modem Interface
-/dev/block/platform/13540000.dwmmc0/by-name/RADIO	0660	system	radio
-/dev/block/platform/13540000.dwmmc0/by-name/CP_DEBUG	0660	radio	system
-/dev/umts*		  0660	system	radio
-/dev/umts_csd		  0660	system	loop_radio
-/dev/smd4                 0660  system  radio
-/dev/umts_ciq0            0660   system     bridge_rw
+/dev/umts*            	  0660   system     radio
+/dev/ipc*                 0660   system     radio
+/dev/umts_csd             0660   system     loop_radio
+/dev/smd4                 0660   system     radio
+/dev/ramdump_memshare     0660   system     radio
+/dev/umts_ciq*            0660   system     bridge_rw
 
 # interactive governor parameters
 /sys/devices/system/cpu/cpu*   cpufreq/interactive/timer_rate                  0660    system  system
@@ -290,13 +284,10 @@ subsystem sound
 /sys/devices/system/cpu/cpu*   cpufreq/interactive/boostpulse_duration         0660    system  system
 /sys/devices/system/cpu/cpu*   cpufreq/interactive/io_is_busy                  0660    system  system
 
-# sensor sysfs properties
-/sys/devices/virtual/input/input*    poll_delay    0660    system    radio
-/sys/devices/virtual/input/input*    enable        0660    system    radio
-/dev/input/event*	  0660   system		input
-
-# Google FRP solution
-/dev/block/platform/13540000.dwmmc0/by-name/PERSISTENT    0660    system    system
+# Sensor
+/dev/input/event* 0660 system input
+/sys/devices/virtual/input/input*   enable      0660  system   input
+/sys/devices/virtual/input/input*   poll_delay  0660  system   input
 
 # Sensorhub IIO
 /dev/ssp_sensorhub        0660   system       system
@@ -304,11 +295,3 @@ subsystem sound
 /sys/devices/13930000.spi/spi_master/spi2/spi2.0/iio:device*    buffer/enable       0660    system    system
 /sys/devices/13930000.spi/spi_master/spi2/spi2.0/iio:device*    buffer/length       0660    system    system
 /sys/bus/iio/devices/iio:device*    0664   system     radio
-
-# TEEGRIS
-/dev/tzdev		0660	system		system
-/dev/ionfd2phys		0660	system		system
-/dev/tuihw		0660	system		system
-/dev/tzirs		0660	system		system
-/dev/tz_shmem_validator	0666    system		system
-/dev/tz_wormhole   	0666    system		system
