@@ -311,8 +311,8 @@ PRODUCT_PACKAGES += \
 # ADB
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.sys.usb.config=adb \
-    ro.adb.secure=0 \
-    ro.secure=0
+    ro.adb.secure=1 \
+    ro.secure=1
 
 # Offmode charger
 PRODUCT_PACKAGES += \
