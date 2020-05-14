@@ -39,6 +39,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="gtaxlwifixx-user 8.1.0 M1AJQ T580XXU4CSA1 release-keys"
 
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
-BUILD_FINGERPRINT := samsung/gtaxlwifixx/gtaxlwifi:7.0/NRD90M/T580XXU3BRF1:user/release-keys
+BUILD_FINGERPRINT := Xiaomi/sagit/sagit:7.1.1/NMF26X/V8.2.17.0.NCACNEC:user/release-keys
 
 TARGET_VENDOR := Samsung
