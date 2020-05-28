@@ -35,10 +35,6 @@ TARGET_SCREEN_HEIGHT := 1920
 TARGET_BOOTANIMATION_PRELOAD := true
 TARGET_BOOTANIMATION_TEXTURE_CACHE := true
 
-# Flat device tree for boot image
-#PRODUCT_HOST_PACKAGES += \
-#    dtbhtoolExynos
-
 # first_stage_mount
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/fstab.samsungexynos7870:$(TARGET_COPY_OUT_RAMDISK)/fstab.samsungexynos7870 \
