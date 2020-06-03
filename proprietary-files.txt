@@ -46,6 +46,7 @@ vendor/lib/libhwjpeg.so
 
 # Fingerprint
 vendor/bin/hw/android.hardware.biometrics.fingerprint@2.1-service.samsung
+vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.samsung.rc
 vendor/lib/libbauthserver.so
 vendor/lib/libbauthtzcommon.so
 vendor/lib/libegis_fp_normal_sensor_test.so
