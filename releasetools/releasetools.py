@@ -21,4 +21,4 @@ def FullOTA_InstallEnd(info):
   info.script.AppendExtra('ifelse(is_mounted("/vendor"), "", mount("ext4", "EMMC", "/dev/block/platform/13540000.dwmmc0/by-name/VENDOR", "/vendor"));')
   info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/etc/nfc/sec_s3nrn81_rfreg.fl /vendor/etc/nfc/sec_s3nrn81_rfreg.bin"));')
   info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/firmware/nfc/sec_s3nrn81_firmware.fl /vendor/firmware/nfc/sec_s3nrn81_firmware.bin"));')
-  info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "sed -i \'s:ro.multisim.simslotcount=.*:ro.multisim.simslotcount=1:\' /vendor/build.prop"));')
+  # info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "sed -i \'s:ro.multisim.simslotcount=.*:ro.multisim.simslotcount=1:\' /vendor/build.prop"));')
