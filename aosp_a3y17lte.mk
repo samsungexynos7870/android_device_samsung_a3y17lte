@@ -29,7 +29,7 @@ $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 PRODUCT_DEVICE := a3y17lte
 PRODUCT_NAME := aosp_a3y17lte
 PRODUCT_BRAND := samsung
-PRODUCT_MODEL := SM-A320FL
+PRODUCT_MODEL := SM-G981B
 PRODUCT_MANUFACTURER := samsung
 
 TARGET_VENDOR := samsung
@@ -40,5 +40,5 @@ TARGET_BOOT_ANIMATION_RES := 720
 TARGET_GAPPS_ARCH := arm64
 
 # Build info
-BUILD_FINGERPRINT :="samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys"
+BUILD_FINGERPRINT :="samsung/x1sxxx/x1s:10/QP1A.190711.020/G981BXXU1ATCT:user/release-keys"
 
