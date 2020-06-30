@@ -29,7 +29,6 @@ $(call inherit-product, vendor/aosp/config/common_full_phone.mk)
 PRODUCT_DEVICE := a3y17lte
 PRODUCT_NAME := aosp_a3y17lte
 PRODUCT_BRAND := samsung
-PRODUCT_MODEL := SM-G981B
 PRODUCT_MANUFACTURER := samsung
 
 TARGET_VENDOR := samsung
