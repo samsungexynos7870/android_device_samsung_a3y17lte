@@ -29,7 +29,6 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 PRODUCT_DEVICE := a3y17lte
 PRODUCT_NAME := lineage_a3y17lte
 PRODUCT_BRAND := samsung
-PRODUCT_MODEL := SM-G981B
 PRODUCT_MANUFACTURER := samsung
 
 TARGET_VENDOR := samsung
