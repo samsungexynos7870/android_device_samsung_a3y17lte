@@ -22,12 +22,15 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
+PRODUCT_PROPERTY_OVERRIDES := \
+    ro.carrier=wifi-only
+
+# Properties
+-include $(LOCAL_PATH)/system_prop.mk
+
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := hdpi
-
-PRODUCT_PROPERTY_OVERRIDES := \
-    ro.carrier=wifi-only
 
 # Boot animation
 TARGET_SCREEN_WIDTH := 1200
@@ -290,7 +293,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.adb.secure=1 \
     ro.secure=1
 
-# Offmode charger
+# Offline charging
 PRODUCT_PACKAGES += \
     charger_res_images \
     lineage_charger_res_images
