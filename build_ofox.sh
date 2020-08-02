@@ -2,6 +2,7 @@
 
 # configure some default settings for the build
 export ALLOW_MISSING_DEPENDENCIES=true
+export TARGET_DEVICE_ALT="a3y17lte, a3y17ltexc, a3y17ltexx, a3y17ltelk"
 export FOX_RECOVERY_INSTALL_PARTITION="/dev/block/platform/13540000.dwmmc0/by-name/RECOVERY"
 export FOX_REPLACE_BUSYBOX_PS="1"
 export FOX_USE_BASH_SHELL="1"
