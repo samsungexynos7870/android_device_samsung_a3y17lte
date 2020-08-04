@@ -23,7 +23,7 @@ export TARGET_ARCH="arm64"
 export TW_DEFAULT_LANGUAGE="en"
 export FOX_R11="1"
 export FOX_ADVANCED_SECURITY="1"
-export FOX_BUILD_TYPE="Beta"
+export FOX_BUILD_TYPE="Stable"
 export FOX_VERSION="R11.0"
 export USE_CCACHE="1"
 
