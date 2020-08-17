@@ -37,7 +37,6 @@ vendor/lib64/vendor.samsung.hardware.bluetooth@1.0.so
 
 # Camera
 vendor/firmware/fimc_is_lib.bin
-vendor/firmware/mfc_fw.bin
 vendor/firmware/setfile_imx219.bin
 vendor/firmware/setfile_imx258.bin
 vendor/lib/libexynoscamera.so
