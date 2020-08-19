@@ -1,0 +1,8 @@
+[
+	{
+		"remote":"github",
+		"repository":"samsungexynos7870/android_kernel_samsung_exynos7870",
+		"target_path":"kernel/samsung/exynos7870",
+		"revision":"twrp"
+	}
+]
