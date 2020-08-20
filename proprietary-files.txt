@@ -22,7 +22,6 @@ vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
 
 # Audio
 vendor/etc/Tfa9896.cnt
-vendor/lib/libtfa98xx.so
 
 # Bluetooth
 vendor/etc/firmware/nvm_tlv_tf_1.1.bin
