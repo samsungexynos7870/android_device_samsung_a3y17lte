@@ -18,8 +18,6 @@ cc_library_static {
     name: "libinit_a3y17lte",
     recovery_available: true,
     srcs: ["init_a3y17lte.cpp"],
-    include_dirs: [
-        "system/core/base/include",
-        "system/core/init"
-    ]
+    include_dirs: ["system/core/init"],
+    shared_libs: ["libbase"]
 }
