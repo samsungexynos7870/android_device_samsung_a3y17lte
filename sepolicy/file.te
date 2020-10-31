@@ -15,3 +15,5 @@ type wifi_efs_file, file_type;
 type mediadrm_vendor_data_file, file_type, data_file_type;
 
 allow sysfs_type tmpfs:filesystem associate;
+
+type camera_device_sysfs, sysfs_type, file_type;
