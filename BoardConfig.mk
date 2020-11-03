@@ -57,14 +57,10 @@ TARGET_KERNEL_CONFIG := exynos7870-a3y17lte_defconfig
 TARGET_KERNEL_SOURCE := kernel/samsung/exynos7870
 
 # Extracted with libbootimg
-BOARD_CUSTOM_BOOTIMG := true
-BOARD_CUSTOM_BOOTIMG_MK := $(DEVICE_PATH)/dtbhtool/mkbootimg.mk
-BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --dt $(OUT_DIR)/target/product/a3y17lte/obj/KERNEL_OBJ/arch/$(TARGET_ARCH)/boot/dtb.img
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_IMAGE_NAME := Image
-BOARD_KERNEL_SEPARATED_DT := true
-TARGET_CUSTOM_DTBTOOL := dtbhtoolExynos
+BOARD_KERNEL_IMAGE_NAME := Image dtb.img
 
 # File systems
 BOARD_HAS_LARGE_FILESYSTEM := true
@@ -72,13 +68,14 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# LZMA support
-LZMA_RAMDISK_TARGETS := recovery
-
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/recovery.fstab
 
 # Recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "ABGR_8888"
+
+# System as root
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOARD_SUPPRESS_SECURE_ERASE := true
 AB_OTA_UPDATER := false
 
 # TWRP specific build flags
@@ -105,10 +102,3 @@ TW_INCLUDE_FUSE_NTFS := true
 
 # Vendor separation
 TARGET_COPY_OUT_VENDOR := vendor
-
-# Android Verified Boot
-BOARD_AVB_ENABLE := false
-BOARD_BUILD_DISABLED_VBMETAIMAGE := true
-
-# Include
-TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/dtbhtool/include
