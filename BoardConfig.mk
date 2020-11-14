@@ -249,10 +249,6 @@ TARGET_IGNORES_FTP_PPTP_CONNTRACK_FAILURE := true
 TARGET_LD_SHIM_LIBS += \
     /system/lib/libexynoscamera.so|libexynoscamera_shim.so
 
-# Shims: gps
-TARGET_LD_SHIM_LIBS += \
-    /vendor/bin/hw/gpsd|gpsd_shim.so
-
 # Security patch level - T580XXU4CRK5
 VENDOR_SECURITY_PATCH := 2018-11-01
 
