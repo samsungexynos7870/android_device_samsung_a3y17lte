@@ -229,7 +229,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl.gtaxlwifi \
-    android.hardware.gnss@1.0-service.gtaxlwifi
+    android.hardware.gnss@1.0-service.gtaxlwifi \
+    libsecril-client
 
 # Keys
 PRODUCT_COPY_FILES += \
