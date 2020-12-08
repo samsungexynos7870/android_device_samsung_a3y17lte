@@ -189,7 +189,7 @@ PRODUCT_PACKAGES += \
     audio.bluetooth.default \
     audio.usb.default \
     audio.r_submix.default \
-    libtinycompress \
+    libtinycompress
 
 PRODUCT_PACKAGES += \
     audio.primary.universal7870_32
