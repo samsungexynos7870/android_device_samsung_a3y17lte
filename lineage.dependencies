@@ -1,17 +1,5 @@
 [
 	{
-		"remote":"github",
-		"repository":"TALUAtGitHub/android_kernel_samsung_exynos7870",
-		"target_path":"kernel/samsung/exynos7870",
-		"revision":"lineage-17.1"
-	},
-	{
-		"remote":"github",
-		"repository":"TALUAtGitHub/android_vendor_samsung_gtaxlwifi",
-		"target_path":"vendor/samsung/gtaxlwifi",
-		"revision":"lineage-17.1"
-	},
-	{
 		"repository": "android_hardware_samsung",
 		"target_path": "hardware/samsung"
 	},
