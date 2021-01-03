@@ -16,8 +16,7 @@ $ git clone https://github.com/samsungexynos7870/android_manifest_samsung_a3y17l
 $ repo sync --no-repo-verify -c --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune -j`nproc`
 
 # Build
-$ mv device/samsung/a3y17lte/build_twrp.sh .
-$ . build_twrp.sh a3y17lte
+$ source build/envsetup.sh ; lunch omni_a3y17lte-eng ; mka recoveryimage
 ```
 ## Credits
 2020 @Astrako

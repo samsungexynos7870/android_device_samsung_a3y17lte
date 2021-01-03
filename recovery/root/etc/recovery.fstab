@@ -1,0 +1,37 @@
+#
+#	This file is part of the OrangeFox Recovery Project
+# 	Copyright (C) 2019-2020 The OrangeFox Recovery Project
+#	
+#	OrangeFox is free software: you can redistribute it and/or modify
+#	it under the terms of the GNU General Public License as published by
+#	the Free Software Foundation, either version 3 of the License, or
+#	any later version.
+#
+#	OrangeFox is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#	GNU General Public License for more details.
+#
+# 	This software is released under GPL version 3 or any later version.
+#	See <http://www.gnu.org/licenses/>.
+#
+
+# mount_point   fstype   device                 device2              	        flags
+
+/boot		    emmc	/dev/block/platform/13540000.dwmmc0/by-name/BOOT	    flags=display="Kernel";backup=1
+/cache		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/CACHE       flags=display="Cache"
+/recovery	    emmc	/dev/block/platform/13540000.dwmmc0/by-name/RECOVERY    flags=display="Recovery";backup=1
+/system	        ext4	/dev/block/platform/13540000.dwmmc0/by-name/SYSTEM      flags=display="System";backup=1
+/system_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM		flags=display="System image";backup=1;flashimg=1
+/vendor		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/VENDOR      flags=display="Vendor";backup=1;wipeingui
+/vendor_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/VENDOR  	flags=display="Vendor image";backup=1;flashimg=1
+/data		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/USERDATA    flags=display="Data";encryptable=footer;length=-20480;fileencryption=ice
+/modem		    emmc	/dev/block/platform/13540000.dwmmc0/by-name/RADIO       flags=display="Modem";backup=1
+/efs		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/EFS	        flags=display="EFS";backup=1
+
+# Internal storage
+/storage        ext4   	/data/media/0                  		     		        flags=display="Internal Storage";usermrf;backup=1;fsflags="bind";removable
+
+# Removable storage
+/sdcard1        vfat    /dev/block/mmcblk1p1  /dev/block/mmc1k1p1               flags=display="Micro SDcard";storage;wipeingui;removable
+/usb-otg        vfat    /dev/block/sda1       /dev/block/sda                    flags=display="USB-Storage";storage;wipeingui;removable
