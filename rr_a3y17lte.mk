@@ -23,11 +23,11 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/samsung/a3y17lte/device.mk)
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+$(call inherit-product, vendor/rr/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := a3y17lte
-PRODUCT_NAME := lineage_a3y17lte
+PRODUCT_NAME := rr_a3y17lte
 PRODUCT_BRAND := samsung
 PRODUCT_MANUFACTURER := samsung
 
@@ -37,3 +37,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-samsung
 
 TARGET_BOOT_ANIMATION_RES := 720
 TARGET_GAPPS_ARCH := arm64
+
+#ResurrectionRemix flags
+TARGET_FACE_UNLOCK_SUPPORTED := true
