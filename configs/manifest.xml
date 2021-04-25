@@ -88,16 +88,6 @@
         <fqname>@1.2::IDrmFactory/clearkey</fqname>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.gatekeeper</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IGatekeeper</name>
-            <instance>default</instance>
-        </interface>
-        <fqname>@1.0::IGatekeeper/default</fqname>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.gnss</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
