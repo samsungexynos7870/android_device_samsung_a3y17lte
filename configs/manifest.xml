@@ -300,7 +300,7 @@
     </hal>
     <hal format="hidl">
         <name>vendor.lineage.touch</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>IKeyDisabler</name>
@@ -309,7 +309,7 @@
     </hal>
     <hal format="hidl">
         <name>vendor.lineage.livedisplay</name>
-        <transport arch="32+64">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>IAdaptiveBacklight</name>
