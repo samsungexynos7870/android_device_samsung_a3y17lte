@@ -86,7 +86,6 @@ vendor/lib/libsamsungDiamondVoice.so
 vendor/lib/libSamsungPostProcessConvertor.so
 vendor/lib/libsecaudioinfo.so
 vendor/lib/libtinyals_.so
-vendor/lib/libtinycompress_.so
 vendor/lib/libvndsecril-client.so
 vendor/lib/libfloatingfeature.so
 vendor/lib/libLifevibes_lvverx.so
