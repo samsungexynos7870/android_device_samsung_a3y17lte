@@ -1,5 +1,5 @@
 cc_library_shared {
-    name: "android.hardware.sensors@1.0-impl.gtaxlwifi",
+    name: "android.hardware.sensors@1.0-impl.exynos7870",
     defaults: ["hidl_defaults"],
     proprietary: true,
     relative_install_path: "hw",
@@ -21,7 +21,7 @@ cc_library_shared {
 }
 
 cc_library_static {
-    name: "android.hardware.sensors@1.0-convert.gtaxlwifi",
+    name: "android.hardware.sensors@1.0-convert.exynos7870",
     vendor_available: true,
     defaults: ["hidl_defaults"],
     srcs: ["convert.cpp"],
@@ -42,10 +42,10 @@ cc_library_static {
 }
 
 cc_binary {
-    name: "android.hardware.sensors@1.0-service.gtaxlwifi",
+    name: "android.hardware.sensors@1.0-service.exynos7870",
     relative_install_path: "hw",
     vendor: true,
-    init_rc: ["android.hardware.sensors@1.0-service.gtaxlwifi.rc"],
+    init_rc: ["android.hardware.sensors@1.0-service.exynos7870.rc"],
     compile_multilib: "32",
     srcs: ["service.cpp"],
 

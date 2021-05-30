@@ -1,91 +1,64 @@
 <mixer>
 	<include name="/vendor/etc/mixer_gains.xml" />
 
-	<pcmdai playback_link="4" />
-	<pcmdai playback_deep_link="5" />
-	<pcmdai playback_jam_link="6" />
+	<pcmdai playback_link="7" />
+	<pcmdai playback_jam_link="8" />
+	<pcmdai playback_deep_link="9" />
 	<pcmdai capture_link="0" />
 	<pcmdai baseband_link="2" />
 	<pcmdai bluetooth_link="3" />
+	<pcmdai fmradio_link="4" />
 
 	<!-- Reset configurations -->
-	<!-- TODO: Need to figure out what to put in reset configuration. -->
-	<ctl name="DAC L1 Source" value="Stereo DAC Mixer"/>
-	<ctl name="DAC R1 Source" value="Stereo DAC Mixer"/>
-	<ctl name="DAC L2 Source" value="Mono DAC Mixer"/>
-	<ctl name="DAC R2 Source" value="Mono DAC Mixer"/>
-	<ctl name="Stereo DAC MIXL DAC L1 Switch" value="0"/>
-	<ctl name="Stereo DAC MIXL DAC L2 Switch" value="0"/>
-	<ctl name="Stereo DAC MIXL DAC R2 Switch" value="0"/>
-	<ctl name="Stereo DAC MIXR DAC R1 Switch" value="0"/>
-	<ctl name="Stereo DAC MIXR DAC L2 Switch" value="0"/>
-	<ctl name="Stereo DAC MIXR DAC R2 Switch" value="0"/>
-	<ctl name="Mono DAC MIXL DAC L1 Switch" value="0"/>
-	<ctl name="Mono DAC MIXL DAC R1 Switch" value="0"/>
-	<ctl name="Mono DAC MIXL DAC L2 Switch" value="0"/>
-	<ctl name="Mono DAC MIXR DAC R1 Switch" value="0"/>
-	<ctl name="Mono DAC MIXR DAC L2 Switch" value="0"/>
-	<ctl name="Mono DAC MIXR DAC R2 Switch" value="0"/>
-	<ctl name="Stereo1 ADC MIXL ADC1 Switch" value="0"/>
-	<ctl name="Stereo1 ADC MIXR ADC1 Switch" value="0"/>
-	<ctl name="Stereo1 ADC MIXL ADC2 Switch" value="0"/>
-	<ctl name="Stereo1 ADC MIXR ADC2 Switch" value="0"/>
-	<ctl name="Mono ADC MIXL ADC1 Switch" value="0"/>
-	<ctl name="Mono ADC MIXR ADC1 Switch" value="0"/>
-	<ctl name="Mono ADC MIXL ADC2 Switch" value="0"/>
-	<ctl name="Mono ADC MIXR ADC2 Switch" value="0"/>
+	<ctl name="AudioMixer Mixer En" value="Off" />
+	<ctl name="AudioMixer SRC2 En" value="Off" />
+	<ctl name="AudioMixer SRC3 En" value="Off" />
+	<ctl name="AudioMixer CH1 Mixer En" value="Off" />
+	<ctl name="AudioMixer CH2 Mixer En" value="Off" />
+	<ctl name="AudioMixer CH3 Mixer En" value="Off" />
+	<ctl name="AudioMixer CH4 Mixer En" value="Off" />
+	<ctl name="AudioMixer RMIX1 En" value="Off" />
+	<ctl name="AudioMixer RMIX2 En" value="Off" />
+	<ctl name="AudioMixer CH3 Rec En" value="Off" />
+	<ctl name="AudioMixer CH1 DOUT Select" value="DMIX_OUT" />
+	<ctl name="AudioMixer CH2 DOUT Select" value="DMIX_OUT" />
+	<ctl name="AudioMixer CH3 DOUT Select" value="DMIX_OUT" />
+	<ctl name="AudioMixer AP1 En" value="On" />
 
-	<ctl name="RECMIX1L BST1 Switch" value="0"/>
-	<ctl name="RECMIX1R BST1 Switch" value="0"/>
-	<ctl name="RECMIX1L BST3 Switch" value="0"/>
-	<ctl name="RECMIX1R BST3 Switch" value="0"/>
-	<ctl name="RECMIX1L BST4 Switch" value="0"/>
-	<ctl name="RECMIX1R BST4 Switch" value="0"/>
+	<!-- For COD3026 pmic codec -->
+	<ctl name="MonoMix Mode" value="Disable" />
+	<ctl name="HP HP On" value="0" />
+	<ctl name="EP EP On" value="0" />
+	<!-- <ctl name="SPK SPK On" value="0" /> -->
+	<ctl name="Chargepump Mode" value="CLASS-G-A" />
+	<ctl name="DNC Max Gain" value="6" />
+	<ctl name="DNC Level Left" value="0" />
+	<ctl name="DNC Level Right" value="0" />
+	<ctl name="FM Link" value="None" />
 
-	<ctl name="DAC L1 Mux" value="IF1 DAC1"/>
-	<ctl name="DAC R1 Mux" value="IF1 DAC1"/>
-	<ctl name="DAC1 MIXL DAC1 Switch" value="1"/>
-	<ctl name="DAC1 MIXR DAC1 Switch" value="1"/>
-
-	<ctl name="ADC IF2 Data Switch" value="L/R"/>
-	<ctl name="DAC IF3 Data Switch" value="L/R"/>
-	<ctl name="ADC IF3 Data Switch" value="L/R"/>
-
-	<ctl name="TDM Data Mux" value="AD1:AD2:DAC:NUL"/>
-	<ctl name="IF2 ADC Mux" value="IF_ADC2"/>
-	<ctl name="IF3 ADC Mux" value="Stereo2_ADC_L/R"/>
-
-	<ctl name="AD MONOL Clk Sel" value="clk_i2s1_track"/>
-	<ctl name="AD MONOR Clk Sel" value="clk_i2s1_track"/>
-	<ctl name="AD STO1 Clk Sel" value="clk_i2s1_track"/>
-	<ctl name="DA STO Clk Sel" value="clk_i2s1_track"/>
-
-	<ctl name="HP Switch" value="0"/>
-	<ctl name="SPK Switch" value="0"/>
-	<ctl name="RCV Switch" value="0"/>
-	<ctl name="Main Mic Switch" value="0"/>
-	<ctl name="Sub Mic Switch" value="0"/>
-	<ctl name="Headset Mic Switch" value="0"/>
-
-	<ctl name="Headphone Control" value="Disable"/>
-	<ctl name="Receiver Control" value="Disable"/>
-	<ctl name="Stereo ADC Control" value="Disable"/>
-	<ctl name="Mono ADC L Control" value="Disable"/>
-	<ctl name="Mono ADC R Control" value="Disable"/>
-	<!-- default routes -->
-
-	<!-- TODO: Need to figure out what to put in default routes. -->
+	<!-- For CS35L40 Speaker AMP-->
 
 	<!-- Common -->
-
 	<path name="route-ap">
 		<ctl name="AudioMixer Mixer En" value="On" />
-		<ctl name="AudioMixer SRC2 En" value="Off" />
-		<ctl name="AudioMixer SRC3 En" value="Off" />
+	</path>
+
+	<path name="route-ap-tx">
+		<path name="route-ap" />
+		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer CH1 Mixer En" value="On" />
 		<ctl name="AudioMixer CH2 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH3 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH4 Mixer En" value="Off" />
+		<ctl name="MonoMix Mode" value="Disable" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="12" />
+	</path>
+
+	<path name="route-ap-rx">
+		<path name="route-ap" />
 		<ctl name="AudioMixer CH1 DOUT Select" value="AIF4IN" />
 	</path>
 
@@ -97,17 +70,22 @@
 		<ctl name="AudioMixer CH2 Mixer En" value="On" />
 		<ctl name="AudioMixer CH3 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH4 Mixer En" value="Off" />
-		<ctl name="AudioMixer RMIX1 En" value="On" />
-		<ctl name="AudioMixer RMIX2 En" value="On" />
+		<ctl name="AudioMixer RMIX1 En" value="Off" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
 		<ctl name="AudioMixer CH3 Rec En" value="Off" />
 		<ctl name="AudioMixer CH1 DOUT Select" value="RMIX_OUT" />
 		<ctl name="AudioMixer CH2 DOUT Select" value="AIF4IN" />
+		<ctl name="MonoMix Mode" value="L" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="12" />
 	</path>
 
 	<path name="route-ap-bt">
 		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer SRC2 En" value="Off" />
-		<ctl name="AudioMixer SRC3 En" value="On" />
+		<ctl name="AudioMixer SRC3 En" value="Off" />
 		<ctl name="AudioMixer CH1 Mixer En" value="On" />
 		<ctl name="AudioMixer CH2 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH3 Mixer En" value="Off" />
@@ -122,32 +100,23 @@
 	<path name="route-cp-bt">
 		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer SRC2 En" value="On" />
-		<ctl name="AudioMixer SRC3 En" value="On" />
+		<ctl name="AudioMixer SRC3 En" value="Off" />
 		<ctl name="AudioMixer CH1 Mixer En" value="On" />
 		<ctl name="AudioMixer CH2 Mixer En" value="On" />
 		<ctl name="AudioMixer CH3 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH4 Mixer En" value="Off" />
-		<ctl name="AudioMixer RMIX1 En" value="On" />
-		<ctl name="AudioMixer RMIX2 En" value="On" />
+		<ctl name="AudioMixer RMIX1 En" value="Off" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
 		<ctl name="AudioMixer CH3 Rec En" value="On" />
 		<ctl name="AudioMixer CH1 DOUT Select" value="RMIX_OUT" />
 		<ctl name="AudioMixer CH2 DOUT Select" value="AIF3IN" />
 		<ctl name="AudioMixer CH3 DOUT Select" value="DMIX_OUT" />
 	</path>
 
-	<path name="route-analog-fm">
-	</path>
-
-	<path name="route-ap-fm-tx">
-	</path>
-
-	<path name="route-ap-fm-rx">
-	</path>
-
 	<path name="route-ap-bt-codec">
 		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer SRC2 En" value="Off" />
-		<ctl name="AudioMixer SRC3 En" value="On" />
+		<ctl name="AudioMixer SRC3 En" value="Off" />
 		<ctl name="AudioMixer CH1 Mixer En" value="On" />
 		<ctl name="AudioMixer CH2 Mixer En" value="Off" />
 		<ctl name="AudioMixer CH3 Mixer En" value="On" />
@@ -159,43 +128,55 @@
 		<ctl name="AudioMixer CH3 DOUT Select" value="DMIX_OUT" />
 	</path>
 
+	<path name="route-codec-loopback">
+		<ctl name="AudioMixer Mixer En" value="On" />
+		<ctl name="AudioMixer SRC2 En" value="Off" />
+		<ctl name="AudioMixer SRC3 En" value="Off" />
+		<ctl name="AudioMixer CH1 Mixer En" value="Off" />
+		<ctl name="AudioMixer CH2 Mixer En" value="Off" />
+		<ctl name="AudioMixer CH3 Mixer En" value="Off" />
+		<ctl name="AudioMixer CH4 Mixer En" value="On" />
+		<ctl name="AudioMixer RMIX1 En" value="Off" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
+		<ctl name="AudioMixer CH3 Rec En" value="Off" />
+		<ctl name="AudioMixer CH1 DOUT Select" value="DMIX_OUT" />
+		<ctl name="AudioMixer CH2 DOUT Select" value="DMIX_OUT" />
+		<ctl name="AudioMixer CH3 DOUT Select" value="DMIX_OUT" />
+		<ctl name="MonoMix Mode" value="L" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="12" />
+	</path>
+
 	<path name="dev-speaker">
-		<ctl name="Stereo DAC MIXL DAC L1 Switch" value="1"/>
-		<ctl name="Stereo DAC MIXR DAC R1 Switch" value="1"/>
-		<ctl name="DAC L2 Source" value="Stereo DAC Mixer"/>
-		<ctl name="DAC R2 Source" value="Stereo DAC Mixer"/>
-		<ctl name="SPK MIXL DAC L2 Switch" value="1"/>
-		<ctl name="SPK MIXR DAC R2 Switch" value="1"/>	
-		<ctl name="SPO L MIX SPKVOL L Switch" value="1"/>
-		<ctl name="SPO R MIX SPKVOL R Switch" value="1"/>
-		<ctl name="SPKVOL L Switch" value="1"/>
-		<ctl name="SPKVOL R Switch" value="1"/>
-		<ctl name="SPO Playback Switch" value="1"/>
-		<ctl name="SPK Switch" value="1" />
+		<ctl name="HP HP On" value="0" />
+		<ctl name="EP EP On" value="0" />
+		<!-- <ctl name="SPK SPK On" value="1" /> -->
 	</path>
 
 	<path name="dev-handset">
-		<ctl name="Mono DAC MIXL DAC L1 Switch" value="1"/>
-		<ctl name="Mono DAC MIXL DAC R1 Switch" value="1"/>
-		<ctl name="Mono MIX DAC L2 Switch" value="1"/>
-		<ctl name="Mono Playback Switch" value="1"/>
-		<ctl name="RCV Switch" value="1" />
+		<ctl name="HP HP On" value="0" />
+		<!-- <ctl name="SPK SPK On" value="0" /> -->
+		<ctl name="EP EP On" value="1" />
 	</path>
 
 	<path name="dev-headset">
-		<ctl name="Stereo DAC MIXL DAC L1 Switch" value="1"/>
-		<ctl name="Stereo DAC MIXR DAC R1 Switch" value="1"/>
-		<ctl name="HPO L Playback Switch" value="1"/>
-		<ctl name="HPO R Playback Switch" value="1"/>
-		<ctl name="HP Switch" value="1" />
+		<ctl name="EP EP On" value="0" />
+		<!-- <ctl name="SPK SPK On" value="0" /> -->
+		<ctl name="HP HP On" value="1" />
 	</path>
 
 	<path name="dev-speaker-headset">
-		<path name="dev-speaker" />
-		<path name="dev-headset" />
+		<ctl name="EP EP On" value="0" />
+		<ctl name="HP HP On" value="1" />
+		<!-- <ctl name="SPK SPK On" value="1" /> -->
 	</path>
 
 	<path name="dev-codec-out-disable">
+		<ctl name="HP HP On" value="0" />
+		<ctl name="EP EP On" value="0" />
+		<!-- <ctl name="SPK SPK On" value="0" /> -->
 	</path>
 
 	<path name="dev-bt-headset">
@@ -207,34 +188,116 @@
 	</path>
 
 	<path name="dev-main-mic">
-        <ctl name="RECMIX1L BST3 Switch" value="1"/>
-        <ctl name="RECMIX1R BST3 Switch" value="1"/>
-        <ctl name="Stereo1 ADC Source" value="ADC1"/>
-        <ctl name="Stereo1 ADC1 Source" value="ADC"/>
-        <ctl name="Stereo1 ADC MIXL ADC1 Switch" value="1"/>
-        <ctl name="Stereo1 ADC MIXR ADC1 Switch" value="1"/>
-        <ctl name="Main Mic Switch" value="1" />
+		<ctl name="ADCL Mixer MIC1L Switch" value="1" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="0" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="1" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="0" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="1" />
+		<ctl name="MIC2 MIC2 On" value="0" />
+		<ctl name="MIC3 MIC3 On" value="0" />
+		<ctl name="LINEIN LINEIN On" value="0" />
 	</path>
 
 	<path name="dev-2nd-mic">
 		<path name="dev-main-mic" />
+		<!--
+		<ctl name="ADCL Mixer MIC1L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="1" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="0" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="1" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="0" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="0" />
+		<ctl name="MIC2 MIC2 On" value="1" />
+		<ctl name="MIC3 MIC3 On" value="0" />
+		<ctl name="LINEIN LINEIN On" value="0" />
+		-->
 	</path>
 
+	<!-- L ch: main-mic / R ch: 2nd-mic -->
 	<path name="dev-dual-mic">
 		<path name="dev-main-mic" />
+		<!--
+		<ctl name="ADCL Mixer MIC1L Switch" value="1" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="0" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="1" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="0" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="1" />
+		<ctl name="MIC2 MIC2 On" value="1" />
+		<ctl name="MIC3 MIC3 On" value="0" />
+		<ctl name="LINEIN LINEIN On" value="0" />
+		-->
+	</path>
+
+	<!-- L ch: 2nd-mic / R ch: main-mic -->
+	<path name="dev-dual-invert-mic">
+		<path name="dev-main-mic" />
+		<!--
+		<ctl name="ADCL Mixer MIC1L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="1" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="0" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="1" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="0" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="1" />
+		<ctl name="MIC2 MIC2 On" value="1" />
+		<ctl name="MIC3 MIC3 On" value="0" />
+		<ctl name="LINEIN LINEIN On" value="0" />
+		-->
 	</path>
 
 	<path name="dev-headset-mic">
-       <ctl name="RECMIX1L BST1 Switch" value="1"/>
-       <ctl name="RECMIX1R BST1 Switch" value="1"/>
-       <ctl name="Stereo1 ADC Source" value="ADC1"/>
-       <ctl name="Stereo1 ADC1 Source" value="ADC"/>
-       <ctl name="Stereo1 ADC MIXL ADC1 Switch" value="1"/>
-       <ctl name="Stereo1 ADC MIXR ADC1 Switch" value="1"/>
-       <ctl name="Headset Mic Switch" value="1" />
+		<ctl name="ADCL Mixer MIC1L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="1" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="1" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="0" />
+		<ctl name="MIC2 MIC2 On" value="0" />
+		<ctl name="MIC3 MIC3 On" value="1" />
+		<ctl name="LINEIN LINEIN On" value="0" />
 	</path>
 
 	<path name="dev-codec-in-disable">
+		<ctl name="ADCL Mixer MIC1L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC2L Switch" value="0" />
+		<ctl name="ADCL Mixer MIC3L Switch" value="0" />
+		<ctl name="ADCL Mixer LINELL Switch" value="0" />
+		<ctl name="ADCL Mixer LINERL Switch" value="0" />
+		<ctl name="ADCR Mixer MIC1R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC2R Switch" value="0" />
+		<ctl name="ADCR Mixer MIC3R Switch" value="0" />
+		<ctl name="ADCR Mixer LINELR Switch" value="0" />
+		<ctl name="ADCR Mixer LINERR Switch" value="0" />
+		<ctl name="MIC1 MIC1 On" value="0" />
+		<ctl name="MIC2 MIC2 On" value="0" />
+		<ctl name="MIC3 MIC3 On" value="0" />
+		<ctl name="LINEIN LINEIN On" value="0" />
 	</path>
 
 	<path name="dev-bt-mic">
@@ -252,26 +315,26 @@
 	<!-- Output stage -->
 	<!-- media playback -->
 	<path name="media-handset">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
 		<path name="dev-handset" />
 	</path>
 
 	<path name="media-speaker">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
 		<path name="dev-speaker" />
 	</path>
 
 	<path name="media-headset">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="18" />
 		<path name="dev-headset" />
 	</path>
 
-	<path name="media-headphone">
-		<path name="media-headset" />
-	</path>
-
 	<path name="media-speaker-headset">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
 		<path name="dev-speaker-headset" />
 	</path>
 
@@ -320,7 +383,12 @@
 	</path>
 
 	<path name="communication-headset">
-		<path name="media-headset" />
+		<path name="route-ap-tx" />
+		<path name="dev-headset" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="12" />
 	</path>
 
 	<path name="communication-headphone">
@@ -333,7 +401,7 @@
 
 	<!-- samsung voip playback -->
 	<path name="samsung_voip-handset">
-		<path name="media-handset" />
+		<path name="communication-handset" />
 	</path>
 
 	<path name="samsung_voip-speaker">
@@ -354,7 +422,7 @@
 
 	<!-- voip playback -->
 	<path name="voip-handset">
-		<path name="media-handset" />
+		<path name="communication-handset" />
 	</path>
 
 	<path name="voip-speaker">
@@ -371,6 +439,63 @@
 
 	<path name="voip-bt-sco-headset">
 		<path name="media-bt-sco-headset" />
+	</path>
+
+	<!-- Wificall playback -->
+	<path name="wificall_wb-handset">
+		<path name="media-handset" />
+	</path>
+
+	<path name="wificall_wb-speaker">
+		<path name="media-speaker" />
+	</path>
+
+	<path name="wificall_wb-headset">
+		<path name="communication-headset" />
+	</path>
+
+	<path name="wificall_wb-headphone">
+		<path name="communication-headset" />
+	</path>
+
+	<path name="wificall_wb-bt-sco-headset">
+		<path name="media-bt-sco-headset" />
+	</path>
+
+	<path name="wificall_nb-handset">
+		<path name="media-handset" />
+	</path>
+
+	<path name="wificall_nb-speaker">
+		<path name="media-speaker" />
+	</path>
+
+	<path name="wificall_nb-headset">
+		<path name="communication-headset" />
+	</path>
+
+	<path name="wificall_nb-headphone">
+		<path name="communication-headset" />
+	</path>
+
+	<path name="wificall_nb-bt-sco-headset">
+		<path name="media-bt-sco-headset" />
+	</path>
+
+	<path name="wificall_wb_extra_vol-handset">
+		<path name="media-handset" />
+	</path>
+
+	<path name="wificall_wb_extra_vol-speaker">
+		<path name="media-speaker" />
+	</path>
+
+	<path name="wificall_nb_extra_vol-handset">
+		<path name="media-handset" />
+	</path>
+
+	<path name="wificall_nb_extra_vol-speaker">
+		<path name="media-speaker" />
 	</path>
 
 	<!-- Video call playback -->
@@ -452,6 +577,10 @@
 	<path name="incall_nb-headset">
 		<path name="route-cp" />
 		<path name="dev-headset" />
+		<ctl name="Chargepump Mode" value="VDD" />
+		<ctl name="DNC ZCD Enable" value="On" />
+		<ctl name="DNC ZCD Timeout" value="1" />
+		<ctl name="DNC Max Gain" value="12" />
 	</path>
 
 	<path name="incall_nb-headphone">
@@ -463,30 +592,12 @@
 		<path name="dev-bt-headset" />
 	</path>
 
-	<!-- NB/HANDOVER -->
-	<path name="incall_nb_handover-handset">
-		<path name="incall_nb-handset" />
-	</path>
-
-	<path name="incall_nb_handover-speaker">
-		<path name="incall_nb-speaker" />
-	</path>
-
 	<!-- NB/EXTRA_VOL -->
 	<path name="incall_nb_extra_vol-handset">
 		<path name="incall_nb-handset" />
 	</path>
 
 	<path name="incall_nb_extra_vol-speaker">
-		<path name="incall_nb-speaker" />
-	</path>
-
-	<!-- NB/EXTRA_VOL/HANDOVER -->
-	<path name="incall_nb_extra_vol_handover-handset">
-		<path name="incall_nb-handset" />
-	</path>
-
-	<path name="incall_nb_extra_vol_handover-speaker">
 		<path name="incall_nb-speaker" />
 	</path>
 
@@ -542,30 +653,12 @@
 		<path name="incall_nb-bt-sco-headset" />
 	</path>
 
-	<!-- VoLTE CP NB/HANDOVER -->
-	<path name="volte_cp_nb_handover-handset">
-		<path name="incall_nb-handset" />
-	</path>
-
-	<path name="volte_cp_nb_handover-speaker">
-		<path name="incall_nb-speaker" />
-	</path>
-
 	<!-- VoLTE CP NB/EXTRA_VOL -->
 	<path name="volte_cp_nb_extra_vol-handset">
 		<path name="incall_nb-handset" />
 	</path>
 
 	<path name="volte_cp_nb_extra_vol-speaker">
-		<path name="incall_nb-speaker" />
-	</path>
-
-	<!-- VoLTE CP NB/EXTRA_VOL/HANDOVER -->
-	<path name="volte_cp_nb_extra_vol_handover-handset">
-		<path name="incall_nb-handset" />
-	</path>
-
-	<path name="volte_cp_nb_extra_vol_handover-speaker">
 		<path name="incall_nb-speaker" />
 	</path>
 
@@ -611,7 +704,7 @@
 		<path name="incall_wb-bt-sco-headset" />
 	</path>
 
-	<!-- VoLTE CP WB/EXTRA_VOL -->	
+	<!-- VoLTE CP WB/EXTRA_VOL -->
 	<path name="volte_cp_wb_extra_vol-handset">
 		<path name="incall_wb-handset" />
 	</path>
@@ -665,31 +758,72 @@
 
 	<!-- Realtime Loopback -->
 	<path name="realtimeloopback-handset">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
 		<path name="dev-handset" />
 	</path>
 
 	<path name="realtimeloopback-speaker">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
 		<path name="dev-speaker" />
 	</path>
-	
+
 	<path name="realtimeloopback-headset">
-		<path name="route-ap" />
+		<path name="route-ap-tx" />
+		<path name="dev-headset" />
+	</path>
+
+	<path name="realtimeloopback-bt-sco-headset">
+		<path name="media-bt-sco-headset" />
+	</path>
+
+	<!-- Codec Loopback -->
+	<path name="loopback_codec-handset">
+		<path name="route-codec-loopback" />
+		<path name="dev-handset" />
+	</path>
+
+	<path name="loopback_codec-speaker">
+		<path name="route-codec-loopback" />
+		<path name="dev-speaker" />
+	</path>
+
+	<path name="loopback_codec-headset">
+		<path name="route-codec-loopback" />
 		<path name="dev-headset" />
 	</path>
 
 	<!-- TTY Mode -->
 	<path name="tty_mode-handset">
-		<path name="media-handset" />
+		<path name="incall_nb-handset" />
 	</path>
 
 	<path name="tty_mode-headset">
+		<path name="incall_nb-headset" />
+	</path>
+
+	<path name="tty_mode-headphone">
+		<path name="tty_mode-headset" />
+	</path>
+
+	<!-- AP TTY Mode -->
+	<path name="ap_tty_mode-handset">
+		<path name="media-handset" />
+	</path>
+
+	<path name="ap_tty_mode-headset">
 		<path name="media-headset" />
+	</path>
+
+	<path name="ap_tty_mode-headphone">
+		<path name="ap_tty_mode-headset" />
 	</path>
 
 	<!-- call forwarding output -->
 	<path name="call_forwarding_master">
+		<ctl name="AudioMixer Mixer En" value="On" />
+		<ctl name="AudioMixer SRC2 En" value="On" />
+		<ctl name="AudioMixer CH1 Mixer En" value="On" />
+		<ctl name="AudioMixer CH2 DOUT Select" value="DMIX_OUT" />
 	</path>
 
 	<path name="call_forwarding_slave-handset">
@@ -714,23 +848,18 @@
 
 	<!-- Input stage -->
 	<!-- media input -->
-	<path name="main-mic">
-		<path name="route-ap" />
-		<path name="dev-main-mic" />
-	</path>
-
 	<path name="media-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-main-mic" />
 	</path>
 
-	<path name="media-second-mic">
-		<path name="route-ap" />
+	<path name="media-2nd-mic">
+		<path name="route-ap-rx" />
 		<path name="dev-2nd-mic" />
 	</path>
 
 	<path name="media-headset-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-headset-mic" />
 	</path>
 
@@ -745,8 +874,8 @@
 
 	<!-- camcorder input -->
 	<path name="camcorder-mic">
-		<path name="route-ap" />
-		<path name="dev-dual-mic" />
+		<path name="route-ap-rx" />
+		<path name="dev-dual-invert-mic" />
 	</path>
 
 	<path name="camcorder-headset-mic">
@@ -785,24 +914,13 @@
 
 	<!-- interview input -->
 	<path name="interview-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
 	</path>
 
 	<!-- meeting input -->
 	<path name="meeting-mic">
-		<path name="route-ap" />
-		<path name="dev-dual-mic" />
-	</path>
-
-	<!-- lpsd control input -->
-	<path name="lpsd_control-mic">
-		<!-- TODO: We will make this -->
-	</path>
-
-	<!-- voice control input -->
-	<path name="voice_control-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
 	</path>
 
@@ -851,7 +969,7 @@
 
 	<!-- svoice/carmode samsung input -->
 	<path name="dualmic_samsung_engine-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
 	</path>
 
@@ -884,7 +1002,7 @@
 	</path>
 
 	<path name="communication-speaker-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
 	</path>
 
@@ -901,7 +1019,7 @@
 	</path>
 
 	<path name="samsung_voip-handset-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
 	</path>
 
@@ -940,6 +1058,67 @@
 
 	<path name="voip-bt-sco-headset-in">
 		<path name="communication-bt-sco-headset-in" />
+	</path>
+
+	<!-- WifiCall input -->
+	<path name="wificall_wb-handset-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_wb-speaker-mic">
+		<path name="route-ap-rx" />
+		<path name="dev-dual-mic" />
+	</path>
+
+	<path name="wificall_wb-headset-mic">
+		<path name="media-headset-mic" />
+	</path>
+
+	<path name="wificall_wb-headphone-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_wb-bt-sco-headset-in">
+		<path name="media-bt-sco-headset-in" />
+	</path>
+
+	<path name="wificall_nb-handset-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_nb-speaker-mic">
+		<path name="route-ap-rx" />
+		<path name="dev-dual-mic" />
+	</path>
+
+	<path name="wificall_nb-headset-mic">
+		<path name="media-headset-mic" />
+	</path>
+
+	<path name="wificall_nb-headphone-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_nb-bt-sco-headset-in">
+		<path name="media-bt-sco-headset-in" />
+	</path>
+
+	<path name="wificall_wb_extra_vol-handset-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_wb_extra_vol-speaker-mic">
+		<path name="route-ap-rx" />
+		<path name="dev-dual-mic" />
+	</path>
+
+	<path name="wificall_nb_extra_vol-handset-mic">
+		<path name="media-mic" />
+	</path>
+
+	<path name="wificall_nb_extra_vol-speaker-mic">
+		<path name="route-ap-rx" />
+		<path name="dev-dual-mic" />
 	</path>
 
 	<!-- Video call input -->
@@ -1033,30 +1212,12 @@
 		<path name="dev-bt-mic" />
 	</path>
 
-	<!-- NB/HANDOVER -->
-	<path name="incall_nb_handover-handset-mic">
-		<path name="incall_nb-handset-mic" />
-	</path>
-
-	<path name="incall_nb_handover-speaker-mic">
-		<path name="incall_nb-speaker-mic" />
-	</path>
-
 	<!-- NB/EXTRA_VOL -->
 	<path name="incall_nb_extra_vol-handset-mic">
 		<path name="incall_nb-handset-mic" />
 	</path>
 
 	<path name="incall_nb_extra_vol-speaker-mic">
-		<path name="incall_nb-speaker-mic" />
-	</path>
-
-	<!-- NB/EXTRA_VOL/HANDOVER -->
-	<path name="incall_nb_extra_vol_handover-handset-mic">
-		<path name="incall_nb-handset-mic" />
-	</path>
-
-	<path name="incall_nb_extra_vol_handover-speaker-mic">
 		<path name="incall_nb-speaker-mic" />
 	</path>
 
@@ -1081,7 +1242,7 @@
 		<path name="incall_nb-bt-sco-headset-in" />
 	</path>
 
-	<!-- WB/EXTRA_VOL -->	
+	<!-- WB/EXTRA_VOL -->
 	<path name="incall_wb_extra_vol-handset-mic">
 		<path name="incall_wb-handset-mic" />
 	</path>
@@ -1112,30 +1273,12 @@
 		<path name="incall_nb-bt-sco-headset-in" />
 	</path>
 
-	<!-- VoLTE CP NB/HANDOVER -->
-	<path name="volte_cp_nb_handover-handset-mic">
-		<path name="incall_nb-handset-mic" />
-	</path>
-
-	<path name="volte_cp_nb_handover-speaker-mic">
-		<path name="incall_nb-speaker-mic" />
-	</path>
-
 	<!-- VoLTE CP NB/EXTRA_VOL-->
 	<path name="volte_cp_nb_extra_vol-handset-mic">
 		<path name="incall_nb-handset-mic" />
 	</path>
 
 	<path name="volte_cp_nb_extra_vol-speaker-mic">
-		<path name="incall_nb-speaker-mic" />
-	</path>
-
-	<!-- VoLTE CP NB/EXTRA_VOL/HANDOVER -->
-	<path name="volte_cp_nb_extra_vol_handover-handset-mic">
-		<path name="incall_nb-handset-mic" />
-	</path>
-
-	<path name="volte_cp_nb_extra_vol_handover-speaker-mic">
 		<path name="incall_nb-speaker-mic" />
 	</path>
 
@@ -1250,34 +1393,64 @@
 
 	<!-- Realtime Loopback Input -->
 	<path name="realtimeloopback-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-main-mic" />
 	</path>
-	
+
 	<path name="realtimeloopback-2nd-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-2nd-mic" />
 	</path>
-	
+
 	<path name="realtimeloopback-headset-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-headset-mic" />
 	</path>
-	
+
+	<path name="realtimeloopback-bt-sco-headset-in">
+		<path name="media-bt-sco-headset-in" />
+	</path>
+
+	<!-- Codec Loopback Input -->
+	<path name="loopback_codec-mic">
+		<path name="route-codec-loopback" />
+		<path name="dev-main-mic" />
+	</path>
+
+	<path name="loopback_codec-2nd-mic">
+		<path name="route-codec-loopback" />
+		<path name="dev-2nd-mic" />
+	</path>
+
+	<path name="loopback_codec-headset-mic">
+		<path name="route-codec-loopback" />
+		<path name="dev-headset-mic" />
+	</path>
+
 	<!-- TTY Mode Input -->
 	<path name="tty_mode-hco-mic">
-		<path name="route-ap" />
-		<path name="dev-main-mic" />
+		<path name="incall_nb-headset-mic" />
 	</path>
 
 	<path name="tty_mode-full-mic">
-		<path name="route-ap" />
-		<path name="dev-headset-mic" />
+		<path name="incall_nb-headset-mic" />
 	</path>
 
 	<path name="tty_mode-vco-mic">
-		<path name="route-ap" />
-		<path name="dev-headset-mic" />
+		<path name="incall_nb-handset-mic" />
+	</path>
+
+	<!-- AP TTY Mode Input -->
+	<path name="ap_tty_mode-hco-mic">
+		<path name="media-headset-mic" />
+	</path>
+
+	<path name="ap_tty_mode-full-mic">
+		<path name="media-headset-mic" />
+	</path>
+
+	<path name="ap_tty_mode-vco-mic">
+		<path name="media-mic" />
 	</path>
 
 	<!-- echo(rms) test input -->
@@ -1286,18 +1459,50 @@
 	</path>
 
 	<path name="echo_test-2nd-mic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-2nd-mic" />
 	</path>
 
 	<path name="echo_test-dualmic">
-		<path name="route-ap" />
+		<path name="route-ap-rx" />
 		<path name="dev-dual-mic" />
+	</path>
+
+	<!-- incall recording setting -->
+	<path name="incall-rec-uplink">
+		<ctl name="AudioMixer RMIX1 En" value="Off" />
+		<ctl name="AudioMixer RMIX2 En" value="On" />
+	</path>
+
+	<path name="incall-rec-downlink">
+		<ctl name="AudioMixer RMIX1 En" value="On" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
+	</path>
+
+	<path name="incall-rec-uplink-and-downlink">
+		<ctl name="AudioMixer RMIX1 En" value="On" />
+		<ctl name="AudioMixer RMIX2 En" value="On" />
+	</path>
+
+    <path name="incall-normal-rec-uplink">
+        <ctl name="AudioMixer RMIX1 En" value="Off" />
+        <ctl name="AudioMixer RMIX2 En" value="On" />
+    </path>
+
+	<!-- incall rec callmemo -->
+	<path name="incall-rec-callmemo">
+		<ctl name="AudioMixer CH2 Mixer En" value="Off" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
+		<ctl name="AudioMixer RMIX1 En" value="On" />
 	</path>
 
 	<!-- call forwarding input -->
 	<path name="call_forwarding_master-mic">
-		<path name="communication-handset-mic" />
+		<ctl name="AudioMixer Mixer En" value="On" />
+		<ctl name="AudioMixer SRC2 En" value="On" />
+		<ctl name="AudioMixer RMIX1 En" value="On" />
+		<ctl name="AudioMixer RMIX2 En" value="Off" />
+		<ctl name="AudioMixer CH1 DOUT Select" value="RMIX_OUT" />
 	</path>
 
 	<path name="call_forwarding_slave-handset-mic">
@@ -1320,24 +1525,23 @@
 		<path name="communication-bt-sco-headset-in" />
 	</path>
 
-	<!-- One byte control -->
-	<path name="seamless_buf_offset">
-	</path>
-
 	<!-- FM Playback/Recording -->
 	<path name="fm_radio-speaker" >
-		<path name="route-ap-fm-tx" />
+		<path name="route-ap-bt-codec" />
 		<path name="dev-speaker" />
 	</path>
 
 	<path name="fm_radio-headset" >
-		<path name="route-ap-fm-tx" />
+		<path name="route-ap-bt-codec" />
 		<path name="dev-headset" />
 	</path>
 
 	<path name="fm_radio-fm-recording" >
-		<path name="route-ap-fm-rx" />
+		<path name="route-ap-bt-codec" />
 		<ctl name="AudioMixer CH3 Rec En" value="On" />
 	</path>
 
+	<path name="codec_rx_mute" >
+		<param name="DAC Soft Mute" id="0" />
+	</path>
 </mixer>

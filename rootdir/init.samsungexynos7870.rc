@@ -125,6 +125,16 @@ on boot
     chmod 0660 /sys/class/android_usb/android0/functions
     chown system system /sys/class/android_usb/android0/bDeviceClass
     chmod 0660 /sys/class/android_usb/android0/bDeviceClass
+    
+    # Permissions for System LSI NFC
+    # NFC : Permissions for NFC
+        chmod 0660 /dev/sec-nfc
+        chown nfc nfc /dev/sec-nfc
+    # NFC : EFS section for NFC Resonant Frequency
+        mkdir /mnt/vendor/efs/sec_efs/nfc 0700 nfc nfc
+    # Permissions for S.LSI ESE
+        chmod 0660 /dev/p3
+        chown system system /dev/p3
 
     # terminal mode
     chmod 0660 /sys/class/android_usb/android0/terminal_version
@@ -196,6 +206,27 @@ service charger /system/bin/charger
     capabilities SYS_BOOT
     seclabel u:r:charger:s0
 
+# FM Radio
+    chown system audio /dev/radio0
+    chmod 0660 /dev/radio0
+    chown bluetooth bluetooth /sys/devices/bluetooth/lna_en
+
+# RPMB daemon
+service rpmbd /system/bin/rpmbd
+     user root
+     group drmrpc
+     class main
+
+on property:sys.mobicoredaemon.enable=true
+    start cs_service
+    write /proc/iccc_ready 1
+
+# FINGERPRINT FRAMEWORK : starts fingerprintd
+service fingerprintd /system/bin/fingerprintd
+    class late_start
+    user system
+    group system
+
 # Bluetooth
 on property:wc_transport.start_hci=true
     start start_hci_filter
@@ -210,5 +241,20 @@ service start_hci_filter /vendor/bin/wcnss_filter
     seclabel u:r:wcnss_filter:s0
     disabled
 
+# sem_daemon
+service sem_daemon /system/bin/sem_daemon
+    class core
+    user system
+    group system nfc
+    disabled
+
+on property:sys.boot_completed=1
+    setprop security.semdaemonfinish 0
+    start sem_daemon
+
+on property:security.semdaemonfinish=1
+    stop sem_daemon
+
+# Enable ZRAM to finish up boot
 on property:sys.boot_completed=1
     swapon_all /vendor/etc/fstab.samsungexynos7870

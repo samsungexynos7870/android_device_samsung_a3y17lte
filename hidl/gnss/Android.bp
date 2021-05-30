@@ -1,5 +1,5 @@
 cc_library_shared {
-    name: "android.hardware.gnss@1.0-impl.gtaxlwifi",
+    name: "android.hardware.gnss@1.0-impl.exynos7870",
     defaults: ["hidl_defaults"],
     vendor: true,
     relative_install_path: "hw",
@@ -32,9 +32,9 @@ cc_library_shared {
 cc_binary {
     relative_install_path: "hw",
     vendor: true,
-    name: "android.hardware.gnss@1.0-service.gtaxlwifi",
+    name: "android.hardware.gnss@1.0-service.exynos7870",
     defaults: ["hidl_defaults"],
-    init_rc: ["android.hardware.gnss@1.0-service.gtaxlwifi.rc"],
+    init_rc: ["android.hardware.gnss@1.0-service.exynos7870.rc"],
     compile_multilib: "32",
     srcs: ["service.cpp"],
 
