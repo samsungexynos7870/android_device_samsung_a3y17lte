@@ -10,7 +10,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Fix for echo in calls
 PRODUCT_PROPERTY_OVERRIDES += \
     audio_hal.disable_two_mic=false
-
-# OTA updates
-PRODUCT_PROPERTY_OVERRIDES += \
-	lineage.updater.uri=https://raw.githubusercontent.com/samsungexynos7870/lineage_ota/master/lineage_a3y17lte.json
