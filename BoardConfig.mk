@@ -110,3 +110,35 @@ BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 # Include
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/dtbhtool/include
+
+#SHRP Mandatory flags
+SHRP_DEVICE_CODE := a3y17lte
+
+# Path of your SHRP device tree
+SHRP_PATH := device/<device-brand>/$(SHRP_DEVICE_CODE)
+
+# Maintainer name
+SHRP_MAINTAINER := 
+
+# Recovery Type (for "About" section only)
+SHRP_REC_TYPE := <Treble|Normal|SAR>
+# Your device's recovery path, dont use blindly
+# NOTE: Edit this before building
+SHRP_REC := </dev/block/bootdevice/by-name/recovery>
+
+# Emergency DownLoad mode (0 = no EDL mode, 1 = EDL mode available)
+SHRP_EDL_MODE := 0
+
+# internal storage path
+SHRP_INTERNAL := /sdcard
+
+# If your device has an external sdcard
+SHRP_EXTERNAL := /external_sd
+
+# USB OTG path
+SHRP_OTG := /usb_otg
+
+# Flashlight: (0 = disable, 1 = enable)
+SHRP_FLASH := 1
+# Optional Flags
+SHRP_DARK := true
