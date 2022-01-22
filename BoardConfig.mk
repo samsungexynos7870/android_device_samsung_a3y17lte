@@ -18,6 +18,9 @@ DEVICE_PATH := device/samsung/a3y17lte
 # Audio
 BOARD_USE_TFA_AMP := true
 
+# Display
+TARGET_SCREEN_DENSITY := 320
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
