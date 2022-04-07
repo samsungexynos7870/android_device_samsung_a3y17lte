@@ -123,28 +123,6 @@
          will not debounce light sensor readings -->
     <integer name="config_lightSensorWarmupTime">0</integer>
 
-    <!-- Screen brightness used to dim the screen while dozing in a very low power state.
-         May be less than the minimum allowed brightness setting
-         that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">20</integer>
-
-    <!-- ComponentName of a dream to show whenever the system would otherwise have
-         gone to sleep.  When the PowerManager is asked to go to sleep, it will instead
-         try to start this dream if possible.  The dream should typically call startDozing()
-         to put the display into a low power state and allow the application processor
-         to be suspended.  When the dream ends, the system will go to sleep as usual.
-         Specify the component name or an empty string if none.
-         Note that doze dreams are not subject to the same start conditions as ordinary dreams.
-         Doze dreams will run whenever the power manager is in a dozing state. -->
-    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
-
-    <!-- Allow automatic adjusting of the screen brightness while dozing in low power state. -->
-    <bool name="config_allowAutoBrightnessWhileDozing">true</bool>
-
-    <!-- If we allow automatic adjustment of screen brightness while dozing, how many times we want
-         to reduce it to preserve the battery. Value of 100% means no scaling. -->
-    <fraction name="config_screenAutoBrightnessDozeScaleFactor">50%</fraction>
-
     <!-- Enable OLED burn-in protection -->
     <bool name="config_enableBurnInProtection">true</bool>
 
