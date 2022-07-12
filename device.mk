@@ -20,12 +20,8 @@ DEVICE_PATH := device/samsung/a3y17lte
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
     frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml \
-    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml
-
-# Custom mixer_paths
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
-    $(DEVICE_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml \
+		frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.uicc.xml
 
 # Launch Android API level
 PRODUCT_SHIPPING_API_LEVEL := 23
@@ -49,8 +45,8 @@ PRODUCT_PACKAGES += \
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.samsung
-   
-PRODUCT_COPY_FILES += \  
+
+PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
 
 # NFC
@@ -90,6 +86,7 @@ PRODUCT_PACKAGES += \
     libcld80211 \
     libwifi-hal \
     libwpa_client \
+		WifiOverlay \
     wificond \
     wpa_supplicant \
     wpa_supplicant.conf
@@ -101,10 +98,27 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
+# Custom mixer_paths OSS
+PRODUCT_COPY_FILES += \
+$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
+
+# Inherit from common (audio)
+$(call inherit-product, device/samsung/universal7870-common/device-oss_audio.mk)
+
+# Custom mixer_paths prebuilt
+#PRODUCT_COPY_FILES += \
+#    $(DEVICE_PATH)/configs/prebuilt/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+#    $(DEVICE_PATH)/configs/prebuilt/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+
+# Inherit from common
+# $(call inherit-product, device/samsung/universal7870-common/device-prebuilt_audio.mk)
+
 # Properties
 -include $(DEVICE_PATH)/system_prop.mk
 
 # Inherit from common
 $(call inherit-product, device/samsung/universal7870-common/device-common.mk)
+
+# $(call inherit-product, device/samsung/universal7870-common/device-prebuilt_bsp-vndk.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/a3y17lte/a3y17lte-vendor.mk)

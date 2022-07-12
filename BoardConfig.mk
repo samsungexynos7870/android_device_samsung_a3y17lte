@@ -16,7 +16,11 @@
 DEVICE_PATH := device/samsung/a3y17lte
 
 # Audio
-BOARD_USE_TFA_AMP := true
+# TFA-Audio
+BOARD_USES_EXYNOS7870_TFA_AMP := true
+
+# exynos7870 OSS audio hal
+TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 
 # Display
 TARGET_SCREEN_DENSITY := 320
@@ -60,6 +64,7 @@ WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_P2P := "p2p"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 WPA_SUPPLICANT_USE_HIDL := true
+WIFI_AVOID_IFACE_RESET_MAC_CHANGE := true
 
 # inherit from common
 -include device/samsung/universal7870-common/BoardConfigCommon.mk

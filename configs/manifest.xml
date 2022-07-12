@@ -2,7 +2,7 @@
     <hal format="hidl">
         <name>android.hardware.audio</name>
         <transport>hwbinder</transport>
-        <version>5.0</version>
+        <version>6.0</version>
         <interface>
             <name>IDevicesFactory</name>
             <instance>default</instance>
@@ -11,7 +11,7 @@
     <hal format="hidl">
         <name>android.hardware.audio.effect</name>
         <transport>hwbinder</transport>
-        <version>5.0</version>
+        <version>6.0</version>
         <interface>
             <name>IEffectsFactory</name>
             <instance>default</instance>
@@ -20,7 +20,7 @@
     <hal format="hidl">
         <name>android.hardware.soundtrigger</name>
         <transport>hwbinder</transport>
-        <version>2.2</version>
+        <version>2.3</version>
         <interface>
             <name>ISoundTriggerHw</name>
             <instance>default</instance>
@@ -109,7 +109,7 @@
     <hal format="hidl">
         <name>android.hardware.graphics.composer</name>
         <transport>hwbinder</transport>
-        <version>2.1</version>
+        <version>2.2</version>
         <interface>
             <name>IComposer</name>
             <instance>default</instance>
@@ -134,15 +134,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.light</name>
-        <transport>hwbinder</transport>
-        <version>2.0</version>
-        <interface>
-            <name>ILight</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.media.omx</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -152,6 +143,15 @@
         </interface>
         <interface>
             <name>IOmxStore</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.light</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ILight</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -248,24 +248,7 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
-        <name>vendor.lineage.livedisplay</name>
-        <transport>hwbinder</transport>
-        <version>2.0</version>
-        <interface>
-            <name>IDisplayColorCalibration</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IDisplayModes</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IReadingEnhancement</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-       <hal format="hidl">
+    <hal format="hidl" override="true">
         <name>android.hardware.power</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -273,9 +256,8 @@
             <name>IPower</name>
             <instance>default</instance>
         </interface>
-        <fqname>@1.0::IPower/default</fqname>
     </hal>
-     <hal format="hidl">
+    <hal format="hidl" override="true">
         <name>vendor.lineage.power</name>
         <transport>hwbinder</transport>
         <version>1.0</version>

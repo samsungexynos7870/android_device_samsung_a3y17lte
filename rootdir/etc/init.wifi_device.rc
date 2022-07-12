@@ -13,7 +13,7 @@ on post-fs-data
     chmod 0666 /data/vendor/conn/.wificable.info
     chown wifi root /sys/wifi/wificable
     chmod 0664 /sys/wifi/wificable
-	
+
 	# for WIFI TRP/TIS
     chown wifi root /data/vendor/conn/.psm.info
     chmod 0664 /data/vendor/conn/.psm.info
@@ -23,5 +23,3 @@ on post-fs-data
     # for WIFI Antenna Selection
     chown wifi root /data/vendor/conn/.ant.info
     chmod 0664 /data/vendor/conn/.ant.info
-
-

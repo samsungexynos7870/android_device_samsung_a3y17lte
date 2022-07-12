@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 The havocOS Project
+# Copyright (C) 2019 The arrowOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/havoc_a3y17lte.mk
+    $(LOCAL_DIR)/arrow_a3y17lte.mk
 
 COMMON_LUNCH_CHOICES := \
-    havoc_a3y17lte-user \
-    havoc_a3y17lte-userdebug \
-    havoc_a3y17lte-eng
+    arrow_a3y17lte-user \
+    arrow_a3y17lte-userdebug \
+    arrow_a3y17lte-eng
