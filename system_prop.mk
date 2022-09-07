@@ -22,3 +22,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Set fdsan to the warn_once severity level
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.fdsan=warn_once
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.multisim.simslotcount=1
+
+#ifneq ($(TARGET_BUILD_VARIANT),eng)
+#PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.adb.secure=1
+#endif

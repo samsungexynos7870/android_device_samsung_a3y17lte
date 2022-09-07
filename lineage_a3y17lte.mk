@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 The arrowOS Project
+# Copyright (C) 2019 The lineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from a3y17lte device
 $(call inherit-product, device/samsung/a3y17lte/device.mk)
 
-# Inherit some common arrow stuff.
-$(call inherit-product, vendor/arrow/config/common.mk)
+# Inherit some common Lineage stuff.
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := a3y17lte
-PRODUCT_NAME := arrow_a3y17lte
+PRODUCT_NAME := lineage_a3y17lte
 PRODUCT_BRAND := samsung
 PRODUCT_MANUFACTURER := samsung
 
