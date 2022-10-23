@@ -7,7 +7,7 @@
 $ mkdir shrp ; cd shrp
 
 # Init repo
-$ repo init -u git://github.com/SHRP/manifest -b v3_9.0
+$ repo init -u https://github.com/SHRP/manifest -b v3_9.0
 
 # Clone my device tree
 $ git clone https://github.com/samsungexynos7870/android_device_samsung_a3y17lte.git -b skyhawk device/samsung/a3y17lte
