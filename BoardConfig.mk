@@ -111,34 +111,28 @@ BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 # Include
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/dtbhtool/include
 
-#SHRP Mandatory flags
+#################################
+# SHRP section
+###############
+TARGET_DEVICE := a3y17lte
+SHRP_PATH := $(DEVICE_PATH)
 SHRP_DEVICE_CODE := a3y17lte
-
-# Path of your SHRP device tree
-SHRP_PATH := device/<device-brand>/$(SHRP_DEVICE_CODE)
-
-# Maintainer name
-SHRP_MAINTAINER := 
-
-# Recovery Type (for "About" section only)
-SHRP_REC_TYPE := <Treble|Normal|SAR>
-# Your device's recovery path, dont use blindly
-# NOTE: Edit this before building
-SHRP_REC := </dev/block/bootdevice/by-name/recovery>
-
-# Emergency DownLoad mode (0 = no EDL mode, 1 = EDL mode available)
+SHRP_MAINTAINER := batuhantrkgl
+SHRP_OFFICIAL := false
 SHRP_EDL_MODE := 0
-
-# internal storage path
-SHRP_INTERNAL := /sdcard
-
-# If your device has an external sdcard
 SHRP_EXTERNAL := /external_sd
-
-# USB OTG path
-SHRP_OTG := /usb_otg
-
-# Flashlight: (0 = disable, 1 = enable)
+SHRP_INTERNAL := /sdcard
+SHRP_OTG := /usb-otg
 SHRP_FLASH := 1
-# Optional Flags
+SHRP_CUSTOM_FLASHLIGHT := true
+SHRP_FONP_1 := /sys/class/camera/flash/rear_torch_flash
+SHRP_FLASH_MAX_BRIGHTNESS := 200
+SHRP_REC := /dev/block/platform/13540000.dwmmc0/by-name/RECOVERY
+SHRP_AB := false
+SHRP_REC_TYPE := Treble
+SHRP_DEVICE_TYPE := A/B
+SHRP_STATUSBAR_RIGHT_PADDING := 40
+SHRP_STATUSBAR_LEFT_PADDING := 40
+SHRP_EXPRESS := true
 SHRP_DARK := true
+LZMA_RAMDISK_TARGETS := recovery
