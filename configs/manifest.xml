@@ -210,7 +210,7 @@
         <name>android.hardware.radio.deprecated</name>
         <transport>hwbinder</transport>
     </hal>
-        <hal format="hidl" override="true">
+    <hal format="hidl" override="true">
         <name>vendor.samsung.hardware.radio.channel</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
@@ -225,7 +225,7 @@
         <fqname>@2.0::ISehChannel/epdgd2</fqname>
         <fqname>@2.0::ISehChannel/imsd</fqname>
         <fqname>@2.0::ISehChannel/imsd2</fqname>
-    </hal>
+   </hal>
    <hal format="hidl" override="true">
       <name>vendor.samsung.hardware.radio.bridge</name>
       <transport>hwbinder</transport>
