@@ -223,6 +223,18 @@
         <fqname>@2.0::ISehChannel/imsd2</fqname>
    </hal>
    <hal format="hidl" override="true">
+        <name>vendor.samsung.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <version>2.1</version>
+        <interface>
+            <name>ISehRadio</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+        <fqname>@2.1::ISehRadio/slot1</fqname>
+        <fqname>@2.1::ISehRadio/slot2</fqname>
+   </hal>
+   <hal format="hidl" override="true">
       <name>vendor.samsung.hardware.radio.bridge</name>
       <transport>hwbinder</transport>
       <fqname>@2.0::ISehBridge/slot1</fqname>
