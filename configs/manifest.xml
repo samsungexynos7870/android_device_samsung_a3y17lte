@@ -240,16 +240,6 @@
         <fqname>@1.0::ISensors/default</fqname>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.soundtrigger</name>
-        <transport>hwbinder</transport>
-        <version>2.3</version>
-        <interface>
-            <name>ISoundTriggerHw</name>
-            <instance>default</instance>
-        </interface>
-        <fqname>@2.3::ISoundTriggerHw/default</fqname>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.tetheroffload.config</name>
         <transport arch="32+64">passthrough</transport>
         <version>1.0</version>
@@ -297,23 +287,6 @@
             <name>ILineagePower</name>
             <instance>default</instance>
         </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.lineage.touch</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IKeyDisabler</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IGloveMode</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IStylusMode</name>
-            <instance>default</instance>
-        </interface>        
     </hal>
     <hal format="hidl">
         <name>vendor.lineage.livedisplay</name>
