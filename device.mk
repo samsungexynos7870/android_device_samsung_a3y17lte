@@ -40,7 +40,13 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
     android.hardware.bluetooth@1.0-service \
     android.hardware.bluetooth.audio@2.0-impl \
-    audio.bluetooth.default \
+    audio.bluetooth.default
+
+# A2DP
+PRODUCT_PACKAGES += \
+  audio.a2dp.default \
+  android.hardware.bluetooth.a2dp@1.0-impl \
+  android.hardware.bluetooth.a2dp@1.0-service
 
 # Fingerprint
 PRODUCT_PACKAGES += \
