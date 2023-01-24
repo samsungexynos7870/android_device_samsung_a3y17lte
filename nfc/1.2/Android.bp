@@ -1,0 +1,28 @@
+cc_binary {
+    name: "android.hardware.nfc@1.2-service.samsung.a3y17lte",
+    stem: "android.hardware.nfc@1.2-service.samsung",
+    defaults: ["hidl_defaults"],
+    proprietary: true,
+    init_rc: ["android.hardware.nfc@1.2-service.samsung.rc"],
+    vintf_fragments: ["android.hardware.nfc@1.2-service.samsung.xml"],
+    relative_install_path: "hw",
+    srcs: [
+        "SecNfcService.cpp",
+        "SecNfc.cpp",
+    ],
+    cflags: [
+    ],
+    shared_libs: [
+        "nfc_nci_samsung",
+        "android.hardware.nfc@1.0",
+        "android.hardware.nfc@1.1",
+        "android.hardware.nfc@1.2",
+        "libbase",
+        "libcutils",
+        "libhardware",
+        "liblog",
+        "libutils",
+        "libhidlbase",
+        "libcrypto",
+    ],
+}
