@@ -47,6 +47,10 @@ PRODUCT_PACKAGES += \
   android.hardware.bluetooth.a2dp@1.0-impl \
   android.hardware.bluetooth.a2dp@1.0-service
 
+# Tests
+PRODUCT_PACKAGES += \
+  QSensorTest
+
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service.samsung
