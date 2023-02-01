@@ -60,7 +60,6 @@ PRODUCT_COPY_FILES += \
 
 # NFC
 PRODUCT_PACKAGES += \
-    android.hardware.nfc@1.2-service.samsung.a3y17lte \
     com.android.nfc_extras \
     libnfc-nci \
     libnfc_nci_jni \
