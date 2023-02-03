@@ -9,10 +9,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Fix for echo in calls
 PRODUCT_PROPERTY_OVERRIDES += \
     audio_hal.disable_two_mic=false
-    
-# Lockscreen rotation
-PRODUCT_PROPERTY_OVERRIDES += \
-    lockscreen.rot_override=true
 
 # FIFO UI scheduling
 PRODUCT_PROPERTY_OVERRIDES += \
