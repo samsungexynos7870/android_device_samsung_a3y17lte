@@ -3,9 +3,6 @@
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.qcom.bluetooth.soc=rome
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.vendor.qcom.bluetooth.soc=cherokee
-
 # Fix for echo in calls
 PRODUCT_PROPERTY_OVERRIDES += \
     audio_hal.disable_two_mic=false
