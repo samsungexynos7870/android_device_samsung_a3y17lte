@@ -6,14 +6,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Fix for echo in calls
 PRODUCT_PROPERTY_OVERRIDES += \
     audio_hal.disable_two_mic=false
-    
-# SurfaceFlinger
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.surface_flinger.max_frame_buffer_acquired_buffers=3
-    
-# Lockscreen rotation
-PRODUCT_PROPERTY_OVERRIDES += \
-    lockscreen.rot_override=true
 
 # FIFO UI scheduling
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -25,7 +17,3 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.multisim.simslotcount=1
-
-#ifneq ($(TARGET_BUILD_VARIANT),eng)
-#PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.adb.secure=1
-#endif
