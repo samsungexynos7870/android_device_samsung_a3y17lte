@@ -128,7 +128,7 @@
          that can be set by the user. -->
     <integer name="config_screenBrightnessDoze">20</integer>
     
-        <!-- If true, the doze component is not started until after the screen has been
+    <!-- If true, the doze component is not started until after the screen has been
          turned off and the screen off animation has been performed. -->
     <bool name="config_dozeAfterScreenOffByDefault">true</bool>
 
@@ -149,12 +149,20 @@
          to reduce it to preserve the battery. Value of 100% means no scaling. -->
     <fraction name="config_screenAutoBrightnessDozeScaleFactor">50%</fraction>
 
-    <!-- Whether the always on display mode is available. -->
+    <!-- Whether the always on display mode is available. This should only be enabled on
+         devices where the display has be tuned to be power efficient in DOZE and/or DOZE_SUSPEND
+         states. -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
+    
+    <!-- Whether device supports double tap to wake -->
+    <bool name="config_supportDoubleTapWake">true</bool>
 
     <!-- Control whether the always on display mode is enabled by default. This value will be used
          during initialization when the setting is still null. -->
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
+    
+    <!-- Whether the display blanks itself when transitioning from a doze to a non-doze state -->
+    <bool name="config_displayBlanksAfterDoze">true</bool>
 
     <!-- Enable OLED burn-in protection -->
     <bool name="config_enableBurnInProtection">true</bool>

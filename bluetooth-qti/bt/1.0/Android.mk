@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 The LineageOS Project
+# Copyright (C) 2023 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-LOCAL_PATH := $(call my-dir)
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := libbauthtzcommon.c
-LOCAL_SHARED_LIBRARIES := liblog libui libutils
-LOCAL_MODULE := libbauthtzcommon_shim
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-LOCAL_MODULE_TARGET_ARCH:= arm
-LOCAL_VENDOR_MODULE := true
-
-include $(BUILD_SHARED_LIBRARY)
+include $(call all-subdir-makefiles)
