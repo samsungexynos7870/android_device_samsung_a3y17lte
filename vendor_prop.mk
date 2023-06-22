@@ -13,4 +13,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # OTA updates
 PRODUCT_PROPERTY_OVERRIDES += \
-    lineage.updater.uri=https://raw.githubusercontent.com/debie-A320FL/OTA/master/lineage_a3y17lte.json
+    lineage.updater.uri=https://raw.githubusercontent.com/samsungexynos7870/OTA/master/lineage_a3y17lte.json
