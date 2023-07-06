@@ -28,7 +28,6 @@ LOCAL_SHARED_LIBRARIES := \
     libhidlbase \
     liblog \
     libutils \
-    libhidltransport \
     android.hardware.biometrics.fingerprint@2.1
 
 ifeq ($(TARGET_SEC_FP_CALL_NOTIFY_ON_CANCEL),true)

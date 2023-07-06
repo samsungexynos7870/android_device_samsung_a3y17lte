@@ -33,7 +33,6 @@ LOCAL_SHARED_LIBRARIES := \
     libutils \
     libhardware \
     libhidlbase \
-    libhidltransport \
     android.hardware.bluetooth@1.0
 
 include $(BUILD_EXECUTABLE)
