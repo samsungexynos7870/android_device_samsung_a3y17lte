@@ -201,5 +201,8 @@
 
     <!-- enable support for configure max aspect ratio per app -->
     <bool name="config_haveHigherAspectRatioScreen">false</bool>
+    
+    <!-- Indicates that AP mode MAC randomization is supported on this device -->
+    <bool translatable="false" name="config_wifi_ap_mac_randomization_supported">false</bool>
 
 </resources>
