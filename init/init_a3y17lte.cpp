@@ -36,10 +36,9 @@
 #include <android-base/logging.h>
 
 #include "vendor_init.h"
-#include "property_service.h"
 
-using android::base::GetProperty;
-using android::init::property_set;
+using ::android::base::GetProperty;
+using ::android::base::SetProperty;
 
 void property_override(const std::string& name, const std::string& value)
 {
@@ -73,15 +72,15 @@ void property_override_quad(const std::string& boot_prop, const std::string& pro
 }
 
 void init_dsds() {
-    property_set("ro.vendor.multisim.set_audio_params", "true");
-    property_set("ro.vendor.multisim.simslotcount", "2");
-    property_set("persist.radio.multisim.config", "dsds");
+    SetProperty("ro.vendor.multisim.set_audio_params", "true");
+    SetProperty("ro.vendor.multisim.simslotcount", "2");
+    SetProperty("persist.radio.multisim.config", "dsds");
 }
 
 void vendor_load_properties()
 {
     // Init a dummy BT MAC address, will be overwritten later
-    property_set("ro.boot.btmacaddr", "00:00:00:00:00:00");
+    SetProperty("ro.boot.btmacaddr", "00:00:00:00:00:00");
 
     std::string bootloader = GetProperty("ro.bootloader","");
 
@@ -106,6 +105,7 @@ void vendor_load_properties()
     }
 
     /* Common properties*/
+    property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "google/coral/coral:10/QQ3A.200705.002/6506677:user/release-keys");
     property_override("ro.build.description", "samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys");
     property_override_quad("ro.product.device", "ro.product.odm.device", "ro.product.system.device", "ro.product.vendor.device", "a3y17lte");
 
