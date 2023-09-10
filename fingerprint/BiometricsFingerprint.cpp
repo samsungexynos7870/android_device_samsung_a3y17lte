@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define LOG_TAG "android.hardware.biometrics.fingerprint@2.1-service.samsung"
+#define LOG_TAG "android.hardware.biometrics.fingerprint@2.3-service.samsung-a3y17lte"
 
 #include <android-base/logging.h>
 
@@ -24,14 +24,19 @@
 #include "BiometricsFingerprint.h"
 
 #include <dlfcn.h>
+#include <fstream>
 #include <inttypes.h>
 #include <unistd.h>
+
+#ifdef HAS_FINGERPRINT_GESTURES
+#include <fcntl.h>
+#endif
 
 namespace android {
 namespace hardware {
 namespace biometrics {
 namespace fingerprint {
-namespace V2_1 {
+namespace V2_3 {
 namespace implementation {
 
 using RequestStatus = android::hardware::biometrics::fingerprint::V2_1::RequestStatus;
@@ -43,12 +48,65 @@ BiometricsFingerprint::BiometricsFingerprint() : mClientCallback(nullptr) {
     if (!openHal()) {
         LOG(ERROR) << "Can't open HAL module";
     }
+
+    std::ifstream in("/sys/devices/virtual/fingerprint/fingerprint/position");
+    mIsUdfps = !!in;
+    if (in)
+        in.close();
+
+#ifdef HAS_FINGERPRINT_GESTURES
+    request(FINGERPRINT_REQUEST_NAVIGATION_MODE_START, 1);
+
+    uinputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+    if (uinputFd < 0) {
+        LOG(ERROR) << "Unable to open uinput node";
+        return;
+    }
+
+    int err = ioctl(uinputFd, UI_SET_EVBIT, EV_KEY) |
+          ioctl(uinputFd, UI_SET_KEYBIT, KEY_UP) |
+          ioctl(uinputFd, UI_SET_KEYBIT, KEY_DOWN);
+    if (err != 0) {
+        LOG(ERROR) << "Unable to enable key events";
+        return;
+    }
+
+    struct uinput_user_dev uidev;
+    sprintf(uidev.name, "uinput-sec-fp");
+    uidev.id.bustype = BUS_VIRTUAL;
+
+    err = write(uinputFd, &uidev, sizeof(uidev));
+    if (err < 0) {
+       LOG(ERROR) << "Write user device to uinput node failed";
+       return;
+    }
+
+    err = ioctl(uinputFd, UI_DEV_CREATE);
+    if (err < 0) {
+       LOG(ERROR) << "Unable to create uinput device";
+       return;
+    }
+
+    LOG(INFO) << "Successfully registered uinput-sec-fp for fingerprint gestures";
+#endif
 }
 
 BiometricsFingerprint::~BiometricsFingerprint() {
     if (ss_fingerprint_close() != 0) {
         LOG(ERROR) << "Can't close HAL module";
     }
+}
+
+Return<bool> BiometricsFingerprint::isUdfps(uint32_t) {
+    return mIsUdfps;
+}
+
+Return<void> BiometricsFingerprint::onFingerDown(uint32_t, uint32_t, float, float) {
+    return Void();
+}
+
+Return<void> BiometricsFingerprint::onFingerUp() {
+    return Void();
 }
 
 Return<RequestStatus> BiometricsFingerprint::ErrorFilter(int32_t error) {
@@ -146,7 +204,7 @@ Return<uint64_t> BiometricsFingerprint::setNotify(
     const sp<IBiometricsFingerprintClientCallback>& clientCallback) {
     std::lock_guard<std::mutex> lock(mClientCallbackMutex);
     mClientCallback = clientCallback;
-    // This is here because HAL 2.1 doesn't have a way to propagate a
+    // This is here because HAL 2.3 doesn't have a way to propagate a
     // unique token for its driver. Subsequent versions should send a unique
     // token for each call to setNotify(). This is fine as long as there's only
     // one fingerprint device on the platform.
@@ -160,6 +218,10 @@ Return<uint64_t> BiometricsFingerprint::preEnroll() {
 Return<RequestStatus> BiometricsFingerprint::enroll(const hidl_array<uint8_t, 69>& hat,
                                                     uint32_t gid, uint32_t timeoutSec) {
     const hw_auth_token_t* authToken = reinterpret_cast<const hw_auth_token_t*>(hat.data());
+
+#ifdef REQUEST_FORCE_CALIBRATE
+    request(SEM_REQUEST_FORCE_CBGE, 1);
+#endif
 
     return ErrorFilter(ss_fingerprint_enroll(authToken, gid, timeoutSec));
 }
@@ -254,6 +316,8 @@ bool BiometricsFingerprint::openHal() {
             dlsym(handle, "ss_fingerprint_set_active_group"));
         ss_fingerprint_authenticate = reinterpret_cast<typeof(ss_fingerprint_authenticate)>(
             dlsym(handle, "ss_fingerprint_authenticate"));
+        ss_fingerprint_request = reinterpret_cast<typeof(ss_fingerprint_request)>(
+            dlsym(handle, "ss_fingerprint_request"));
 
         if ((err = ss_fingerprint_open(nullptr)) != 0) {
             LOG(ERROR) << "Can't open fingerprint, error: " << err;
@@ -290,6 +354,10 @@ void BiometricsFingerprint::notify(const fingerprint_msg_t* msg) {
             }
         } break;
         case FINGERPRINT_ACQUIRED: {
+            if (msg->data.acquired.acquired_info > SEM_FINGERPRINT_EVENT_BASE) {
+                thisPtr->handleEvent(msg->data.acquired.acquired_info);
+                return;
+            }
             int32_t vendorCode = 0;
             FingerprintAcquiredInfo result =
                 VendorAcquiredFilter(msg->data.acquired.acquired_info, &vendorCode);
@@ -367,8 +435,83 @@ void BiometricsFingerprint::notify(const fingerprint_msg_t* msg) {
     }
 }
 
+void BiometricsFingerprint::handleEvent(int eventCode) {
+    switch (eventCode) {
+#ifdef HAS_FINGERPRINT_GESTURES
+        case SEM_FINGERPRINT_EVENT_GESTURE_SWIPE_DOWN:
+        case SEM_FINGERPRINT_EVENT_GESTURE_SWIPE_UP:
+            struct input_event event {};
+            int keycode = eventCode == SEM_FINGERPRINT_EVENT_GESTURE_SWIPE_UP ?
+                          KEY_UP : KEY_DOWN;
+
+            // Report the key
+            event.type = EV_KEY;
+            event.code = keycode;
+            event.value = 1;
+            if (write(uinputFd, &event, sizeof(event)) < 0) {
+                LOG(ERROR) << "Write EV_KEY to uinput node failed";
+                return;
+            }
+
+            // Force a flush with an EV_SYN
+            event.type = EV_SYN;
+            event.code = SYN_REPORT;
+            event.value = 0;
+            if (write(uinputFd, &event, sizeof(event)) < 0) {
+                LOG(ERROR) << "Write EV_SYN to uinput node failed";
+                return;
+            }
+
+            // Report the key
+            event.type = EV_KEY;
+            event.code = keycode;
+            event.value = 0;
+            if (write(uinputFd, &event, sizeof(event)) < 0) {
+                LOG(ERROR) << "Write EV_KEY to uinput node failed";
+                return;
+            }
+
+            // Force a flush with an EV_SYN
+            event.type = EV_SYN;
+            event.code = SYN_REPORT;
+            event.value = 0;
+            if (write(uinputFd, &event, sizeof(event)) < 0) {
+                LOG(ERROR) << "Write EV_SYN to uinput node failed";
+                return;
+            }
+        break;
+#endif
+    }
+}
+
+int BiometricsFingerprint::request(int cmd, int param) {
+    // TO-DO: input, output handling not implemented
+    int result = ss_fingerprint_request(cmd, nullptr, 0, nullptr, 0, param);
+    LOG(INFO) << "request(cmd=" << cmd << ", param=" << param << ", result=" << result << ")";
+    return result;
+}
+
+int BiometricsFingerprint::waitForSensor(std::chrono::milliseconds pollWait,
+                                         std::chrono::milliseconds timeOut) {
+    int sensorStatus = SEM_SENSOR_STATUS_WORKING;
+    std::chrono::milliseconds timeWaited = 0ms;
+    while (sensorStatus != SEM_SENSOR_STATUS_OK) {
+        if (sensorStatus == SEM_SENSOR_STATUS_CALIBRATION_ERROR
+                || sensorStatus == SEM_SENSOR_STATUS_ERROR){
+            return -1;
+        }
+        if (timeWaited >= timeOut) {
+            return -2;
+        }
+        sensorStatus = request(FINGERPRINT_REQUEST_GET_SENSOR_STATUS, 0);
+        std::this_thread::sleep_for(pollWait);
+        timeWaited += pollWait;
+    }
+    return 0;
+}
+
 }  // namespace implementation
-}  // namespace V2_1
+}  // namespace V2_3
 }  // namespace fingerprint
 }  // namespace biometrics
 }  // namespace hardware
