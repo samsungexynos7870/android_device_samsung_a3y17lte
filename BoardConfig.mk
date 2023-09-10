@@ -52,6 +52,9 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(LOCAL_PATH)/releasetools
 TARGET_LD_SHIM_LIBS += \
     /vendor/lib/libbauthserver.so|/vendor/lib/libbauthtzcommon_shim.so
 
+# device sepolicy
+BOARD_SEPOLICY_DIRS := $(LOCAL_PATH)/sepolicy
+
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_WLAN_DEVICE := qcwcn
