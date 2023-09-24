@@ -819,32 +819,32 @@
 	</path>
 
 	<!-- call forwarding output -->
-	<path name="call_forwarding_master">
+	<path name="call_forwarding_primary">
 		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer SRC2 En" value="On" />
 		<ctl name="AudioMixer CH1 Mixer En" value="On" />
 		<ctl name="AudioMixer CH2 DOUT Select" value="DMIX_OUT" />
 	</path>
 
-	<path name="call_forwarding_slave-handset">
+	<!--path name="call_forwarding_slave-handset">
 		<path name="communication-handset" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-speaker">
+	<!--path name="call_forwarding_slave-speaker">
 		<path name="communication-speaker" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-headset">
+	<!--path name="call_forwarding_slave-headset">
 		<path name="communication-headset" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-headphone">
+	<!--path name="call_forwarding_slave-headphone">
 		<path name="communication-headphone" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-bt-sco-headset">
+	<!--path name="call_forwarding_slave-bt-sco-headset">
 		<path name="communication-bt-sco-headset" />
-	</path>
+	</path-->
 
 	<!-- Input stage -->
 	<!-- media input -->
@@ -1497,7 +1497,7 @@
 	</path>
 
 	<!-- call forwarding input -->
-	<path name="call_forwarding_master-mic">
+	<path name="call_forwarding_primary-mic">
 		<ctl name="AudioMixer Mixer En" value="On" />
 		<ctl name="AudioMixer SRC2 En" value="On" />
 		<ctl name="AudioMixer RMIX1 En" value="On" />
@@ -1505,25 +1505,25 @@
 		<ctl name="AudioMixer CH1 DOUT Select" value="RMIX_OUT" />
 	</path>
 
-	<path name="call_forwarding_slave-handset-mic">
+	<!--path name="call_forwarding_slave-handset-mic">
 		<path name="communication-handset-mic" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-speaker-mic">
+	<!--path name="call_forwarding_slave-speaker-mic">
 		<path name="communication-speaker-mic" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-headset-mic">
+	<!--path name="call_forwarding_slave-headset-mic">
 		<path name="communication-headset-mic" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-headphone-mic">
+	<!--path name="call_forwarding_slave-headphone-mic">
 		<path name="communication-headphone-mic" />
-	</path>
+	</path-->
 
-	<path name="call_forwarding_slave-bt-sco-headset-in">
+	<!--path name="call_forwarding_slave-bt-sco-headset-in">
 		<path name="communication-bt-sco-headset-in" />
-	</path>
+	</path-->
 
 	<!-- FM Playback/Recording -->
 	<path name="fm_radio-speaker" >

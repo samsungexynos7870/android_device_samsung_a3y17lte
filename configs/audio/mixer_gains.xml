@@ -766,38 +766,38 @@
 	</path>
 
 	<!-- call forwarding output volume -->
-	<path name="gain-call_forwarding_master">
+	<path name="gain-call_forwarding_primary">
 		<!-- we use default volume -->
 	</path>
 
-	<path name="gain-call_forwarding_slave-handset">
+	<!--path name="gain-call_forwarding_slave-handset">
 		<ctl name="AudioMixer MIX1_LVL" value="0" />
 		<ctl name="DAC Gain" value="127" />
 		<ctl name="Earphone Volume" value="0" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-speaker">
-		<ctl name="AudioMixer MIX1_LVL" value="0" />
+	<!--path name="gain-call_forwarding_slave-speaker">
+		<ctl name="AudioMixer MIX1_LVL" value="0" /-->
 		<!--
 		<ctl name="DAC Gain" value="127" />
 		<ctl name="Speaker Volume" value="3" />
 		-->
-	</path>
+	<!--/path-->
 
-	<path name="gain-call_forwarding_slave-headset">
+	<!--path name="gain-call_forwarding_slave-headset">
 		<ctl name="AudioMixer MIX1_LVL" value="0" />
 		<ctl name="DAC Gain" value="127" />
 		<ctl name="Headphone Volume" value="32" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-headphone">
+	<!--path name="gain-call_forwarding_slave-headphone">
 		<ctl name="AudioMixer MIX1_LVL" value="0" />
 		<ctl name="DAC Gain" value="127" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-bt-sco-headset">
+	<!--path name="gain-call_forwarding_slave-bt-sco-headset">
 		<ctl name="AudioMixer MIX1_LVL" value="0" />
-	</path>
+	</path-->
 
 	<!-- Input stage volume -->
 	<!-- media input volume -->
@@ -1986,45 +1986,45 @@
 	</path>
 
 	<!-- call forwarding input volume -->
-	<path name="gain-call_forwarding_master-mic">
+	<path name="gain-call_forwarding_primary-mic">
 		<!-- we use default volume -->
 	</path>
 
-	<path name="gain-call_forwarding_slave-handset-mic">
+	<!--path name="gain-call_forwarding_slave-handset-mic">
 		<ctl name="MIC1 Volume" value="11" />
 		<ctl name="MIC1 Boost Volume" value="2" />
 		<ctl name="ADC Left Gain" value="127" />
 		<ctl name="ADC Right Gain" value="127" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-speaker-mic">
+	<!--path name="gain-call_forwarding_slave-speaker-mic">
 		<ctl name="MIC1 Volume" value="11" />
-		<ctl name="MIC1 Boost Volume" value="2" />
+		<ctl name="MIC1 Boost Volume" value="2" /-->
 		<!--
 		<ctl name="MIC2 Volume" value="11" />
 		<ctl name="MIC2 Boost Volume" value="2" />
 		-->
-		<ctl name="ADC Left Gain" value="127" />
+		<!--ctl name="ADC Left Gain" value="127" />
 		<ctl name="ADC Right Gain" value="127" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-headset-mic">
+	<!--path name="gain-call_forwarding_slave-headset-mic">
 		<ctl name="MIC3 Volume" value="11" />
 		<ctl name="MIC3 Boost Volume" value="2" />
 		<ctl name="ADC Left Gain" value="127" />
 		<ctl name="ADC Right Gain" value="127" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-headphone-mic">
+	<!--path name="gain-call_forwarding_slave-headphone-mic">
 		<ctl name="MIC1 Volume" value="11" />
 		<ctl name="MIC1 Boost Volume" value="2" />
 		<ctl name="ADC Left Gain" value="127" />
 		<ctl name="ADC Right Gain" value="127" />
-	</path>
+	</path-->
 
-	<path name="gain-call_forwarding_slave-bt-sco-headset-in">
+	<!--path name="gain-call_forwarding_slave-bt-sco-headset-in">
 		<ctl name="AudioMixer RMIX2_LVL" value="0" />
-	</path>
+	</path-->
 
 	<!-- echo(rms) test input volume -->
 	<path name="gain-echo_test-mic">
