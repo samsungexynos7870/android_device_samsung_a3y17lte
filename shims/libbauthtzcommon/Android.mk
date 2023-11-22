@@ -15,6 +15,8 @@
 
 LOCAL_PATH := $(call my-dir)
 
+LOCAL_ARM_MODE := arm
+
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := libbauthtzcommon.c
 LOCAL_SHARED_LIBRARIES := liblog libui libutils
