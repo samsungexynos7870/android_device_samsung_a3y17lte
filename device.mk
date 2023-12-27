@@ -36,9 +36,9 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_AAPT_PREBUILT_DPI := xhdpi hdpi
 
-# Bluetooth hal
-PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-service-qti.a3y17lte
+# qti Bluetooth service | does not support com.qualcomm.qti.ant@1.0-impl or vendor.samsung.hardware.bluetooth@1.0 hal unlike the prebuilt one by vendor
+#PRODUCT_PACKAGES += \
+#    android.hardware.bluetooth@1.0-service-qti.a3y17lte
 
 # Bluetooth audio
 PRODUCT_PACKAGES += \
@@ -56,6 +56,13 @@ PRODUCT_PACKAGES += \
     android.hardware.broadcastradio@1.0-impl \
     android.hardware.broadcastradio@1.0 \
     android.hardware.broadcastradio@1.1
+
+# ANT+
+PRODUCT_PACKAGES += \
+    com.dsi.ant.antradio_library
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/antradio-library/com.dsi.ant.antradio_library.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.dsi.ant.antradio_library.xml    
 
 # Fingerprint Permissions
 PRODUCT_COPY_FILES += \
@@ -91,7 +98,8 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-    libbauthtzcommon_shim
+    libbauthtzcommon_shim \
+    libgui_vendor_shim_exynos7870
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -102,7 +110,8 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     wificond \
     wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant.conf \
+    wcnss_filter
 
 #hostpad
 PRODUCT_PACKAGES += \
@@ -124,19 +133,19 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # Custom mixer_paths OSS
-PRODUCT_COPY_FILES += \
-$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
+#PRODUCT_COPY_FILES += \
+#$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
 
 # Inherit from common (audio)
-$(call inherit-product, device/samsung/universal7870-common/device-oss_audio.mk)
+#$(call inherit-product, device/samsung/universal7870-common/device-oss_audio.mk)
 
 # Custom mixer_paths prebuilt
-#PRODUCT_COPY_FILES += \
-#    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
-#    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
 
 # Inherit from common
-# $(call inherit-product, device/samsung/universal7870-common/device-prebuilt_audio.mk)
+$(call inherit-product, device/samsung/universal7870-common/device-prebuilt_audio.mk)
 
 # Properties
 -include $(DEVICE_PATH)/system_prop.mk

@@ -1,0 +1,55 @@
+# mcRegistry
+system/vendor/app/mcRegistry/07010000000000000000000000000000.tlbin:vendor/app/mcRegistry/07010000000000000000000000000000.tlbin
+system/vendor/app/mcRegistry/07060000000000000000000000000000.tlbin:vendor/app/mcRegistry/07060000000000000000000000000000.tlbin
+system/vendor/app/mcRegistry/08130000000000000000000000000000.tlbin:vendor/app/mcRegistry/08130000000000000000000000000000.tlbin
+system/vendor/app/mcRegistry/ffffffff00000000000000000000000f.tlbin:vendor/app/mcRegistry/ffffffff00000000000000000000000f.tlbin
+system/vendor/app/mcRegistry/ffffffff00000000000000000000002e.tlbin:vendor/app/mcRegistry/ffffffff00000000000000000000002e.tlbin
+system/vendor/app/mcRegistry/ffffffff00000000000000000000002f.tlbin:vendor/app/mcRegistry/ffffffff00000000000000000000002f.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000005.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000005.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000013.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000013.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000017.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000017.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000038.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000038.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000041.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000041.tlbin
+system/vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin
+system/vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin:vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin
+system/vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin:vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin
+system/vendor/app/mcRegistry/ffffffffd0000000000000000000000e.tlbin:vendor/app/mcRegistry/ffffffffd0000000000000000000000e.tlbin
+system/vendor/app/mcRegistry/ffffffffd00000000000000000000014.tlbin:vendor/app/mcRegistry/ffffffffd00000000000000000000014.tlbin
+system/vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin:vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin
+system/vendor/bin/mcDriverDaemon:vendor/bin/mcDriverDaemon
+system/vendor/lib/libMcClient.so:vendor/lib/libMcClient.so
+system/vendor/lib/libMcRegistry.so:vendor/lib/libMcRegistry.so
+
+
+# WiFi
+system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin
+system/etc/firmware/bdwlan32.bin:vendor/firmware/bdwlan32.bin
+system/etc/firmware/otp30.bin:vendor/firmware/otp30.bin
+system/etc/firmware/qwlan30.bin:vendor/firmware/qwlan30.bin
+system/etc/firmware/qwlan30_ibss.bin:vendor/firmware/qwlan30_ibss.bin
+system/etc/firmware/utf30.bin:vendor/firmware/utf30.bin
+system/etc/firmware/utfbd30.bin:vendor/firmware/utfbd30.bin
+system/etc/firmware/utfbd32.bin:vendor/firmware/utfbd32.bin
+
+# Bluetooth
+system/etc/firmware/nvm_tlv_tf_1.1.bin:vendor/etc/firmware/nvm_tlv_tf_1.1.bin
+system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
+
+
+# Camera
+system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin
+system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin
+system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
+
+# Sensors
+-system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so
+
+# camera
+-system/vendor/lib/libstainkiller.so:vendor/lib/libstainkiller.so
+-system/lib/libexynoscamera.so:vendor/lib/libexynoscamera.so
+-system/lib/libexynoscamera3.so:vendor/lib/libexynoscamera3.so
+-system/lib/hw/camera.exynos7870.so:vendor/lib/hw/camera.vendor.exynos7870.so
+
+# Misc data
+system/etc/firmware/Data.msc:vendor/firmware/Data.msc

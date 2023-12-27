@@ -15,7 +15,6 @@
 # limitations under the License.
 
 import common
-
 def FullOTA_InstallEnd(info):
   info.script.AppendExtra('ifelse(is_mounted("/vendor"), unmount("/vendor"));')
   info.script.AppendExtra('ifelse(is_mounted("/vendor"), "", mount("ext4", "EMMC", "/dev/block/platform/13540000.dwmmc0/by-name/VENDOR", "/vendor"));')

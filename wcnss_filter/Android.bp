@@ -1,0 +1,10 @@
+cc_prebuilt_binary {
+	name: "wcnss_filter",
+	srcs: ["scr/wcnss_filter"],
+	check_elf_files: false,
+	strip: {
+		none: true,
+	},
+	prefer: true,
+	soc_specific: true,
+}

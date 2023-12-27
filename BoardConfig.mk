@@ -25,6 +25,9 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Display
 TARGET_SCREEN_DENSITY := 320
 
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
