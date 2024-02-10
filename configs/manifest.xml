@@ -161,17 +161,17 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" override="true">
+    <hal format="hidl">
         <name>vendor.samsung.hardware.nfc</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
-            <name>ISecNfc</name>
+            <name>ISehNfc</name>
             <instance>default</instance>
         </interface>
-        <fqname>@2.0::ISecNfc/default</fqname>
+        <fqname>@2.0::ISehNfc/default</fqname>
     </hal>
-    <hal format="hidl" override="true">
+    <hal format="hidl">
         <name>android.hardware.radio</name>
         <transport>hwbinder</transport>
         <fqname>@1.2::ISap/slot1</fqname>
@@ -179,7 +179,19 @@
         <fqname>@1.4::IRadio/slot1</fqname>
         <fqname>@1.4::IRadio/slot2</fqname>
     </hal>
-    <hal format="hidl" override="true">
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <version>2.1</version>
+        <interface>
+            <name>ISehRadio</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+        <fqname>@2.1::ISehRadio/slot1</fqname>
+        <fqname>@2.1::ISehRadio/slot2</fqname>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.radio.config</name>
         <transport>hwbinder</transport>
         <version>1.2</version>
@@ -187,9 +199,8 @@
             <name>IRadioConfig</name>
             <instance>default</instance>
         </interface>
-        <fqname>@1.2::IRadioConfig/default</fqname>
     </hal>
-    <hal format="hidl" override="true">
+    <hal format="hidl">
         <name>vendor.samsung.hardware.radio.channel</name>
         <transport>hwbinder</transport>
         <version>2.0</version>
@@ -200,18 +211,18 @@
             <instance>imsd</instance>
             <instance>imsd2</instance>
         </interface>
-        <fqname>@2.0::ISehChannel/epdgd</fqname>
-        <fqname>@2.0::ISehChannel/epdgd2</fqname>
-        <fqname>@2.0::ISehChannel/imsd</fqname>
-        <fqname>@2.0::ISehChannel/imsd2</fqname>
     </hal>
-   <hal format="hidl" override="true">
-      <name>vendor.samsung.hardware.radio.bridge</name>
-      <transport>hwbinder</transport>
-      <fqname>@2.0::ISehBridge/slot1</fqname>
-      <fqname>@2.0::ISehBridge/slot2</fqname>
-   </hal>
-    <hal format="hidl" override="true">
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.radio.bridge</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISehBridge</name>
+            <instance>slot1</instance>
+            <instance>slot2</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.radio.deprecated</name>
         <transport>hwbinder</transport>
     </hal>
