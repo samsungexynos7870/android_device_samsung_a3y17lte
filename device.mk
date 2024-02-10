@@ -16,6 +16,20 @@
 
 DEVICE_PATH := device/samsung/a3y17lte
 
+# audio type guard
+TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := true
+TARGET_DEVICE_HAS_A6LTE_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP := true
+
+ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
+TARGET_DEVICE_HAS_TFA_AMP := true
+endif
+
+ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP),true)
+TARGET_DEVICE_HAS_TFA_AMP := true
+endif
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
@@ -120,20 +134,18 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
+ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
+# Custom mixer_paths prebuilt
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+endif
+
+ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 # Custom mixer_paths OSS
 PRODUCT_COPY_FILES += \
 $(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
-
-# Inherit from common (audio)
-$(call inherit-product, device/samsung/universal7870-common/device-oss_audio.mk)
-
-# Custom mixer_paths prebuilt
-#PRODUCT_COPY_FILES += \
-#    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
-#    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
-
-# Inherit from common
-# $(call inherit-product, device/samsung/universal7870-common/device-prebuilt_audio.mk)
+endif
 
 # Properties
 -include $(DEVICE_PATH)/system_prop.mk
