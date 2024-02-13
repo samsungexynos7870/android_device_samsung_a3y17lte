@@ -2,6 +2,10 @@
 # Im to lazy to find modern working nfc binarys from samsung stock
 # opensouce samsung nfc always fails for unknown reasone
 
+# camera
+-vendor/lib/libexynoscamera.so
+-vendor/lib/libexynoscamera3.so
+
 -vendor/bin/hw/sec.android.hardware.nfc@1.2-service
 vendor/etc/init/sec.android.hardware.nfc@1.2-service.rc
 vendor/etc/libnfc-sec-vendor.conf

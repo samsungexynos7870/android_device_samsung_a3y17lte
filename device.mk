@@ -16,6 +16,21 @@
 
 DEVICE_PATH := device/samsung/a3y17lte
 
+# audio type guard
+TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := true
+TARGET_DEVICE_HAS_A6LTE_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP := true
+
+ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
+TARGET_DEVICE_HAS_TFA_AMP := true
+TARGET_DEVICE_HAS_PREBUILT_AUDIO_HAL := true
+endif
+
+ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP),true)
+TARGET_DEVICE_HAS_TFA_AMP := true
+endif
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.ese.xml \
@@ -57,13 +72,6 @@ PRODUCT_PACKAGES += \
     android.hardware.broadcastradio@1.0 \
     android.hardware.broadcastradio@1.1
 
-# ANT+
-PRODUCT_PACKAGES += \
-    com.dsi.ant.antradio_library
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/antradio-library/com.dsi.ant.antradio_library.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.dsi.ant.antradio_library.xml    
-
 # Fingerprint Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
@@ -98,8 +106,7 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-    libbauthtzcommon_shim \
-    libgui_vendor_shim_exynos7870
+    libbauthtzcommon_shim
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -132,20 +139,18 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
-# Custom mixer_paths OSS
-#PRODUCT_COPY_FILES += \
-#$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
-
-# Inherit from common (audio)
-#$(call inherit-product, device/samsung/universal7870-common/device-oss_audio.mk)
-
+ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
 # Custom mixer_paths prebuilt
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
     $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+endif
 
-# Inherit from common
-$(call inherit-product, device/samsung/universal7870-common/device-prebuilt_audio.mk)
+ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
+# Custom mixer_paths OSS
+PRODUCT_COPY_FILES += \
+$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
+endif
 
 # Properties
 -include $(DEVICE_PATH)/system_prop.mk

@@ -1,4 +1,4 @@
-<manifest version="1.0" type="device" target-level="4">
+<manifest version="1.0" type="device" target-level="3">
     <hal format="hidl">
         <name>android.hardware.audio</name>
         <transport>hwbinder</transport>
@@ -38,7 +38,7 @@
     <hal format="hidl">
         <name>android.hardware.camera.provider</name>
         <transport>hwbinder</transport>
-        <version>2.5</version>
+        <version>2.4</version>
         <interface>
             <name>ICameraProvider</name>
             <instance>legacy/0</instance>
@@ -157,10 +157,10 @@
         <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
-            <name>ISecNfc</name>
+            <name>ISehNfc</name>
             <instance>default</instance>
         </interface>
-        <fqname>@2.0::ISecNfc/default</fqname>
+        <fqname>@2.0::ISehNfc/default</fqname>
     </hal>
     <hal format="hidl">
         <name>android.hardware.radio</name>
@@ -271,6 +271,15 @@
         <version>2.0</version>
         <interface>
             <name>ISehGnss</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.thermal</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IThermal</name>
             <instance>default</instance>
         </interface>
     </hal>

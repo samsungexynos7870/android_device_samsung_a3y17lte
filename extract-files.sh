@@ -19,6 +19,7 @@ set -e
 
 VENDOR=samsung
 DEVICE=a3y17lte
+TOOLS_DIR=vendor-tools
 
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
@@ -37,14 +38,24 @@ CLEAN_VENDOR=true
 
 source "${HELPER}"
 
-# proprietary-files_device.txt
-declare -A PROP_FILES=(
-    ["proprietary-files_a3y17lte.txt"]=""
-    ["proprietary-files_a7y17lte.txt"]=""
-    ["proprietary-files_m10lte.txt"]=""
-    ["proprietary-files_a6lte.txt"]=""
-    ["proprietary-files_a3y17lte-lineage-19.txt"]=""
-)
+generate_prop_files_array() {
+# The path to vendor-tools directory
+    local vendor_tools_dir="$1"
+# Declare PROP_FILES as a global associative array    
+    declare -gA PROP_FILES
+
+# List all 'proprietary-files_*.txt' files in the vendor-tools directory
+    local files=(${vendor_tools_dir}/proprietary-files_*.txt)
+    for file_path in "${files[@]}"; do
+        if [[ -f "$file_path" ]]; then
+            local filename=$(basename "$file_path")
+# Add to associative array with empty value            
+            PROP_FILES["$filename"]=""
+        fi
+    done
+}
+
+generate_prop_files_array "${MY_DIR}/${TOOLS_DIR}"
 
 function usage() {
     echo "Usage: $0 [options]"
@@ -125,14 +136,14 @@ done
 BLOB_ROOT="${ANDROID_ROOT}"/vendor/"${VENDOR}"/"${DEVICE}"/proprietary/vendor
 
 # Fix proprietary blobs
-for lib in libexynoscamera.so libexynoscamera3.so; do
-    if [[ -f "${BLOB_ROOT}/lib/${lib}" ]]; then
-        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/${lib}"
-        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/${lib}"
-        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/${lib}"
-        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/${lib}"
-    fi
-done
+#for lib in libexynoscamera.so libexynoscamera3.so; do
+#    if [[ -f "${BLOB_ROOT}/lib/${lib}" ]]; then
+#        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/${lib}"
+#        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/${lib}"
+#        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/${lib}"
+#        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/${lib}"
+#    fi
+#done
 
 for lib in android.hardware.bluetooth@1.0-impl-qti.so; do
     if [[ -f "${BLOB_ROOT}/lib/hw/${lib}" ]]; then
@@ -144,13 +155,13 @@ for lib in android.hardware.bluetooth@1.0-impl-qti.so; do
     fi
 done
 
-for lib in camera.vendor.exynos7870.so; do
-    if [[ -f "${BLOB_ROOT}/lib/hw/${lib}" ]]; then
-        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/hw/${lib}"
-        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/hw/${lib}"
-        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/hw/${lib}"
-        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/hw/${lib}"
-    fi
-done
+#for lib in camera.vendor.exynos7870.so; do
+#    if [[ -f "${BLOB_ROOT}/lib/hw/${lib}" ]]; then
+#        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/hw/${lib}"
+#        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/hw/${lib}"
+#        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/hw/${lib}"
+#        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/hw/${lib}"
+#    fi
+#done
 
 "${MY_DIR}/setup-makefiles.sh"

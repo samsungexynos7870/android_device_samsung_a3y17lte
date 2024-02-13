@@ -16,17 +16,24 @@
 LOCAL_PATH := device/samsung/a3y17lte
 
 # Audio
-# TFA-Audio
-BOARD_USES_EXYNOS7870_TFA_AMP := true
 
-# exynos7870 OSS audio hal
-TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
+# audio type guard
+TARGET_BOARD_HAS_M10LTE_AUDIO_HAL := true
+TARGET_BOARD_HAS_A6LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_OSS_AUDIO_HAL := false
+TARGET_BOARD_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP := true
+
+ifeq ($(TARGET_BOARD_HAS_M10LTE_AUDIO_HAL),true)
+TARGET_BOARD_HAS_TFA_AMP := true
+endif
+
+ifeq ($(TARGET_BOARD_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP),true)
+TARGET_BOARD_HAS_TFA_AMP := true
+BOARD_USES_EXYNOS7870_TFA_AMP := true
+endif
 
 # Display
 TARGET_SCREEN_DENSITY := 320
-
-# ANT+
-BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk

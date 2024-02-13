@@ -36,7 +36,6 @@ system/etc/firmware/utfbd32.bin:vendor/firmware/utfbd32.bin
 system/etc/firmware/nvm_tlv_tf_1.1.bin:vendor/etc/firmware/nvm_tlv_tf_1.1.bin
 system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
 
-
 # Camera
 system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin
 system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin
@@ -44,12 +43,6 @@ system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
 
 # Sensors
 -system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so
-
-# camera
--system/vendor/lib/libstainkiller.so:vendor/lib/libstainkiller.so
--system/lib/libexynoscamera.so:vendor/lib/libexynoscamera.so
--system/lib/libexynoscamera3.so:vendor/lib/libexynoscamera3.so
--system/lib/hw/camera.exynos7870.so:vendor/lib/hw/camera.vendor.exynos7870.so
 
 # Misc data
 system/etc/firmware/Data.msc:vendor/firmware/Data.msc
