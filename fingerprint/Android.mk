@@ -43,7 +43,8 @@ ifeq ($(TARGET_SEC_FP_CALL_CANCEL_ON_ENROLL_COMPLETION),true)
 endif
 
 LOCAL_MODULE := android.hardware.biometrics.fingerprint@2.1-service.samsung-a3y17lte
-LOCAL_INIT_RC := android.hardware.biometrics.fingerprint@2.1-service.samsung-a3y17lte.rc
+LOCAL_INIT_RC := android.hardware.biometrics.fingerprint@2.1-service.samsung.rc
+LOCAL_MODULE_STEM := android.hardware.biometrics.fingerprint@2.1-service.samsung
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_OWNER := samsung
