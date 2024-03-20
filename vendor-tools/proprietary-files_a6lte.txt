@@ -1,0 +1,7 @@
+# Biometrics - ET5XX - a6lte
+-vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
+-vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
+-vendor/lib/libegis_fp_normal_sensor_test.so:vendor/lib/libegis_fp_normal_sensor_test.so
+-vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
+-vendor/lib/libqfp_sensortest.so:vendor/lib/libqfp_sensortest.so
+-vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so

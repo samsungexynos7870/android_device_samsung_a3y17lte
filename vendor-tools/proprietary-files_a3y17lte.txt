@@ -1,0 +1,41 @@
+# mcRegistry a3y17lte
+# system/vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin
+# system/vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin
+
+# idk
+
+
+# Fingerprint
+# -system/vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
+# -system/vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
+# -system/vendor/lib/libegis_fp_normal_sensor_test.so:vendor/lib/libegis_fp_normal_sensor_test.so
+# -system/vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
+# -system/vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so
+
+
+# WiFi
+system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin
+system/etc/firmware/bdwlan32.bin:vendor/firmware/bdwlan32.bin
+system/etc/firmware/otp30.bin:vendor/firmware/otp30.bin
+system/etc/firmware/qwlan30.bin:vendor/firmware/qwlan30.bin
+system/etc/firmware/qwlan30_ibss.bin:vendor/firmware/qwlan30_ibss.bin
+system/etc/firmware/utf30.bin:vendor/firmware/utf30.bin
+system/etc/firmware/utfbd30.bin:vendor/firmware/utfbd30.bin
+system/etc/firmware/utfbd32.bin:vendor/firmware/utfbd32.bin
+
+# Bluetooth
+system/etc/firmware/nvm_tlv_tf_1.1.bin:vendor/etc/firmware/nvm_tlv_tf_1.1.bin
+system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
+
+# Camera
+system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin
+system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin
+system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
+-system/lib/libexynoscamera.so:vendor/lib/libexynoscamera.so
+-system/lib/libexynoscamera3.so:vendor/lib/libexynoscamera3.so
+
+# Sensors
+-system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so
+
+# Misc data
+system/etc/firmware/Data.msc:vendor/firmware/Data.msc

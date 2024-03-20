@@ -1,0 +1,13 @@
+# lineage_a3y17lte-eng 12 SQ3A.220705.004 eng.flomin.20231019.163941
+# Im to lazy to find modern working nfc binarys from samsung stock
+# opensouce samsung nfc always fails for unknown reasone
+
+# vendor/bin/hw/sec.android.hardware.nfc@1.2-service
+# vendor/etc/init/sec.android.hardware.nfc@1.2-service.rc
+# vendor/etc/libnfc-sec-vendor.conf
+# -vendor/lib64/nfc_nci_sec.so
+# -vendor/lib64/vendor.samsung.hardware.nfc@2.0.so
+vendor/etc/nfc/sec_s3nrn81_rfreg.bin
+vendor/etc/nfc/sec_s3nrn81_rfreg.fl
+vendor/firmware/nfc/sec_s3nrn81_firmware.fl
+vendor/firmware/nfc/sec_s3nrn81_firmware.bin
