@@ -22,15 +22,6 @@ DEVICE=a3y17lte
 
 export INITIAL_COPYRIGHT_YEAR=2017
 
-# proprietary-files_device.txt
-declare -A PROP_FILES=(
-    ["proprietary-files_a3y17lte.txt"]=""
-    ["proprietary-files_a7y17lte.txt"]=""
-    ["proprietary-files_m10lte.txt"]=""
-    ["proprietary-files_a6lte.txt"]=""
-    ["proprietary-files_a3y17lte-lineage-19.txt"]=""
-)
-
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi

@@ -103,11 +103,6 @@ while [ "${#}" -gt 0 ]; do
     shift
 done
 
-# Debug: Outputs current state of PROP_FILES
-#for key in "${!PROP_FILES[@]}"; do
-#    echo "$key=${PROP_FILES[$key]}"
-#done
-
 # vendor setup helper
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"
 
@@ -151,19 +146,4 @@ sed -i 's|/system/etc/|/vendor/etc/|g' "${BLOB_ROOT}/vendor/lib64/hw/android.har
 
 # libbauthserver.so
 "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${BLOB_ROOT}/vendor/lib/libbauthserver.so"
-# "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${BLOB_ROOT}/vendor/lib64/libbauthserver.so"
-
-# camera.vendor.exynos7870.so
-#"${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/vendor/lib/hw/camera.vendor.exynos7870.so"
-#"${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/vendor/lib/hw/camera.vendor.exynos7870.so"
-#"${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/vendor/lib/hw/camera.vendor.exynos7870.so"
-
-# ffffffff00000000000000000000002f.tlbin | We are universal7870 not universal7880
-# sed -i 's|universal7880|universal7870|g' "${BLOB_ROOT}/vendor/app/mcRegistry/ffffffff00000000000000000000002f.tlbin"
-
-# ffffffff000000000000000000000041.tlbin | We are smdk7870 not smdk7880
-# sed -i 's|smdk7880|smdk7870|g' "${BLOB_ROOT}/vendor/app/mcRegistry/ffffffff000000000000000000000041.tlbin"
-
-
-
 "${MY_DIR}/setup-makefiles.sh"
