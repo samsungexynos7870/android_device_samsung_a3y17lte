@@ -1,17 +1,4 @@
 # mcRegistry a3y17lte
-# system/vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000012.tlbin
-# system/vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin:vendor/app/mcRegistry/ffffffff000000000000000000000073.tlbin
-
-# idk
-
-
-# Fingerprint
-# -system/vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
-# -system/vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
-# -system/vendor/lib/libegis_fp_normal_sensor_test.so:vendor/lib/libegis_fp_normal_sensor_test.so
-# -system/vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
-# -system/vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so
-
 
 # WiFi
 system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin

@@ -19,20 +19,3 @@ system/lib64/libantradio.so:vendor/lib64/libantradio.so
 system/lib/libantradio.so:vendor/lib/libantradio.so
 system/lib64/libantradio.so
 system/lib/libantradio.so
-
-
-# Biometrics - ET5XX_7880
-# -system/vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
-# -system/vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
-# -system/vendor/lib/libegis_fp_normal_sensor_test.so:vendor/lib/libegis_fp_normal_sensor_test.so
-# -system/vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
-# -system/vendor/lib/libqfp_sensortest.so:vendor/lib/libqfp_sensortest.so
-# -system/vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so
-# -system/vendor/lib64/libbauthserver.so:vendor/lib64/libbauthserver.so
-# -system/vendor/lib64/libbauthtzcommon.so:vendor/lib64/libbauthtzcommon.so
-# -system/vendor/lib64/libegis_fp_normal_sensor_test.so:vendor/lib64/libegis_fp_normal_sensor_test.so
-# -system/vendor/lib64/libgf_in_system_lib.so:vendor/lib64/libgf_in_system_lib.so
-# -system/vendor/lib64/libqfp_sensortest.so:vendor/lib64/libqfp_sensortest.so
-# -system/vendor/lib64/libsynaFpSensorTestNwd.so:vendor/lib64/libsynaFpSensorTestNwd.so
-
-# vendor/app/mcRegistry/ffffffff00000000000000000000002e.tlbin

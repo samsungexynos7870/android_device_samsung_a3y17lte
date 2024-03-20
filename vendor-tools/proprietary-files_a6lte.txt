@@ -1,3 +1,5 @@
+# A600FJXU9CUH3
+
 # Biometrics - ET5XX - a6lte
 -vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
 -vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
