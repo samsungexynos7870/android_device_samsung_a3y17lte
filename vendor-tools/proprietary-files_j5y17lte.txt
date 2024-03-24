@@ -1,6 +1,6 @@
 # J530FXXS9CUE5
 
 # NFC - ese p3
-system/vendor/firmware/nfc/sec_s3nrn81_firmware.bin
-system/vendor/etc/nfc/sec_s3nrn81_rfreg.bin
+system/vendor/firmware/nfc/sec_s3nrn81_firmware.bin:vendor/firmware/nfc/sec_s3nrn81_firmware.bin
+system/vendor/etc/nfc/sec_s3nrn81_rfreg.bin:vendor/etc/nfc/sec_s3nrn81_rfreg.bin
 
