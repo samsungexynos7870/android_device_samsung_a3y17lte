@@ -18,10 +18,10 @@ DEVICE_PATH := device/samsung/a3y17lte
 # Audio
 
 # audio type guard
-TARGET_BOARD_HAS_M10LTE_AUDIO_HAL := true
-TARGET_BOARD_HAS_A6LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_TFA_SEC_AUDIO_HAL := false
+TARGET_BOARD_HAS_SEC_AUDIO_HAL := false
 
-ifeq ($(TARGET_BOARD_HAS_M10LTE_AUDIO_HAL),true)
+ifeq ($(TARGET_BOARD_HAS_TFA_SEC_AUDIO_HAL),true)
 TARGET_BOARD_HAS_TFA_AMP := true
 endif
 
@@ -32,6 +32,12 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 
 # Audiohal
 BOARD_USE_SPKAMP := true
+
+# keymaster type guard 
+TARGET_BOARD_HAS_MDFPP_KEYSTORE := false
+
+# gatekeeper type guard
+TARGET_BOARD_HAS_HW_GATEKEEPER := false
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
