@@ -17,12 +17,15 @@
 DEVICE_PATH := device/samsung/a3y17lte
 
 # audio type guard
-TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := true
+TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := false
 TARGET_DEVICE_HAS_A6LTE_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL := true
 
 ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
 TARGET_DEVICE_HAS_TFA_AMP := true
 TARGET_DEVICE_HAS_PREBUILT_AUDIO_HAL := true
+else ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
+TARGET_DEVICE_HAS_TFA_AMP := true
 endif
 
 # Permissions
@@ -31,11 +34,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml \
     frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.uicc.xml
-
+    
+ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
+# Custom mixer_paths OSS
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/mixer_paths_oss_a720s.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+else
 # Custom mixer_paths
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
     $(DEVICE_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
+endif
 
 # Bootanimation
 TARGET_SCREEN_HEIGHT := 1280

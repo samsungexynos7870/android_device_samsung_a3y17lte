@@ -25,6 +25,14 @@ ifeq ($(TARGET_BOARD_HAS_M10LTE_AUDIO_HAL),true)
 TARGET_BOARD_HAS_TFA_AMP := true
 endif
 
+# sec audio hal
+TARGET_BOARD_HAS_EXYNOS7870_SEC_AUDIOHAL := false
+
+TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
+
+# Audiohal
+BOARD_USE_SPKAMP := true
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
