@@ -103,11 +103,6 @@ while [ "${#}" -gt 0 ]; do
     shift
 done
 
-# Debug: Outputs current state of PROP_FILES
-#for key in "${!PROP_FILES[@]}"; do
-#    echo "$key=${PROP_FILES[$key]}"
-#done
-
 # vendor setup helper
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"
 
@@ -133,35 +128,22 @@ for PROP_FILE in "${!PROP_FILES[@]}"; do
 done
 
 # BLOB_ROOT
-BLOB_ROOT="${ANDROID_ROOT}"/vendor/"${VENDOR}"/"${DEVICE}"/proprietary/vendor
+BLOB_ROOT="${ANDROID_ROOT}"/vendor/"${VENDOR}"/"${DEVICE}"/proprietary
 
-# Fix proprietary blobs
-#for lib in libexynoscamera.so libexynoscamera3.so; do
-#    if [[ -f "${BLOB_ROOT}/lib/${lib}" ]]; then
-#        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/${lib}"
-#        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/${lib}"
-#        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/${lib}"
-#        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/${lib}"
-#    fi
-#done
+# libexynoscamera.so
+"${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera.so"
+"${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera.so"
+"${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera.so"
 
-for lib in android.hardware.bluetooth@1.0-impl-qti.so; do
-    if [[ -f "${BLOB_ROOT}/lib/hw/${lib}" ]]; then
-        sed -i 's|/system/etc/|/vendor/etc/|g' "${BLOB_ROOT}/lib/hw/${lib}"
-    fi
-    
-    if [[ -f "${BLOB_ROOT}/lib64/hw/${lib}" ]]; then
-        sed -i 's|/system/etc/|/vendor/etc/|g' "${BLOB_ROOT}/lib64/hw/${lib}"
-    fi
-done
+# libexynoscamera3.so
+"${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera3.so"
+"${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera3.so"
+"${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/vendor/lib/libexynoscamera3.so"
 
-#for lib in camera.vendor.exynos7870.so; do
-#    if [[ -f "${BLOB_ROOT}/lib/hw/${lib}" ]]; then
-#        "${PATCHELF}" --replace-needed "libcamera_client.so" "libcamera_metadata_helper.so" "${BLOB_ROOT}/lib/hw/${lib}"
-#        "${PATCHELF}" --replace-needed "libgui.so" "libgui_vendor.so" "${BLOB_ROOT}/lib/hw/${lib}"
-#        "${PATCHELF}" --add-needed "libexynoscamera_shim.so" "${BLOB_ROOT}/lib/hw/${lib}"
-#        "${PATCHELF}" --add-needed "libgui_vendor_shim_exynos7870.so" "${BLOB_ROOT}/lib/hw/${lib}"
-#    fi
-#done
+# android.hardware.bluetooth@1.0-impl-qti.so
+sed -i 's|/system/etc/|/vendor/etc/|g' "${BLOB_ROOT}/vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so"
+sed -i 's|/system/etc/|/vendor/etc/|g' "${BLOB_ROOT}/vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so"
 
+# libbauthserver.so
+"${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${BLOB_ROOT}/vendor/lib/libbauthserver.so"
 "${MY_DIR}/setup-makefiles.sh"

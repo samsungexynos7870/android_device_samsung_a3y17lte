@@ -17,19 +17,36 @@
 DEVICE_PATH := device/samsung/a3y17lte
 
 # audio type guard
-TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL := true
-TARGET_DEVICE_HAS_A6LTE_AUDIO_HAL := false
-TARGET_DEVICE_HAS_OSS_AUDIO_HAL := false
-TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP := true
+TARGET_DEVICE_HAS_TFA_SEC_AUDIO_HAL := false
+TARGET_DEVICE_HAS_SEC_AUDIO_HAL := false
+TARGET_DEVICE_HAS_OSS_AUDIO_HAL := true
 
-ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
+ifeq ($(TARGET_DEVICE_HAS_TFA_SEC_AUDIO_HAL),true)
 TARGET_DEVICE_HAS_TFA_AMP := true
 TARGET_DEVICE_HAS_PREBUILT_AUDIO_HAL := true
-endif
-
-ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL_WITH_TFA_AMP),true)
+else ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 TARGET_DEVICE_HAS_TFA_AMP := true
 endif
+
+# gatekeeper type guard
+TARGET_DEVICE_HAS_HW_GATEKEEPER_BIOMETRICS := true
+TARGET_DEVICE_HAS_HW_GATEKEEPER_COMMON := false
+
+# radio type guard
+TARGET_DEVICE_HAS_SEC_RIL := true
+
+# gnss type guard
+TARGET_DEVICE_HAS_SEC_GNSS := true
+
+# prebuilt slsi
+TARGET_DEVICE_HAS_SAMSUNG_SLSI_EXYNOS7870 := false
+
+# keymaster type guard 
+# TODO: Fix keymaster driver telling its untrusted
+TARGET_DEVICE_HAS_SEC_KEYMASTER := false
+
+# gatekeeper type guard
+TARGET_DEVICE_HAS_HW_GATEKEEPER := true
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -80,11 +97,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/display/576nits_config/display_id_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/displayconfig/display_id_0.xml
 
-# GPS configs
+# NFC
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/gps/gps_debug.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gps.conf \
-    $(LOCAL_PATH)/configs/gps/gps_debug.conf:$(TARGET_COPY_OUT_VENDOR)/etc/gps_debug.conf \
-    $(LOCAL_PATH)/configs/gps/gps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gps.xml
+    $(LOCAL_PATH)/configs/nfc/libnfc-sec-vendor.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-sec-vendor.conf \
+    $(LOCAL_PATH)/configs/nfc/libnfc-nci.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf \
+    $(LOCAL_PATH)/configs/nfc/nfcee_access.xml:$(TARGET_COPY_OUT_VENDOR)/etc/nfcee_access.xml
 
 # NFC
 PRODUCT_PACKAGES += \
@@ -93,7 +110,8 @@ PRODUCT_PACKAGES += \
     NfcNci \
     Tag \
     com.android.nfc_extras \
-    android.hardware.nfc@1.2.vendor
+    android.hardware.nfc@1.2.vendor \
+    android.hardware.nfc@1.2-service.samsung
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
@@ -139,17 +157,15 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
-ifeq ($(TARGET_DEVICE_HAS_M10LTE_AUDIO_HAL),true)
-# Custom mixer_paths prebuilt
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
-    $(DEVICE_PATH)/configs/audio/prebuilt/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
-endif
-
 ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 # Custom mixer_paths OSS
 PRODUCT_COPY_FILES += \
-$(LOCAL_PATH)/configs/audio/oss/mixer_paths_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths_0.xml
+    $(LOCAL_PATH)/configs/audio/mixer_paths_oss_a720s.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+else
+# Custom mixer_paths
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml \
+    $(DEVICE_PATH)/configs/audio/mixer_gains.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_gains.xml
 endif
 
 # Properties
