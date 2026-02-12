@@ -33,15 +33,6 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Audiohal
 BOARD_USE_SPKAMP := true
 
-# keystore type guard 
-TARGET_BOARD_HAS_MDFPP_KEYSTORE := false
-
-# keymaster type guard 
-TARGET_BOARD_HAS_MDFPP_KEYMASTER_IMPL := false
-
-# gatekeeper type guard
-TARGET_BOARD_HAS_HW_GATEKEEPER := false
-
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
