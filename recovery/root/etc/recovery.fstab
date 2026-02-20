@@ -25,7 +25,7 @@
 /system_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM		flags=display="System image";backup=1;flashimg=1
 /vendor		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/VENDOR      flags=display="Vendor";backup=1;wipeingui
 /vendor_image   emmc    /dev/block/platform/13540000.dwmmc0/by-name/VENDOR  	flags=display="Vendor image";backup=1;flashimg=1
-/data		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/USERDATA    flags=display="Data";encryptable=footer;length=-20480;fileencryption=ice
+/data		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/USERDATA    flags=display="Data"
 /modem		    emmc	/dev/block/platform/13540000.dwmmc0/by-name/RADIO       flags=display="Modem";backup=1
 /efs		    ext4	/dev/block/platform/13540000.dwmmc0/by-name/EFS	        flags=display="EFS";backup=1
 
