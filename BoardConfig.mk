@@ -33,12 +33,6 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Audiohal
 BOARD_USE_SPKAMP := true
 
-# keymaster type guard 
-TARGET_BOARD_HAS_MDFPP_KEYSTORE := false
-
-# gatekeeper type guard
-TARGET_BOARD_HAS_HW_GATEKEEPER := false
-
 # Display
 TARGET_SCREEN_DENSITY := 320
 
