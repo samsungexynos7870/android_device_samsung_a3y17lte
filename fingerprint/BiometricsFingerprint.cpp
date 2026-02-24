@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#define LOG_TAG "android.hardware.biometrics.fingerprint@2.3-service.samsung-a3y17lte"
+#define LOG_TAG "android.hardware.biometrics.fingerprint@2.3-service.a3y17lte"
 
 #include <android-base/logging.h>
-
 
 #include <hardware/hw_auth_token.h>
 
@@ -24,7 +23,7 @@
 #include <hardware/hardware.h>
 #include "BiometricsFingerprint.h"
 
-#include <dlfcn.h>
+//#include <dlfcn.h>
 #include <fstream>
 #include <inttypes.h>
 #include <unistd.h>
@@ -32,6 +31,23 @@
 #ifdef HAS_FINGERPRINT_GESTURES
 #include <fcntl.h>
 #endif
+
+extern "C" {
+    int ss_fingerprint_open(const char* id);
+    int ss_fingerprint_close();
+    int ss_set_notify_callback(fingerprint_notify_t notify);
+    uint64_t ss_fingerprint_pre_enroll();
+    int ss_fingerprint_enroll(const hw_auth_token_t* hat, uint32_t gid, uint32_t timeout_sec);
+    int ss_fingerprint_post_enroll();
+    uint64_t ss_fingerprint_get_auth_id();
+    int ss_fingerprint_cancel();
+    int ss_fingerprint_enumerate();
+    int ss_fingerprint_remove(uint32_t gid, uint32_t fid);
+    int ss_fingerprint_set_active_group(uint32_t gid, const char* store_path);
+    int ss_fingerprint_authenticate(uint64_t operation_id, uint32_t gid);
+    int ss_fingerprint_request(uint32_t cmd, char *inBuf, uint32_t inBuf_length,
+                               char *outBuf, uint32_t outBuf_length, uint32_t param);
+}
 
 namespace android {
 namespace hardware {
@@ -93,7 +109,7 @@ BiometricsFingerprint::BiometricsFingerprint() : mClientCallback(nullptr) {
 }
 
 BiometricsFingerprint::~BiometricsFingerprint() {
-    if (ss_fingerprint_close() != 0) {
+    if (::ss_fingerprint_close() != 0) {
         LOG(ERROR) << "Can't close HAL module";
     }
 }
@@ -103,10 +119,16 @@ Return<bool> BiometricsFingerprint::isUdfps(uint32_t) {
 }
 
 Return<void> BiometricsFingerprint::onFingerDown(uint32_t, uint32_t, float, float) {
+#ifdef REQUEST_TOUCH_EVENT
+    request(SEM_REQUEST_TOUCH_EVENT, 2);
+#endif
     return Void();
 }
 
 Return<void> BiometricsFingerprint::onFingerUp() {
+#ifdef REQUEST_TOUCH_EVENT
+    request(SEM_REQUEST_TOUCH_EVENT, 1);
+#endif
     return Void();
 }
 
@@ -213,7 +235,7 @@ Return<uint64_t> BiometricsFingerprint::setNotify(
 }
 
 Return<uint64_t> BiometricsFingerprint::preEnroll() {
-    return ss_fingerprint_pre_enroll();
+    return ::ss_fingerprint_pre_enroll();
 }
 
 Return<RequestStatus> BiometricsFingerprint::enroll(const hidl_array<uint8_t, 69>& hat,
@@ -224,19 +246,19 @@ Return<RequestStatus> BiometricsFingerprint::enroll(const hidl_array<uint8_t, 69
     request(SEM_REQUEST_FORCE_CBGE, 1);
 #endif
 
-    return ErrorFilter(ss_fingerprint_enroll(authToken, gid, timeoutSec));
+    return ErrorFilter(::ss_fingerprint_enroll(authToken, gid, timeoutSec));
 }
 
 Return<RequestStatus> BiometricsFingerprint::postEnroll() {
-    return ErrorFilter(ss_fingerprint_post_enroll());
+    return ErrorFilter(::ss_fingerprint_post_enroll());
 }
 
 Return<uint64_t> BiometricsFingerprint::getAuthenticatorId() {
-    return ss_fingerprint_get_auth_id();
+    return ::ss_fingerprint_get_auth_id();
 }
 
 Return<RequestStatus> BiometricsFingerprint::cancel() {
-    int32_t ret = ss_fingerprint_cancel();
+    int32_t ret = ::ss_fingerprint_cancel();
 
 #ifdef CALL_NOTIFY_ON_CANCEL
     if (ret == 0) {
@@ -251,15 +273,11 @@ Return<RequestStatus> BiometricsFingerprint::cancel() {
 }
 
 Return<RequestStatus> BiometricsFingerprint::enumerate() {
-    if (ss_fingerprint_enumerate != nullptr) {
-        return ErrorFilter(ss_fingerprint_enumerate());
-    }
-
-    return RequestStatus::SYS_UNKNOWN;
+    return ErrorFilter(::ss_fingerprint_enumerate());
 }
 
 Return<RequestStatus> BiometricsFingerprint::remove(uint32_t gid, uint32_t fid) {
-    return ErrorFilter(ss_fingerprint_remove(gid, fid));
+    return ErrorFilter(::ss_fingerprint_remove(gid, fid));
 }
 
 Return<RequestStatus> BiometricsFingerprint::setActiveGroup(uint32_t gid,
@@ -273,11 +291,11 @@ Return<RequestStatus> BiometricsFingerprint::setActiveGroup(uint32_t gid,
         return RequestStatus::SYS_EINVAL;
     }
 
-    return ErrorFilter(ss_fingerprint_set_active_group(gid, storePath.c_str()));
+    return ErrorFilter(::ss_fingerprint_set_active_group(gid, storePath.c_str()));
 }
 
 Return<RequestStatus> BiometricsFingerprint::authenticate(uint64_t operationId, uint32_t gid) {
-    return ErrorFilter(ss_fingerprint_authenticate(operationId, gid));
+    return ErrorFilter(::ss_fingerprint_authenticate(operationId, gid));
 }
 
 IBiometricsFingerprint* BiometricsFingerprint::getInstance() {
@@ -288,52 +306,22 @@ IBiometricsFingerprint* BiometricsFingerprint::getInstance() {
 }
 
 bool BiometricsFingerprint::openHal() {
-    void* handle = dlopen("libbauthserver.so", RTLD_NOW);
-    if (handle) {
-        int err;
+    int err;
 
-        ss_fingerprint_close =
-            reinterpret_cast<typeof(ss_fingerprint_close)>(dlsym(handle, "ss_fingerprint_close"));
-        ss_fingerprint_open =
-            reinterpret_cast<typeof(ss_fingerprint_open)>(dlsym(handle, "ss_fingerprint_open"));
-
-        ss_set_notify_callback = reinterpret_cast<typeof(ss_set_notify_callback)>(
-            dlsym(handle, "ss_set_notify_callback"));
-        ss_fingerprint_pre_enroll = reinterpret_cast<typeof(ss_fingerprint_pre_enroll)>(
-            dlsym(handle, "ss_fingerprint_pre_enroll"));
-        ss_fingerprint_enroll =
-            reinterpret_cast<typeof(ss_fingerprint_enroll)>(dlsym(handle, "ss_fingerprint_enroll"));
-        ss_fingerprint_post_enroll = reinterpret_cast<typeof(ss_fingerprint_post_enroll)>(
-            dlsym(handle, "ss_fingerprint_post_enroll"));
-        ss_fingerprint_get_auth_id = reinterpret_cast<typeof(ss_fingerprint_get_auth_id)>(
-            dlsym(handle, "ss_fingerprint_get_auth_id"));
-        ss_fingerprint_cancel =
-            reinterpret_cast<typeof(ss_fingerprint_cancel)>(dlsym(handle, "ss_fingerprint_cancel"));
-        ss_fingerprint_enumerate = reinterpret_cast<typeof(ss_fingerprint_enumerate)>(
-            dlsym(handle, "ss_fingerprint_enumerate"));
-        ss_fingerprint_remove =
-            reinterpret_cast<typeof(ss_fingerprint_remove)>(dlsym(handle, "ss_fingerprint_remove"));
-        ss_fingerprint_set_active_group = reinterpret_cast<typeof(ss_fingerprint_set_active_group)>(
-            dlsym(handle, "ss_fingerprint_set_active_group"));
-        ss_fingerprint_authenticate = reinterpret_cast<typeof(ss_fingerprint_authenticate)>(
-            dlsym(handle, "ss_fingerprint_authenticate"));
-        ss_fingerprint_request = reinterpret_cast<typeof(ss_fingerprint_request)>(
-            dlsym(handle, "ss_fingerprint_request"));
-
-        if ((err = ss_fingerprint_open(nullptr)) != 0) {
-            LOG(ERROR) << "Can't open fingerprint, error: " << err;
-            return false;
-        }
-
-        if ((err = ss_set_notify_callback(BiometricsFingerprint::notify)) != 0) {
-            LOG(ERROR) << "Can't register fingerprint module callback, error: " << err;
-            return false;
-        }
-
-        return true;
+    // Open the fingerprint HAL directly
+    if ((err = ::ss_fingerprint_open(nullptr)) != 0) {
+        LOG(ERROR) << "Can't open fingerprint, error: " << err;
+        return false;
     }
 
-    return false;
+    // Register the callback
+    if ((err = ::ss_set_notify_callback(BiometricsFingerprint::notify)) != 0) {
+        LOG(ERROR) << "Can't register fingerprint module callback, error: " << err;
+        ::ss_fingerprint_close();  // clean up
+        return false;
+    }
+
+    return true;
 }
 
 void BiometricsFingerprint::notify(const fingerprint_msg_t* msg) {
@@ -374,7 +362,7 @@ void BiometricsFingerprint::notify(const fingerprint_msg_t* msg) {
 #endif
 #ifdef CALL_CANCEL_ON_ENROLL_COMPLETION
             if(msg->data.enroll.samples_remaining == 0) {
-                thisPtr->ss_fingerprint_cancel();
+                thisPtr->::ss_fingerprint_cancel();
             }
 #endif
             LOG(DEBUG) << "onEnrollResult(fid=" << msg->data.enroll.finger.fid
@@ -487,7 +475,7 @@ void BiometricsFingerprint::handleEvent(int eventCode) {
 
 int BiometricsFingerprint::request(int cmd, int param) {
     // TO-DO: input, output handling not implemented
-    int result = ss_fingerprint_request(cmd, nullptr, 0, nullptr, 0, param);
+    int result = ::ss_fingerprint_request(cmd, nullptr, 0, nullptr, 0, param);
     LOG(INFO) << "request(cmd=" << cmd << ", param=" << param << ", result=" << result << ")";
     return result;
 }

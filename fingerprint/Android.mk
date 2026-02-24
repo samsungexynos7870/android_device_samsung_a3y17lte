@@ -28,6 +28,7 @@ LOCAL_SHARED_LIBRARIES := \
     libhidlbase \
     liblog \
     libutils \
+    libbauthserver \
     android.hardware.biometrics.fingerprint@2.1 \
     android.hardware.biometrics.fingerprint@2.2 \
     android.hardware.biometrics.fingerprint@2.3
@@ -52,10 +53,13 @@ ifeq ($(TARGET_SEC_FP_REQUEST_FORCE_CALIBRATE),true)
     LOCAL_CFLAGS += -DREQUEST_FORCE_CALIBRATE
 endif
 
-LOCAL_MODULE := android.hardware.biometrics.fingerprint@2.3-service.samsung-a3y17lte
-LOCAL_INIT_RC := android.hardware.biometrics.fingerprint@2.3-service.samsung.rc
-LOCAL_VINTF_FRAGMENTS := android.hardware.biometrics.fingerprint@2.3-service.samsung.xml
-LOCAL_MODULE_STEM := android.hardware.biometrics.fingerprint@2.3-service.samsung
+ifeq ($(TARGET_SEC_FP_REQUEST_TOUCH_EVENT),true)
+    LOCAL_CFLAGS += -DREQUEST_TOUCH_EVENT
+endif
+
+LOCAL_MODULE := android.hardware.biometrics.fingerprint@2.3-service.a3y17lte
+LOCAL_INIT_RC := android.hardware.biometrics.fingerprint@2.3-service.a3y17lte.rc
+LOCAL_VINTF_FRAGMENTS := android.hardware.biometrics.fingerprint@2.3-service.a3y17lte.xml
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_OWNER := samsung
