@@ -15,7 +15,9 @@
 #
 
 # Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_m.mk)
+# $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_m.mk)
+# this is save to assume since devices like a6lte lauched with o
+$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_o.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
@@ -26,10 +28,22 @@ $(call inherit-product, device/samsung/a3y17lte/device.mk)
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := a3y17lte
+
 PRODUCT_NAME := lineage_a3y17lte
+PRODUCT_DEVICE := a3y17lte
 PRODUCT_BRAND := samsung
+PRODUCT_MODEL := SM-A320FL
 PRODUCT_MANUFACTURER := samsung
+
+BUILD_FINGERPRINT := "samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys"
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRODUCT_NAME=a3y17ltexc \
+    PRIVATE_BUILD_DESC="a3y17ltexc-user 8.0.0 R16NW A320FLXXS5CSL5 release-keys"
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.build.PDA=A320FLXXS5CSL5 \
+    ro.build.fingerprint=samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys
 
 TARGET_SUPPORTS_BLUR := false
 TARGET_FACE_UNLOCK_SUPPORTED := false
