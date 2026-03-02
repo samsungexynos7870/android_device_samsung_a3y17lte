@@ -17,8 +17,14 @@
 import common
 
 def FullOTA_InstallEnd(info):
-  info.script.AppendExtra('ifelse(is_mounted("/vendor"), unmount("/vendor"));')
   info.script.AppendExtra('ifelse(is_mounted("/vendor"), "", mount("ext4", "EMMC", "/dev/block/platform/13540000.dwmmc0/by-name/VENDOR", "/vendor"));')
   info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/etc/nfc/sec_s3nrn81_rfreg.fl /vendor/etc/nfc/sec_s3nrn81_rfreg.bin"));')
   info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/firmware/nfc/sec_s3nrn81_firmware.fl /vendor/firmware/nfc/sec_s3nrn81_firmware.bin"));')
+  info.script.AppendExtra('ifelse(is_mounted("/vendor"), unmount("/vendor"));')
+  info.script.AppendExtra(
+    'run_program("/sbin/sh", "-c", '
+    '"if grep -qE \'encryptable=|forceencrypt=|fileencryption=|metadata_encryption=\' /etc/recovery.fstab; then '
+    'echo \'ERROR: Encryption found in recovery.fstab. Aborting.\' > /proc/self/fd/2; exit 1; fi") && '
+    'abort("E3004: Encryption found in recovery.fstab. Android 13 requires encryption to be disabled for recovery. IF YOU BOOT INTO SYSTEM NOW, CUSTOM RECOVERY WILL LIKELY BE CORRUPTED! Go get a supported TWRP recovery image or update inside LineageOS. To save THIS RECOVERY you might want to wipe SYSTEM, VENDOR, DATA, CACHE!");')
+  
   # info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "sed -i \'s:ro.multisim.simslotcount=.*:ro.multisim.simslotcount=1:\' /vendor/build.prop"));')
