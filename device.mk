@@ -37,6 +37,9 @@ TARGET_DEVICE_HAS_SEC_GNSS := true
 # prebuilt slsi
 TARGET_DEVICE_HAS_SAMSUNG_SLSI_EXYNOS7870 := false
 
+# TFA
+TARGET_DEVICE_TFA_MODEL := 9896
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \

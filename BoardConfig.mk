@@ -33,6 +33,9 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Audiohal
 BOARD_USE_SPKAMP := true
 
+# TFA
+TARGET_BOARD_TFA_MODEL := 9896
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
