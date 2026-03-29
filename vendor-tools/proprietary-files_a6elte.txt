@@ -1,0 +1,16 @@
+# A600FJXU9CUH3
+
+# Biometrics - ET5XX - a6elte
+-vendor/lib/libbauthserver.so:vendor/lib/libbauthserver.so
+-vendor/lib/libbauthtzcommon.so:vendor/lib/libbauthtzcommon.so
+-vendor/lib/libegis_fp_normal_sensor_test.so:vendor/lib/libegis_fp_normal_sensor_test.so
+-vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
+-vendor/lib/libqfp_sensortest.so:vendor/lib/libqfp_sensortest.so
+-vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so
+
+-vendor/lib64/libbauthserver.so:vendor/lib64/libbauthserver.so
+-vendor/lib64/libbauthtzcommon.so:vendor/lib64/libbauthtzcommon.so
+-vendor/lib64/libegis_fp_normal_sensor_test.so:vendor/lib64/libegis_fp_normal_sensor_test.so
+-vendor/lib64/libgf_in_system_lib.so:vendor/lib64/libgf_in_system_lib.so
+-vendor/lib64/libqfp_sensortest.so:vendor/lib64/libqfp_sensortest.so
+-vendor/lib64/libsynaFpSensorTestNwd.so:vendor/lib64/libsynaFpSensorTestNwd.so
