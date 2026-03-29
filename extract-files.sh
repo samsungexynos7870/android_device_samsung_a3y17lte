@@ -66,6 +66,11 @@ function blob_fixup() {
             # Add shim for libbauthserver.so
             "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
         ;;
+
+        vendor/lib64/libbauthserver.so)
+            # Add shim for libbauthserver.so
+            "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
+        ;;
     esac
 }
 
