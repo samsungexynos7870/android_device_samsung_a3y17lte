@@ -39,6 +39,9 @@ TARGET_BOARD_TFA_MODEL := 9896
 # libhwjpeg
 TARGET_USES_EXYNOS7870_LIBHWJPEG_O := true
 
+# FM Radio
+TARGET_BOARD_HAS_SILAB_FM := true
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
