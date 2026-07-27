@@ -43,6 +43,9 @@ TARGET_DEVICE_TFA_MODEL := 9896
 # camera type guard
 TARGET_DEVICE_CAMERA_VER := O
 
+# Audio NXP
+TARGET_DEVICE_HAS_TFA_SEC_AUDIO := true
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
