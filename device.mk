@@ -148,6 +148,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.4
 
+# power
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
 #supplicant
 PRODUCT_PACKAGES += \
     android.hardware.wifi.supplicant@1.3
