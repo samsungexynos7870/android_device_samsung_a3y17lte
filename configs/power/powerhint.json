@@ -280,7 +280,7 @@
             "PowerHint": "DOUBLE_TAP_TO_WAKE",
             "Node": "DoubleTapToWakeEnable",
             "Duration": 0,
-            "Value": "aot_enable,1"
+            "Value": "aod_enable,1"
         }
     ]
 }
