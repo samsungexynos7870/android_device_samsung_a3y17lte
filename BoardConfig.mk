@@ -33,6 +33,9 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Audiohal
 BOARD_USE_SPKAMP := true
 
+# FM Radio
+TARGET_BOARD_HAS_SILAB_FM := true
+
 # Display
 TARGET_SCREEN_DENSITY := 320
 
