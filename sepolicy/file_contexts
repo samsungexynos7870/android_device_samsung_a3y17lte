@@ -1,1 +1,4 @@
 /(vendor|system/vendor)/bin/hw/android\.hardware\.bluetooth@1\.0-service-qti         u:object_r:hal_bluetooth_default_exec:s0
+
+# FM Radio (Silicon Labs Si47xx)
+/dev/radio0                  u:object_r:fm_radio_device:s0

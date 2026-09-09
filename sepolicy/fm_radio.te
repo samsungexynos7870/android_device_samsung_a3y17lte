@@ -1,0 +1,6 @@
+# FM Radio (Silicon Labs Si47xx)
+
+type fm_radio_device, dev_type;
+
+# system uid FM radio applications (e.g. com.android.fmradio based)
+allow system_app fm_radio_device:chr_file rw_file_perms;
