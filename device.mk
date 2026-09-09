@@ -81,6 +81,10 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth.audio@2.0-impl \
     audio.bluetooth.default
 
+# Advanced display (mDNIe) settings
+PRODUCT_PACKAGES += \
+    AdvancedDisplay
+
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.3-service.a3y17lte
