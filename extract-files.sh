@@ -47,6 +47,12 @@ function blob_fixup() {
             # Add shim for libbauthserver.so
             "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
         ;;
+
+        system/lib/libantradio.so | system/lib64/libantradio.so | vendor/lib/libantradio.so | vendor/lib64/libantradio.so)
+            # ANT JNI library: provide the JNI helpers it was built against
+            # (jniThrowException is no longer exported by libnativehelper)
+            "${PATCHELF}" --add-needed "libnativehelper_shim.so" "${2}"
+        ;;
     esac
 }
 

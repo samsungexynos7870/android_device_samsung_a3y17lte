@@ -2,3 +2,9 @@
 
 # FM Radio (Silicon Labs Si47xx)
 /dev/radio0                  u:object_r:fm_radio_device:s0
+
+# ANT+ vendor public libraries (app-accessible JNI/HIDL client stack)
+/vendor/lib(64)?/libantradio\.so                        u:object_r:vendor_public_lib_file:s0
+/vendor/lib(64)?/com\.qualcomm\.qti\.ant@1\.0\.so       u:object_r:vendor_public_lib_file:s0
+/vendor/lib(64)?/android\.hardware\.bluetooth@1\.0\.so u:object_r:vendor_public_lib_file:s0
+/vendor/lib(64)?/libnativehelper_shim\.so               u:object_r:vendor_public_lib_file:s0

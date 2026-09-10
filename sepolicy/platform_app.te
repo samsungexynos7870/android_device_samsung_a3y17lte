@@ -1,0 +1,4 @@
+# com.dsi.ant.server (prebuilt AntHalService.apk) talks to the ANT HAL
+# served by the prebuilt bluetooth service via libantradio.so.
+allow platform_app hal_bluetooth_hwservice:hwservice_manager find;
+allow platform_app hal_bluetooth_default:hwbinder { call transfer };

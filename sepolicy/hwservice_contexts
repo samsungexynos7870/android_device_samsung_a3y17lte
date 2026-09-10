@@ -1,0 +1,5 @@
+# The ANT HAL (com.qualcomm.qti.ant@1.0::IAntHci) is registered by the
+# prebuilt android.hardware.bluetooth@1.0-service-qti, which also loads
+# com.qualcomm.qti.ant@1.0-impl.so. Reuse the bluetooth hwservice type
+# so both the server registration and client lookups keep working.
+com.qualcomm.qti.ant::IAntHci                                u:object_r:hal_bluetooth_hwservice:s0

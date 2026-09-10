@@ -130,7 +130,8 @@ PRODUCT_PACKAGES += \
 
 # Shims
 PRODUCT_PACKAGES += \
-    libbauthtzcommon_shim
+    libbauthtzcommon_shim \
+    libnativehelper_shim
 
 # Wifi
 PRODUCT_PACKAGES += \
