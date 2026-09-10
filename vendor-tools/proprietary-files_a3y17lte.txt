@@ -18,8 +18,6 @@ system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_
 system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin
 system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin
 system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
-# libexynoscamera/libexynoscamera3 come from the lineage-19 vendor dump
-# via proprietary-files_a3y17lte-lineage-19.txt on this branch
 
 # Sensors
 -system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so

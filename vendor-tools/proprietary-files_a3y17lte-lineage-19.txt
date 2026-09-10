@@ -1,7 +1,0 @@
-# lineage_a3y17lte-eng 12 SQ3A.220705.004 eng.flomin.20231019.163941
-# camera blobs from the lineage-19 vendor dump
-# (NFC is built from source; its firmware comes from the j5y17lte dump)
-
-# camera
--vendor/lib/libexynoscamera.so
--vendor/lib/libexynoscamera3.so

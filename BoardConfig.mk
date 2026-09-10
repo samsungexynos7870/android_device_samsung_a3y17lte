@@ -33,6 +33,9 @@ TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
 # Audiohal
 BOARD_USE_SPKAMP := true
 
+# TFA98xx
+TARGET_BOARD_TFA_MODEL := 9896
+
 # FM Radio
 TARGET_BOARD_HAS_SILAB_FM := true
 

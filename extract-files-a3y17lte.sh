@@ -53,15 +53,3 @@ COMMON_P_J5Y17LTE_PATH="${TARGET_SOURCES_DIR}/J530FXXS8CUE4"
 
 # j5y17lte files (NFC)
 ./extract-files.sh a3y17lte vendor-tools/proprietary-files_j5y17lte.txt -n -k $COMMON_P_J5Y17LTE_PATH
-
-# lineage-19 vendor dump (camera + NFC blobs for the cam-34xx setup).
-# Point A3Y17LTE_LINEAGE19_DUMP at an extracted lineage-19 vendor tree
-# (e.g. the vendor partition of a running lineage-19 build) to pull in
-# proprietary-files_a3y17lte-lineage-19.txt as well.
-LINEAGE19_DUMP="${A3Y17LTE_LINEAGE19_DUMP:-}"
-if [ -n "${LINEAGE19_DUMP}" ] && [ -d "${LINEAGE19_DUMP}" ]; then
-    ./extract-files.sh a3y17lte vendor-tools/proprietary-files_a3y17lte-lineage-19.txt -n -k "${LINEAGE19_DUMP}"
-else
-    echo "NOTE: A3Y17LTE_LINEAGE19_DUMP is not set or does not exist."
-    echo "      Skipping vendor-tools/proprietary-files_a3y17lte-lineage-19.txt (camera/NFC blobs)."
-fi

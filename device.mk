@@ -28,11 +28,8 @@ else ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 TARGET_DEVICE_HAS_TFA_AMP := true
 endif
 
-TFA_MODEL := 9896
-
-# gatekeeper type guard
-TARGET_DEVICE_HAS_HW_GATEKEEPER_BIOMETRICS := true
-TARGET_DEVICE_HAS_HW_GATEKEEPER_COMMON := false
+# TFA98xx
+TARGET_DEVICE_TFA_MODEL := 9896
 
 # radio type guard
 TARGET_DEVICE_HAS_SEC_RIL := true
@@ -42,13 +39,6 @@ TARGET_DEVICE_HAS_SEC_GNSS := true
 
 # prebuilt slsi
 TARGET_DEVICE_HAS_SAMSUNG_SLSI_EXYNOS7870 := false
-
-# keymaster type guard 
-# TODO: Fix keymaster driver telling its untrusted
-TARGET_DEVICE_HAS_SEC_KEYMASTER := false
-
-# gatekeeper type guard
-TARGET_DEVICE_HAS_HW_GATEKEEPER := true
 
 # Permissions
 PRODUCT_COPY_FILES += \
