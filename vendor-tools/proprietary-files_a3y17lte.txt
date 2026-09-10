@@ -24,8 +24,5 @@ system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
 # Sensors
 -system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so
 
-# ANT+
--system/app/AntHalService/AntHalService.apk
-
 # Misc data
 system/etc/firmware/Data.msc:vendor/firmware/Data.msc

@@ -19,3 +19,4 @@ system/lib64/libantradio.so:vendor/lib64/libantradio.so
 system/lib/libantradio.so:vendor/lib/libantradio.so
 system/lib64/libantradio.so
 system/lib/libantradio.so
+-system/app/AntHalService/AntHalService.apk

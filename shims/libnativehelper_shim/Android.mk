@@ -16,8 +16,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-LOCAL_ARM_MODE := arm
-
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := libnativehelper_shim.c
 LOCAL_SHARED_LIBRARIES := liblog
