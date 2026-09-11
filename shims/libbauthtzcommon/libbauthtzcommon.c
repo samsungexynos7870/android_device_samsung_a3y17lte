@@ -17,7 +17,7 @@
 #define LOG_TAG "libbauthtzcommon_shim"
 #define LOG_NDEBUG 0
 
-#include <cutils/log.h>
+#include <log/log.h>
 
 int BAuth_Hat_OP(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
 {

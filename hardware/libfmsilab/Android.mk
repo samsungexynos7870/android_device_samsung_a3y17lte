@@ -26,7 +26,7 @@ LOCAL_SRC_FILES := \
     FmRadioRDSParser.cpp \
     silab_ioctl.cpp
 
-LOCAL_C_INCLUDES := $(JNI_H_INCLUDE) \
+LOCAL_C_INCLUDES := \
     frameworks/base/include/media
 
 LOCAL_SHARED_LIBRARIES := \
@@ -34,6 +34,8 @@ LOCAL_SHARED_LIBRARIES := \
     libdl \
     libmedia \
     liblog
+
+LOCAL_HEADER_LIBRARIES := jni_headers
 
 LOCAL_CFLAGS += -Wno-error
 LOCAL_CXXFLAGS += -Wno-error -std=c++11

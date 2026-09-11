@@ -15,7 +15,7 @@
  */
 
 #include <jni.h>
-#include <cutils/log.h>
+#include <log/log.h>
 
 /*
  * Shim for the JNI helpers the ANT radio JNI library (libantradio.so)
