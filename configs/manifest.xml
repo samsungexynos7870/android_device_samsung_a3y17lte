@@ -72,6 +72,20 @@
         <fqname>@1.4::ICryptoFactory/clearkey</fqname>
         <fqname>@1.4::IDrmFactory/clearkey</fqname>
     </hal>
+    <!-- Samsung Widevine key provisioning, started by
+         vendor/etc/init/vendor.samsung.hardware.security.widevine.keyprovisioning@1.0-service.rc.
+         hwservicemanager only accepts the registration of instances that are
+         declared here. -->
+    <hal format="hidl">
+        <name>vendor.samsung.hardware.security.widevine.keyprovisioning</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ISehWidevineKeyProvisioning</name>
+            <instance>default</instance>
+        </interface>
+        <fqname>@1.0::ISehWidevineKeyProvisioning/default</fqname>
+    </hal>
     <hal format="hidl">
         <name>android.hardware.graphics.allocator</name>
         <transport>hwbinder</transport>
