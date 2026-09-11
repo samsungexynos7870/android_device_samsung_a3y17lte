@@ -1,0 +1,2 @@
+# The dynamic linker probes LD_SHIM_LIBS targets (access + realpath) in every domain.
+allow coredomain vendor_public_lib_file:file { read getattr };
