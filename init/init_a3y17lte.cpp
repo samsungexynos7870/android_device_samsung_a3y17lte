@@ -89,6 +89,14 @@ void vendor_load_properties()
         property_override_quad("ro.product.model", "ro.product.odm.model", "ro.product.system.model", "ro.product.vendor.model", "SM-A320FL");
         property_override_quad("ro.product.name", "ro.product.odm.name", "ro.product.system.name", "ro.product.vendor.name", "a3y17ltexc");
 
+        /*
+         * Single SIM: pin the legacy slot count so the EFS factory.prop
+         * (which may report a dual SIM config) cannot flip the RIL into
+         * DSDS mode. secril_config_svc runs later and only uses property_set,
+         * which fails on the already-set ro.* property, so this value wins.
+         */
+        property_override("ro.multisim.simslotcount", "1");
+
     } else if (bootloader.find("A320FX") == 0) {
     /* SM-A320FX */
         property_override_quad("ro.product.model", "ro.product.odm.model", "ro.product.system.model", "ro.product.vendor.model", "SM-A320F");
