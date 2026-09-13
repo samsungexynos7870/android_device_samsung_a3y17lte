@@ -122,8 +122,7 @@ PRODUCT_PACKAGES += \
     mobicore.rc \
     init.wifi_device.rc
 
-# MobiCore TUI service.  The TEE/auth stack is device specific: the common
-# 7870 tree is also used by tablets like gtaxlwifi that have neither.
+# MobiCore TUI
 PRODUCT_PACKAGES += \
     TuiService
 
