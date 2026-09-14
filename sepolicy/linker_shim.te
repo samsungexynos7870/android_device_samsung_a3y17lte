@@ -1,2 +1,5 @@
-# The dynamic linker probes LD_SHIM_LIBS targets (access + realpath) in every domain.
-allow coredomain vendor_public_lib_file:file { read getattr };
+# The dynamic linker runs parse_LD_SHIM_LIBS in every process and probes each
+# LD_SHIM_LIBS target with access(R_OK) + realpath(); core domains never load
+# the shimmed lib, so dontaudit the probe (a grant would hit the full-Treble
+# neverallow on crosvm vendor_file_type).
+dontaudit coredomain vendor_public_lib_file:file { read getattr };
