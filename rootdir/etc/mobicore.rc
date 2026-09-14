@@ -1,18 +1,13 @@
-# MobiCore driver daemon (T-Base / Kinibi).
-#
-# mcDriverDaemon keeps its secure storage (So.Root, TbStorage, the auth
-# token) under its first registry search path and looks up trustlets in the
-# paths that follow.  The first -p must be a writable directory that already
-# exists when the daemon starts (it waits for it), so create it here and
-# restorecon it to the mobicore_vendor_data_file label that the daemon's tee
-# domain is allowed to write.  The second -p is the read-only vendor registry
-# that holds the extracted factory trustlets; without it every trustlet that
-# is not preloaded via -r could never be found.
+on post-fs
+	setprop vendor.sys.mobicoredaemon.enable stopped
 
-on post-fs-data
+on late-fs
+
+on nonencrypted
     mkdir /data/vendor/mcRegistry 0775 system system
-    restorecon -R /data/vendor/mcRegistry
-    start mobicore
+
+on property:vold.decrypt=trigger_restart_framework
+    mkdir /data/vendor/mcRegistry 0775 system system
 
 on post-fs
     export MC_AUTH_TOKEN_PATH /efs
@@ -20,8 +15,9 @@ on post-fs
     mkdir /mnt/vendor/efs/TEE  0770 radio system
     chmod 0660 /dev/t-base-tui
     chown system system /dev/t-base-tui
+    start mobicore
 
-service mobicore /vendor/bin/mcDriverDaemon -p /data/vendor/mcRegistry -p /vendor/app/mcRegistry -r /vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin -r /vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin -r /vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin -r /vendor/app/mcRegistry/ffffffffd00000000000000000000045.drbin
+service mobicore /vendor/bin/mcDriverDaemon -r /vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin -r /vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin -r /vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin -r /vendor/app/mcRegistry/ffffffffd0000000000000000000001c.tlbin -r /vendor/app/mcRegistry/ffffffffd00000000000000000000045.drbin
     class core
     user system
     group system

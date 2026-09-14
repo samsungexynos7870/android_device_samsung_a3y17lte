@@ -1,3 +1,5 @@
+# mcRegistry a3y17lte
+
 # WiFi
 system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin
 system/etc/firmware/bdwlan32.bin:vendor/firmware/bdwlan32.bin

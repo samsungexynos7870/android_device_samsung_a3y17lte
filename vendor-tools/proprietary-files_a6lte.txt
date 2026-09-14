@@ -7,6 +7,3 @@
 -vendor/lib/libgf_in_system_lib.so:vendor/lib/libgf_in_system_lib.so
 -vendor/lib/libqfp_sensortest.so:vendor/lib/libqfp_sensortest.so
 -vendor/lib/libsynaFpSensorTestNwd.so:vendor/lib/libsynaFpSensorTestNwd.so
-
-# TUI Secure Driver (TuiService / trusted UI)
-vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin
