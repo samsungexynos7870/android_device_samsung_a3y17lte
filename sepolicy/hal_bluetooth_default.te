@@ -1,7 +1,7 @@
 # The prebuilt android.hardware.bluetooth@1.0-service-qti also registers
-# the ANT HAL (com.qualcomm.qti.ant@1.0::IAntHci) reusing the bluetooth
-# hwservice type (see hwservice_contexts).
+# the ANT HAL (com.qualcomm.qti.ant@1.0::IAntHci, see hwservice_contexts).
 allow hal_bluetooth_default hal_bluetooth_hwservice:hwservice_manager { add find };
+allow hal_bluetooth_default hal_ant_hwservice:hwservice_manager { add find };
 
 # android.hardware.bluetooth@1.0.so is relabeled as a vendor public
 # library (it is a dependency of the app-side ANT client libantradio.so),

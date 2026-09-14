@@ -1,0 +1,4 @@
+# com.qualcomm.qti.ant@1.0::IAntHci (ANT HCI HAL): its own hwservice
+# type instead of hal_bluetooth_hwservice, which the platform policy
+# restricts to the bluetooth HAL client/server domains.
+type hal_ant_hwservice, hwservice_manager_type, protected_hwservice;
