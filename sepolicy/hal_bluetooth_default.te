@@ -2,6 +2,14 @@
 # android.hardware.bluetooth@1.0::IBluetoothHci.
 allow hal_bluetooth_default hal_bluetooth_hwservice:hwservice_manager { add find };
 
-# QCA9377 open-source stack (CAF libbt-vendor): the vendor lib coordinates
-# the combo chip bring-up with the wcnss_filter daemon.
+# QCA9377 open-source stack (CAF libbt-vendor): the vendor lib opens the
+# combo chip UART directly for power-up and rampatch/NV download.
+allow hal_bluetooth_default bluetooth_device:chr_file { getattr ioctl open read write };
+
+# ...and then proxies all further HCI traffic through the wcnss_filter
+# daemon's abstract local sockets ("bt_sock", "wcnssfilter_ctrl").
+unix_socket_connect(hal_bluetooth_default, wcnss_filter_socket, wcnss_filter)
 unix_socket_connect(hal_bluetooth_default, property, wcnss_filter)
+
+# libbt-vendor drives the vendor.wc_transport.* properties itself.
+set_prop(hal_bluetooth_default, vendor_bluetooth_prop)

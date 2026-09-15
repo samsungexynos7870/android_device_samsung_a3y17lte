@@ -1,11 +1,20 @@
-# Qualcomm wcnss_filter daemon: performs the initial combo chip (QCA9377)
-# HCI/UART setup on behalf of the CAF libbt-vendor before the Bluetooth
-# stack attaches. Started/stopped by init on vendor.wc_transport.start_hci.
+# Qualcomm wcnss_filter daemon: bridges the CAF libbt-vendor and the QCA9377
+# combo chip on the high-speed UART (/dev/ttySAC0). Started/stopped by init
+# on vendor.wc_transport.start_hci.
 type wcnss_filter, domain;
 type wcnss_filter_exec, exec_type, vendor_file_type, file_type;
+type wcnss_filter_socket, socket_type;
 
 init_daemon_domain(wcnss_filter)
 
-allow wcnss_filter bluetooth_device:chr_file { ioctl open read write };
+# Combo chip UART (labeled bluetooth_device in file_contexts)
+allow wcnss_filter bluetooth_device:chr_file { getattr ioctl open read write };
+
+# Abstract local sockets served by this daemon: "bt_sock" (HCI bridge) and
+# "wcnssfilter_ctrl" (1-byte control protocol). Ksocket label transitions on
+# the bind name so clients can be allowed to connect specifically.
+type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket "bt_sock";
+type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket "wcnssfilter_ctrl";
+allow wcnss_filter wcnss_filter_socket:unix_stream_socket create_stream_socket_perms;
 
 set_prop(wcnss_filter, vendor_bluetooth_prop)

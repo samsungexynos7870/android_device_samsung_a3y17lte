@@ -10,3 +10,7 @@
 # QCA9377 Bluetooth - wcnss_filter daemon (started by libbt-vendor via
 # vendor.wc_transport.start_hci, proxies the initial combo-chip HCI setup)
 /(vendor|system/vendor)/bin/wcnss_filter            u:object_r:wcnss_filter_exec:s0
+# QCA9377 combo chip UART (Exynos 7870 UART0)
+/dev/ttySAC0                                          u:object_r:bluetooth_device:s0
+# Bluetooth rfkill switch (kernel bluetooth-power driver)
+/dev/rfkill                                           u:object_r:rfkill_device:s0
