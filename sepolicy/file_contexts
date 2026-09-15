@@ -13,3 +13,6 @@
 # Source-built NFC HAL (hardware/samsung/nfc) - the label the common tree
 # only gives to the samsung binary NFC service
 /(vendor|system/vendor)/bin/hw/android\.hardware\.nfc@1\.2-service\.samsung            u:object_r:hal_nfc_default_exec:s0
+# QCA9377 Bluetooth - wcnss_filter daemon (started by libbt-vendor via
+# vendor.wc_transport.start_hci, proxies the initial combo-chip HCI setup)
+/(vendor|system/vendor)/bin/wcnss_filter            u:object_r:wcnss_filter_exec:s0

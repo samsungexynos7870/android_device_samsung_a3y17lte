@@ -1,0 +1,15 @@
+# QCA9377 Bluetooth: CAF libbt-vendor tells init (via the
+# vendor.wc_transport.start_hci property) when the combo chip UART needs
+# to be prepared/torn down through the wcnss_filter helper.
+on property:vendor.wc_transport.start_hci=true
+    start start_hci_filter
+
+on property:vendor.wc_transport.start_hci=false
+    stop start_hci_filter
+
+service start_hci_filter /vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth
+    seclabel u:r:wcnss_filter:s0
+    disabled

@@ -64,9 +64,13 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 PRODUCT_AAPT_PREBUILT_DPI := xhdpi hdpi
 
-# qti Bluetooth service | does not support com.qualcomm.qti.ant@1.0-impl or vendor.samsung.hardware.bluetooth@1.0 hal unlike the prebuilt one by vendor
-#PRODUCT_PACKAGES += \
-#    android.hardware.bluetooth@1.0-service-qti.a3y17lte
+# Bluetooth - open-source QCOM (QCA9377) HCI stack:
+# generic AOSP bluetooth@1.0 HIDL service driving the source-built
+# CAF libbt-vendor (ROME firmware download over UART, see libbt-vendor/)
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl \
+    android.hardware.bluetooth@1.0-service \
+    libbt-vendor
 
 # Bluetooth audio
 PRODUCT_PACKAGES += \
@@ -119,6 +123,7 @@ DEVICE_PACKAGE_OVERLAYS += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
+    init.qca9377_bt.rc \
     mobicore.rc \
     init.wifi_device.rc
 
