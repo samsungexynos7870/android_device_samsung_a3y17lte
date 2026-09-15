@@ -2,4 +2,4 @@ security.semdaemonfinish u:object_r:default_prop:s0
 # QCA9377 Bluetooth (CAF libbt-vendor <-> wcnss_filter handshake)
 vendor.wc_transport.                 u:object_r:vendor_bluetooth_prop:s0
 # Bluetooth factory data (bdaddr path) - set by init at boot
-ro.bt.                              u:object_r:vendor_bluetooth_prop:s0
+ro.bt.bdaddr_path                  u:object_r:vendor_bluetooth_prop:s0
