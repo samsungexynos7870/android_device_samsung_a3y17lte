@@ -1,22 +1,43 @@
+# A720SKSU5CTL2 (a7y17lte, Android 9 Pie)
+#
+# NOTE: This list is intentionally EMPTY since the switch to the
+# open-source QCOM (QCA9377) Bluetooth stack (source-built CAF
+# libbt-vendor + generic AOSP android.hardware.bluetooth@1.0 HIDL
+# service, see device.mk). It previously extracted the prebuilt QTI
+# Bluetooth HAL and the ANT+ extension from this dump; those blobs must
+# no longer be shipped:
+#
+#   * two android.hardware.bluetooth@1.0::IBluetoothHci providers
+#     (prebuilt -qti service + source-built service) were racing over
+#     the service manager ("registering over instance of ..."),
+#   * the prebuilt QTI libbt-vendor was shadowing the source-built one,
+#   * and the Bluetooth stack FATAL-crashed on first enable
+#     (bt_stack_manage, alarm.cc check failure).
+#
+# The original entries are kept below (commented out) for reference. If
+# the proprietary stack is ever restored on purpose, also revert the
+# open-source libbt-vendor/service packages and the matching
+# ANT+/bluetooth blob_fixup() removal in extract-files.sh.
+
 # A720SKSU5CTL2
 
 # Bluetooth
--system/vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so:vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so
--system/vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so:vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so
--system/lib/vendor.samsung.hardware.bluetooth@1.0.so:vendor/lib/vendor.samsung.hardware.bluetooth@1.0.so
--system/lib64/vendor.samsung.hardware.bluetooth@1.0.so:vendor/lib64/vendor.samsung.hardware.bluetooth@1.0.so
-system/vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti:vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti
-system/vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc:vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc
+#-system/vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so:vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so
+#-system/vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so:vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so
+#-system/lib/vendor.samsung.hardware.bluetooth@1.0.so:vendor/lib/vendor.samsung.hardware.bluetooth@1.0.so
+#-system/lib64/vendor.samsung.hardware.bluetooth@1.0.so:vendor/lib64/vendor.samsung.hardware.bluetooth@1.0.so
+#system/vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti:vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti
+#system/vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc:vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc
 
 # ANT+
-system/lib/com.qualcomm.qti.ant@1.0.so:vendor/lib/com.qualcomm.qti.ant@1.0.so
-system/lib64/com.qualcomm.qti.ant@1.0.so:vendor/lib64/com.qualcomm.qti.ant@1.0.so
-system/lib/com.qualcomm.qti.ant@1.0.so
-system/lib64/com.qualcomm.qti.ant@1.0.so
--system/vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
--system/vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so
-system/lib64/libantradio.so:vendor/lib64/libantradio.so
-system/lib/libantradio.so:vendor/lib/libantradio.so
-system/lib64/libantradio.so
-system/lib/libantradio.so
--system/app/AntHalService/AntHalService.apk
+#system/lib/com.qualcomm.qti.ant@1.0.so:vendor/lib/com.qualcomm.qti.ant@1.0.so
+#system/lib64/com.qualcomm.qti.ant@1.0.so:vendor/lib64/com.qualcomm.qti.ant@1.0.so
+#system/lib/com.qualcomm.qti.ant@1.0.so
+#system/lib64/com.qualcomm.qti.ant@1.0.so
+#-system/vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
+#-system/vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so
+#system/lib64/libantradio.so:vendor/lib64/libantradio.so
+#system/lib/libantradio.so:vendor/lib/libantradio.so
+#system/lib64/libantradio.so
+#system/lib/libantradio.so
+#-system/app/AntHalService/AntHalService.apk

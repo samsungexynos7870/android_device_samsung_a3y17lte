@@ -38,20 +38,9 @@ source "${HELPER}"
 
 function blob_fixup() {
     case "${1}" in
-        vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so | vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so)
-            # Fix bluetooth HAL configuration path
-            sed -i 's|/system/etc/|/vendor/etc/|g' "${2}"
-        ;;
-
         vendor/lib/libbauthserver.so | vendor/lib64/libbauthserver.so)
             # Add shim for libbauthserver.so
             "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
-        ;;
-
-        system/lib/libantradio.so | system/lib64/libantradio.so | vendor/lib/libantradio.so | vendor/lib64/libantradio.so)
-            # ANT JNI library: provide the JNI helpers it was built against
-            # (jniThrowException is no longer exported by libnativehelper)
-            "${PATCHELF}" --add-needed "libnativehelper_shim.so" "${2}"
         ;;
     esac
 }
