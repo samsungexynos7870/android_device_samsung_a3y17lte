@@ -12,5 +12,5 @@
 /(vendor|system/vendor)/bin/wcnss_filter            u:object_r:wcnss_filter_exec:s0
 # QCA9377 combo chip UART (Exynos 7870 UART0)
 /dev/ttySAC0                                          u:object_r:bluetooth_device:s0
-# Bluetooth rfkill switch (kernel bluetooth-power driver)
-/dev/rfkill                                           u:object_r:rfkill_device:s0
+# /dev/rfkill is already labeled rfkill_device by u7870-common sepolicy;
+# do not duplicate the spec here (checkfc rejects identical specs).
