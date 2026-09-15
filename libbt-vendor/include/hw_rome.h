@@ -162,8 +162,12 @@
 #define ROME_NVM_TLV_3_0_0_PATH           "/bt_firmware/image/btnv30.bin"
 #define ROME_RAMPATCH_TLV_3_0_2_PATH      "/bt_firmware/image/btfw32.tlv"
 #define ROME_NVM_TLV_3_0_2_PATH           "/bt_firmware/image/btnv32.bin"
-#define TF_RAMPATCH_TLV_1_0_1_PATH        "/vendor/firmware/rampatch_tlv_tf_1.1.tlv"
-#define TF_NVM_TLV_1_0_1_PATH             "/vendor/firmware/nvm_tlv_tf_1.1.bin"
+/* a3y17lte extracts the QCA9377 ("Tufello") firmware from the stock dump
+ * into TARGET_COPY_OUT_VENDOR/etc/firmware (see proprietary-files list),
+ * so point the TF 1.1 TLV pair there instead of the CAF /vendor/firmware
+ * default. */
+#define TF_RAMPATCH_TLV_1_0_1_PATH        "/vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv"
+#define TF_NVM_TLV_1_0_1_PATH             "/vendor/etc/firmware/nvm_tlv_tf_1.1.bin"
 #define TF_RAMPATCH_TLV_1_0_0_PATH        "/bt_firmware/image/rampatch_tlv_tf_1.0.tlv"
 #define TF_NVM_TLV_1_0_0_PATH             "/bt_firmware/image/nvm_tlv_tf_1.0.bin"
 
