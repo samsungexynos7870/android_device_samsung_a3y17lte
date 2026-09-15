@@ -11,10 +11,10 @@ init_daemon_domain(wcnss_filter)
 allow wcnss_filter bluetooth_device:chr_file { getattr ioctl open read write };
 
 # Abstract local sockets served by this daemon: "bt_sock" (HCI bridge) and
-# "wcnssfilter_ctrl" (1-byte control protocol). Ksocket label transitions on
-# the bind name so clients can be allowed to connect specifically.
-type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket bt_sock;
-type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket wcnssfilter_ctrl;
+# "wcnssfilter_ctrl" (1-byte control protocol). The daemon's sockets get the
+# wcnss_filter_socket label via a self-domain transition, so the HAL client
+# can be allowed to connect specifically.
+type_transition wcnss_filter wcnss_filter:unix_stream_socket wcnss_filter_socket;
 allow wcnss_filter wcnss_filter_socket:unix_stream_socket create_stream_socket_perms;
 
 set_prop(wcnss_filter, vendor_bluetooth_prop)
