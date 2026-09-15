@@ -13,8 +13,8 @@ allow wcnss_filter bluetooth_device:chr_file { getattr ioctl open read write };
 # Abstract local sockets served by this daemon: "bt_sock" (HCI bridge) and
 # "wcnssfilter_ctrl" (1-byte control protocol). Ksocket label transitions on
 # the bind name so clients can be allowed to connect specifically.
-type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket "bt_sock";
-type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket "wcnssfilter_ctrl";
+type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket bt_sock;
+type_transition wcnss_filter wcnss_filter_socket:unix_stream_socket wcnssfilter_ctrl;
 allow wcnss_filter wcnss_filter_socket:unix_stream_socket create_stream_socket_perms;
 
 set_prop(wcnss_filter, vendor_bluetooth_prop)
