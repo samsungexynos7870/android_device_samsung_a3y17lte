@@ -15,6 +15,13 @@ allow wcnss_filter bluetooth_device:chr_file { getattr ioctl open read write };
 # wcnss_filter_socket label via a self-domain transition, so the HAL client
 # can be allowed to connect specifically.
 type_transition wcnss_filter wcnss_filter:unix_stream_socket wcnss_filter_socket;
-allow wcnss_filter wcnss_filter_socket:unix_stream_socket create_stream_socket_perms;
+# create_stream_socket_perms minus ioctl: granting bare ioctl on sockets
+# without an xperm allowlist trips the platform-wide neverallowxperm in
+# system/sepolicy/public/domain.te ("ioctl { 0 }"). The daemon performs no
+# ioctls on its abstract sockets, so just drop it.
+allow wcnss_filter wcnss_filter_socket:unix_stream_socket {
+    create read write getattr setattr lock append bind connect listen accept
+    getopt setopt shutdown recvfrom sendto
+};
 
 set_prop(wcnss_filter, vendor_bluetooth_prop)
