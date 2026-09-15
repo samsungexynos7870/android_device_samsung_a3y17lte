@@ -1635,4 +1635,31 @@
 		<path name="gain-recording-headset-mic"/>
 	</path>
 
+	<path name="gain-incall_nb-bt-sco-headset"/>
+	<path name="gain-incall_nb-bt-sco-headset-in"/>
+	<path name="gain-incall_nb-handset"/>
+	<path name="gain-incall_nb-handset-mic"/>
+	<path name="gain-incall_nb-headset"/>
+	<path name="gain-incall_nb-headset-mic"/>
+	<path name="gain-incall_nb-speaker"/>
+	<path name="gain-incall_nb-speaker-mic"/>
+	<path name="gain-incall_wb-bt-sco-headset"/>
+	<path name="gain-incall_wb-bt-sco-headset-in"/>
+	<path name="gain-incall_wb-handset"/>
+	<path name="gain-incall_wb-handset-mic"/>
+	<path name="gain-incall_wb-headset"/>
+	<path name="gain-incall_wb-headset-mic"/>
+	<path name="gain-incall_wb-speaker"/>
+	<path name="gain-incall_wb-speaker-mic"/>
+	<path name="gain-media-bt-sco-headset"/>
+	<path name="gain-media-bt-sco-headset-in"/>
+	<path name="gain-media-handset"/>
+	<path name="gain-media-headset"/>
+	<path name="gain-media-headset-mic"/>
+	<path name="gain-media-mic"/>
+	<path name="gain-media-speaker"/>
+	<path name="gain-media-speaker-headset"/>
+	<path name="gain-recording-headset-mic"/>
+	<path name="gain-recording-mic"/>
+
 </mixer>
