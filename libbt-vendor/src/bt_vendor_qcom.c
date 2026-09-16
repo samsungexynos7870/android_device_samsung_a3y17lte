@@ -487,7 +487,10 @@ static int bt_powerup(int en )
     if(on == '0'){
         ALOGE("Stopping HCI filter as part of CTRL:OFF");
         stop_hci_filter();
-        property_set("vendor.wc_transport.soc_initialized", "0");
+        /* QCA9377 on a3y17lte: keep vendor.wc_transport.soc_initialized=1
+           across BT disable. See the note in the rfkill write below. */
+        if (q->soc_type != BT_SOC_ROME)
+            property_set("vendor.wc_transport.soc_initialized", "0");
     }
 
     if (q->soc_type >= BT_SOC_CHEROKEE && q->soc_type < BT_SOC_RESERVED) {
@@ -507,6 +510,22 @@ static int bt_powerup(int en )
         }
         close(fd_btpower);
     } else {
+       /* QCA9377 on a3y17lte: keep the SOC powered across BT disable.
+          rfkill-off on this board only pulses bt-sys-rst; the chip never
+          loses power (no dedicated regulator in the board BT node, only the
+          shared WLAN DCDC). A warm-reset SOC no longer completes the ROM EDL
+          handshake on re-init (patch-ver VS event arrives, command-complete
+          never follows, read_hci_event() then blocks forever inside a
+          HwBinder thread) so re-enabling BT always dies in a retry loop.
+          Keeping rfkill unblocked keeps the rampatch/NVM-resident SOC truly
+          alive; the next BT_VND_OP_USERIAL_OPEN then takes the
+          soc_initialized resume path and skips the whole EDL/rampatch/NVM
+          download. On a real reboot the volatile vendor.wc_transport.*
+          properties vanish, so a fresh boot still runs the full download. */
+       if (q->soc_type == BT_SOC_ROME && on == '0') {
+           ALOGI("QCA9377/a3y17lte: keeping rfkill unblocked across BT disable\\n");
+           goto skip_rfkill_write;
+       }
        ALOGI("Write %c to rfkill\n", on);
        /* Write value to control rfkill */
        if(fd >= 0) {
@@ -519,6 +538,7 @@ static int bt_powerup(int en )
                return -1;
            }
        }
+skip_rfkill_write: ;
    }
 #ifdef WIFI_BT_STATUS_SYNC
     /* query wifi status */
