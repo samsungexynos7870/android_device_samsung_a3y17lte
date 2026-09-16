@@ -13,6 +13,7 @@ allow hal_bluetooth_default rfkill_device:chr_file rw_file_perms;
 # ...and then proxies all further HCI traffic through the wcnss_filter
 # daemon's abstract local sockets ("bt_sock", "wcnssfilter_ctrl").
 unix_socket_connect(hal_bluetooth_default, wcnss_filter, wcnss_filter)
+unix_socket_connect(hal_bluetooth_default, property, wcnss_filter)
 
 # libbt-vendor drives the vendor.wc_transport.* properties itself.
 set_prop(hal_bluetooth_default, vendor_bluetooth_prop)
