@@ -3,7 +3,6 @@
 # on vendor.wc_transport.start_hci.
 type wcnss_filter, domain;
 type wcnss_filter_exec, exec_type, vendor_file_type, file_type;
-type wcnss_filter_socket, file_type;
 
 init_daemon_domain(wcnss_filter)
 
@@ -11,17 +10,18 @@ init_daemon_domain(wcnss_filter)
 allow wcnss_filter bluetooth_device:chr_file { getattr ioctl open read write };
 
 # Abstract local sockets served by this daemon: "bt_sock" (HCI bridge) and
-# "wcnssfilter_ctrl" (1-byte control protocol). The daemon's sockets get the
-# wcnss_filter_socket label via a self-domain transition, so the HAL client
-# can be allowed to connect specifically.
-type_transition wcnss_filter wcnss_filter:unix_stream_socket wcnss_filter_socket;
-# create_stream_socket_perms minus ioctl: granting bare ioctl on sockets
-# without an xperm allowlist trips the platform-wide neverallowxperm in
-# system/sepolicy/public/domain.te ("ioctl { 0 }"). The daemon performs no
-# ioctls on its abstract sockets, so just drop it.
-allow wcnss_filter wcnss_filter_socket:unix_stream_socket {
-    create read write getattr setattr lock append bind connect listen accept
-    getopt setopt shutdown recvfrom sendto
-};
+# "wcnssfilter_ctrl" (1-byte control protocol). No dedicated socket type:
+# without a transition the sockets just keep the process context
+# (u:r:wcnss_filter:s0), and the HAL client connect is covered domain-level
+# by unix_socket_connect(hal_bluetooth_default, wcnss_filter, wcnss_filter).
+# A self-domain type_transition to a separate file_type socket label is NOT
+# usable here: when creating the socket the kernel pairs the source role
+# r with the new type, which the policy only authorizes for object_r, so
+# the context comes back invalid, and the transition also mislabels the
+# daemon's outbound property socket. (Runtime-proven on permissive audit:
+# invalid_context=u:r:wcnss_filter_socket:s0 + denied { set }/connectto on
+# /dev/socket/property_service attributed to wcnss_filter_socket.)
+# The daemon performs no ioctls on its abstract sockets (which would need
+# an allowxperm anyway), so plain domain labeling suffices everywhere.
 
 set_prop(wcnss_filter, vendor_bluetooth_prop)
