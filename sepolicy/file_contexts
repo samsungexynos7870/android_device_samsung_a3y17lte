@@ -22,3 +22,6 @@
 /dev/ttySAC0                                          u:object_r:bluetooth_device:s0
 # /dev/rfkill is already labeled rfkill_device by u7870-common sepolicy;
 # do not duplicate the spec here (checkfc rejects identical specs).
+
+# ANT+
+/(vendor|system/vendor)/bin/hw/com\.qualcomm\.qti\.ant@1\.0-service   u:object_r:hal_bluetooth_default_exec:s0

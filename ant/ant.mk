@@ -6,5 +6,8 @@
 PRODUCT_PACKAGES += \
     com.qualcomm.qti.ant@1.0 \
     com.qualcomm.qti.ant@1.0-impl \
-    com.qualcomm.qti.ant@1.0-service \
-    libnativehelper_shim
+    com.qualcomm.qti.ant@1.0-service
+
+# ANT+
+PRODUCT_PACKAGES += \
+     AntHalService
