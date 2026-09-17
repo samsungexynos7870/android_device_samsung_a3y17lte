@@ -43,6 +43,12 @@ using ::android::wp;
 using android::hardware::hidl_death_recipient;
 
 using android::hardware::bluetooth::V1_0::implementation::DataHandler;
+using android::hardware::bluetooth::V1_0::implementation::HciPacketType;
+using android::hardware::bluetooth::V1_0::implementation::HCI_PACKET_TYPE_ANT_CTRL;
+using android::hardware::bluetooth::V1_0::implementation::HCI_PACKET_TYPE_ANT_DATA;
+using android::hardware::bluetooth::V1_0::implementation::HCI_PACKET_TYPE_UNKNOWN;
+using android::hardware::bluetooth::V1_0::implementation::ProtocolType;
+using android::hardware::bluetooth::V1_0::implementation::TYPE_ANT;
 
 class AntDeathRecipient;
 

@@ -24,7 +24,8 @@
 
 #include <hidl/LegacySupport.h>
 #include <com/qualcomm/qti/ant/1.0/IAntHci.h>
-#include <binder/ProcessState.h>
+#include <utils/Errors.h>
+#include <utils/Log.h>
 
 using android::hardware::configureRpcThreadpool;
 using android::hardware::joinRpcThreadpool;
