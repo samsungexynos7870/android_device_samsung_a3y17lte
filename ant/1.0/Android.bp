@@ -29,8 +29,6 @@ cc_library_shared {
         "libcutils",
         "libdl",
         "libhidlbase",
-        "libhidltransport",
-        "libhwbinder",
         "liblog",
         "libutils",
         "com.qualcomm.qti.ant@1.0",
@@ -45,8 +43,6 @@ cc_binary {
     init_rc: ["com.qualcomm.qti.ant@1.0-service.rc"],
     shared_libs: [
         "libhidlbase",
-        "libhidltransport",
-        "libhwbinder",
         "liblog",
         "libutils",
         "com.qualcomm.qti.ant@1.0",
