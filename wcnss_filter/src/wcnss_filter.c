@@ -331,13 +331,23 @@ int main(void) {
             ALOGW("bt client error/hangup, closing (fd %d)", fd_bt_cli);
             close(fd_bt_cli);
             fd_bt_cli = -1;
+            /* Exit with the client: our init .rc cannot reliably SIGTERM-kill
+             * us on vendor.wc_transport.start_hci=false (observed on-device),
+             * and a daemon surviving across disables poisons the next
+             * BT_VND_OP_USERIAL_OPEN: start_hci_filter() resets
+             * hci_filter_status to 0 and waits for a fresh bridge that never
+             * comes if init reports the service "already running". Dying with
+             * the client makes every start_hci=true spawn a pristine bridge. */
+            ALOGI("bt client gone, exiting for a fresh bridge on next enable");
+            stop_requested = 1;
         } else if (idx_bt_cli >= 0) {
             if (fds[idx_bt_cli].revents & POLLIN) {
                 ssize_t rd = recv(fd_bt_cli, io_buf, sizeof(io_buf), 0);
                 if (rd <= 0) {
-                    ALOGI("bt client disconnected");
+                    ALOGI("bt client disconnected, exiting for a fresh bridge");
                     close(fd_bt_cli);
                     fd_bt_cli = -1;
+                    stop_requested = 1;
                 } else {
                     size_t pushed = ring_push(&to_uart, io_buf, (size_t)rd);
                     if (pushed < (size_t)rd)
@@ -357,6 +367,7 @@ int main(void) {
                         ALOGW("send to bt client failed: %s", strerror(errno));
                         close(fd_bt_cli);
                         fd_bt_cli = -1;
+                        stop_requested = 1;
                     }
                 }
             }
