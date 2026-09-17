@@ -15,6 +15,7 @@ mkdir -p "$TARGET_SOURCES_DIR"
 REPO_URLS=(
     "https://github.com/Exynos7870-labs/samsung_a3y17lte_dump.git -b a3y17ltexc-user-8.0.0-R16NW-A320FLXXS9CTK1-release-keys A320FLXXS9CTK1"
     "https://github.com/Exynos7870-labs/samsung_a6lte_dump.git -b a6ltejx-user-10-QP1A.190711.020-A600FJXU9CVB1-release-keys A600FJXU9CVB1"
+    "https://github.com/Exynos7870-labs/samsung_a7y17lteskt_dump.git -b a7y17lteskt-user-9-PPR1.180610.011-A720SKSU5CUJ2-release-keys A720SKSU5CUJ2"
     "https://github.com/Exynos7870-labs/samsung_j5y17lte_dump.git -b j5y17ltexx-user-9-PPR1.180610.011-J530FXXS8CUE4-release-keys J530FXXS8CUE4"
 )
 
@@ -38,6 +39,7 @@ cd "$ORIGINAL_DIR"
 
 COMMON_O_A3Y17LTE_PATH="${TARGET_SOURCES_DIR}/A320FLXXS9CTK1"
 COMMON_Q_A6LTE_PATH="${TARGET_SOURCES_DIR}/A600FJXU9CVB1"
+COMMON_P_A7Y17LTE_PATH="${TARGET_SOURCES_DIR}/A720SKSU5CUJ2"
 COMMON_P_J5Y17LTE_PATH="${TARGET_SOURCES_DIR}/J530FXXS8CUE4"
 
 # a3y17lte files (Oreo)
@@ -46,10 +48,11 @@ COMMON_P_J5Y17LTE_PATH="${TARGET_SOURCES_DIR}/J530FXXS8CUE4"
 # a6lte files (Biometrics - ET5XX)
 ./extract-files.sh a3y17lte vendor-tools/proprietary-files_a6lte.txt -n -k $COMMON_Q_A6LTE_PATH
 
-# a7y17lte dump (Bluetooth + ANT) no longer needed: the prebuilt QTI
-# Bluetooth/ANT stack was replaced by the source-built open-source QCOM
-# (QCA9377) stack; its file list vendor-tools/proprietary-files_a7y17lte.txt
-# is intentionally left empty (see that file for details).
+# a7y17lte files (ANT+ support libraries only: the prebuilt QTI
+# Bluetooth/ANT stack itself stays replaced by the source-built open-source
+# QCOM (QCA9377) stack; the ANT HCI HAL impl, interface package and
+# service are now source-built in this tree - see ant/ and interfaces/)
+./extract-files.sh a3y17lte vendor-tools/proprietary-files_a7y17lte.txt -n -k $COMMON_P_A7Y17LTE_PATH
 
 # j5y17lte files (NFC)
 ./extract-files.sh a3y17lte vendor-tools/proprietary-files_j5y17lte.txt -n -k $COMMON_P_J5Y17LTE_PATH

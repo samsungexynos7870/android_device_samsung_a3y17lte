@@ -1,0 +1,12 @@
+package com.qualcomm.qti.ant@1.0;
+
+import IAntHciCallbacks;
+
+/** ANT Host/Controller Interface, reverse-authored from the stock
+  * a7y17lte com.qualcomm.qti.ant@1.0.so (declaration order preserved). */
+interface IAntHci {
+    oneway initialize(IAntHciCallbacks callback);
+    oneway sendAntData(vec<uint8_t> command);
+    oneway sendAntControl(vec<uint8_t> command);
+    oneway close();
+};

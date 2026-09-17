@@ -1,0 +1,25 @@
+// com.qualcomm.qti.ant@1.0 HIDL interface package, reverse-authored from
+// the stock a7y17lte (A720SKSU5CUJ2) com.qualcomm.qti.ant@1.0.so so the
+// ANT HCI HAL implementation and its passthrough service can be built
+// from source. Method order matches the prebuilt interface's declaration
+// order (verify the generated hash chain against the prebuilt blob when
+// enabling: `hidl-gen -L hash -r com.qualcomm.qti:$(top)/device/samsung/
+// a3y17lte/interfaces com.qualcomm.qti.ant@1.0`).
+hidl_interface {
+    name: "com.qualcomm.qti.ant@1.0",
+    root: "com.qualcomm.qti",
+    // Build system and vendor variants so the source-built lib REPLACES
+    // the prebuilt interface blob for both consumers (libantradio JNI on
+    // the system side, our impl/service on the vendor side). The hash
+    // chain must match the stock package - verify after building
+    // (README in the deliverable).
+    vendor_available: true,
+    srcs: [
+        "types.hal",
+        "IAntHci.hal",
+        "IAntHciCallbacks.hal",
+    ],
+    interfaces: [
+        "android.hidl.base@1.0",
+    ],
+}

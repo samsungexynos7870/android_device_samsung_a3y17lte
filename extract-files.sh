@@ -42,6 +42,10 @@ function blob_fixup() {
             # Add shim for libbauthserver.so
             "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
         ;;
+
+        # libantradio.so is source-built from external/ant-wireless/ant_native
+        # (qualcomm-hidl backend): no blob fixup needed, the extraction of
+        # the prebuilt is disabled in proprietary-files_a7y17lte.txt.
     esac
 }
 

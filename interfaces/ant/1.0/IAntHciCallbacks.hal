@@ -1,0 +1,9 @@
+package com.qualcomm.qti.ant@1.0;
+
+/** ANT stack callbacks, declaration order preserved from the prebuilt
+  * interface. */
+interface IAntHciCallbacks {
+    oneway antDataReceived(vec<uint8_t> data);
+    oneway antControlReceived(vec<uint8_t> control);
+    oneway initializationComplete(Status status);
+};

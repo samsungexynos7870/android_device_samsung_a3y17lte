@@ -1,0 +1,4 @@
+# The ANT HAL (com.qualcomm.qti.ant@1.0::IAntHci) is registered by the
+# source-built com.qualcomm.qti.ant@1.0-service and looked up by
+# com.dsi.ant.server (AntHalService.apk) via libantradio.so.
+com.qualcomm.qti.ant::IAntHci                                u:object_r:hal_ant_hwservice:s0

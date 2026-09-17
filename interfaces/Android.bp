@@ -1,0 +1,5 @@
+// Root for HIDL interfaces authored in this device tree.
+hidl_package_root {
+    name: "com.qualcomm.qti",
+    path: "device/samsung/a3y17lte/interfaces",
+}

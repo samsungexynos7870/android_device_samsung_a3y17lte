@@ -1,0 +1,7 @@
+package com.qualcomm.qti.ant@1.0;
+
+/** Status of IAntHci method completion, mirroring the prebuilt package. */
+enum Status : int32_t {
+    SUCCESS = 0,
+    INITIALIZATION_ERROR = 1,
+};

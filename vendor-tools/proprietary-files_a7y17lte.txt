@@ -29,13 +29,25 @@
 #system/vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti:vendor/bin/hw/android.hardware.bluetooth@1.0-service-qti
 #system/vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc:vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc
 
-# ANT+
-#system/lib/com.qualcomm.qti.ant@1.0.so:vendor/lib/com.qualcomm.qti.ant@1.0.so
-#system/lib64/com.qualcomm.qti.ant@1.0.so:vendor/lib64/com.qualcomm.qti.ant@1.0.so
-#system/lib/com.qualcomm.qti.ant@1.0.so
-#system/lib64/com.qualcomm.qti.ant@1.0.so
-#-system/vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
-#-system/vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so:vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so
+# ANT+ support libraries. The HCI HAL impl, interface package and
+# service are SOURCE-BUILT in the device tree (ant/ + interfaces/), and
+# this list must stay compatible with them:
+#
+# * libantradio.so is SOURCE-BUILT from external/ant-wireless/ant_native
+#   with the src/qualcomm-hidl backend (BOARD_ANT_WIRELESS_DEVICE set to
+#   "qualcomm-hidl"): the app-side ANT client (AntHalService.apk /
+#   Play-Store ANT apps) links against it. No prebuilt is extracted
+#   anywhere (system or vendor), the source module owns the install paths.
+# * com.qualcomm.qti.ant@1.0.so is extracted for the app-side binder only;
+#   on the vendor side the source-built interface package provides it.
+#   DO NOT also add it to PRODUCT_PACKAGES from a prebuilt module source -
+#   the source-built interfaces/ant/1.0 module owns that name.
+# The QTI Bluetooth stack entries stay commented out on purpose.
+# com.qualcomm.qti.ant@1.0.so is NOT extracted: the interface package is
+# built from source (interfaces/ant/1.0, system+vendor variants).
+# libantradio.so not extracted anywhere: source-built (see above). The
+# source module also owns the system/lib[64]/libantradio.so install paths,
+# so extracting the prebuilt would collide with it on the target files.
 #system/lib64/libantradio.so:vendor/lib64/libantradio.so
 #system/lib/libantradio.so:vendor/lib/libantradio.so
 #system/lib64/libantradio.so
