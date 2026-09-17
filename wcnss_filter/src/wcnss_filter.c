@@ -44,8 +44,9 @@
  *
  *   SoC -> host:  0x02/0x03/0x04 (HCI ACL/SCO/EVT) -> bt_sock client;
  *                 0x0c/0x0e (ANT CTL/DATA)        -> ant_sock client,
- *                 dropping the type byte (the ANT channel protocol handed
- *                 to libbt-vendor's ant_fd is [len][payload] frames).
+ *                 keeping the full [type][len][payload] frame so the ANT
+ *                 HIDL shim can route control vs data events to the right
+ *                 callback (the only ant_sock consumer on this tree).
  *   host -> SoC:  both client streams are forwarded as-is to the UART
  *                 (single-threaded, so writes are naturally serialized).
  *
@@ -614,13 +615,17 @@ int main(void) {
         /* ---- SoC -> host demux -----------------------------------------
          * Pop complete H4 packets off uart_in and route them by type byte:
          * HCI families to the bt client, ANT families to the ant client.
-         * Deliveries to the ant client drop the type byte - the ANT channel
-         * protocol libbt-vendor hands to its ant_fd consumer is
-         * [len][payload] frames, matching Qualcomm's reference mux. Packets
-         * whose client is not attached are discarded (that keeps the stream
-         * aligned and, for ANT-class traffic arriving with no ANT stack
-         * enabled, perfectly quiet). Bytes that can never start a packet
-         * are dropped one at a time to re-sync after link corruption.
+         * Packets are delivered whole to their client: COM packet buffers
+         * and ANT frames keep the type byte so the ANT HIDL shim on the
+         * other end of ant_sock can split control vs data events (QCom's
+         * own reference mux stripped the type byte for its ANT
+         * extension-style consumer; our consumer is the source-built
+         * com.qualcomm.qti.ant@1.0-impl, which needs the distinction).
+         * Packets whose client is not attached are discarded (that keeps
+         * the stream aligned and, for ANT-class traffic arriving with no
+         * ANT stack enabled, perfectly quiet). Bytes that can never start
+         * a packet are dropped one at a time to re-sync after link
+         * corruption.
          */
         for (;;) {
             size_t total;
@@ -657,18 +662,10 @@ int main(void) {
                 continue;
             }
 
-            /* frame pushed to an ant client excludes the type byte */
-            if (is_ant) {
-                if (ring_free(dst) < total - 1)
-                    break; /* backpressure: retry after draining */
-                ring_peek(&uart_in, pkt_buf, total);
-                ring_push(dst, pkt_buf + 1, total - 1);
-            } else {
-                if (ring_free(dst) < total)
-                    break; /* backpressure */
-                ring_peek(&uart_in, pkt_buf, total);
-                ring_push(dst, pkt_buf, total);
-            }
+            if (ring_free(dst) < total)
+                break; /* backpressure: retry after draining */
+            ring_peek(&uart_in, pkt_buf, total);
+            ring_push(dst, pkt_buf, total);
             ring_consume(&uart_in, total);
         }
 
