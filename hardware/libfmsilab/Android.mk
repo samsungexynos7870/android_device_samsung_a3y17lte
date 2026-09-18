@@ -47,7 +47,7 @@ LOCAL_CXXFLAGS += -Wno-error -std=c++11
 LOCAL_MODULE := libfmjni
 # The stock FM JNI and the vendor audio stack are 32 bit, keep the application
 # that embeds this library 32 bit as well.
-LOCAL_MULTILIB := 32
+LOCAL_MULTILIB := both
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
