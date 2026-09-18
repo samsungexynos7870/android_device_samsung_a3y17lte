@@ -173,6 +173,16 @@ PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(DEVICE_PATH)/configs/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
+# FM radio
+# The LineageOS FM radio application, driven by the libfmjni library built
+# from hardware/libfmsilab; the FM audio path itself is implemented by the
+# audio HAL of the common tree (TARGET_BOARD_HAS_SILAB_FM enables both).
+ifeq ($(TARGET_BOARD_HAS_SILAB_FM),true)
+PRODUCT_PACKAGES += \
+    FMRadio \
+    libfmjni
+endif
+
 ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 # Custom mixer_paths OSS
 PRODUCT_COPY_FILES += \

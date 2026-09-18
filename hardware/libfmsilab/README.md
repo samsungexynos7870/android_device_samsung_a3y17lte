@@ -15,4 +15,4 @@ This is a C++ implementation of the Silicon Labs **Si47xx (`silab fm`)** JNI wra
 | **`FmNative_silab_jni.cpp`** | **JNI Wrapper**. Implements all 16 methods of `com/android/fmradio/FmNative` (`openDev`, `powerUp`, `tune`, `seek`, `autoScan`, `stopScan`, `setRds`, `readRds`, `getPs`, `getLrText`, `activeAf`, `setMute`, `isRdsSupport`, `switchAntenna`) by delegating to a singleton `gRadioController` instance (`FmRadioController_silab*`). |
 | **`silab_ioctl.h / .cpp`** | **Direct IOCTL Backend**. Defines exact ioctl constants (`SI47XX_IOC_POWERUP`, `SI47XX_IOC_CHAN_SELECT`, etc.) and data structures (`struct radio_data_t`, `struct sys_config2`, `struct sys_config3`) matching the Si47xx Linux kernel radio driver (`/dev/radio0`). |
 | **`fmr.h / fmr_err.cpp`** | Common logging macros (`LOGI`, `LOGE`, `ALOG*`), error handling utilities, and standard POSIX/Android definitions. |
-| **`Android.mk`** | Android NDK build makefile configured for `c++11`, compiling `libfmsilab_jni.so`. |
+| **`Android.mk`** | Android NDK build makefile configured for `c++11`, compiling `libfmjni.so`. |

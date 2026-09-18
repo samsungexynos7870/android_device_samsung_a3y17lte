@@ -40,7 +40,14 @@ LOCAL_HEADER_LIBRARIES := jni_headers
 LOCAL_CFLAGS += -Wno-error
 LOCAL_CXXFLAGS += -Wno-error -std=c++11
 
-LOCAL_MODULE := libfmsilab_jni
+# The FM radio application loads its native library as "fmjni"; this library
+# implements its 16 com.android.fmradio.FmNative methods for the si47xx
+# tuner, replacing the generic implementation of the application (see
+# BOARD_HAVE_SLSI_FM in BoardConfig.mk).
+LOCAL_MODULE := libfmjni
+# The stock FM JNI and the vendor audio stack are 32 bit, keep the application
+# that embeds this library 32 bit as well.
+LOCAL_MULTILIB := 32
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
