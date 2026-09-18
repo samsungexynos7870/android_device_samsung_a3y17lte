@@ -35,5 +35,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.fdsan=warn_once
 
+# Choreographer
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.log.tag.Choreographer=E
+
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.multisim.simslotcount=1
