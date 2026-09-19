@@ -41,11 +41,7 @@ TARGET_BOARD_TFA_MODEL := 9896
 
 # FM Radio
 TARGET_BOARD_HAS_SILAB_FM := true
-# The FM radio application builds a generic JNI library, which expects a
-# Qualcomm/Broadcom/Samsung LSI/Mediatek tuner backend, unless one of the
-# BOARD_HAVE_*_FM flags is set. This device provides its own implementation
-# for its Silicon Labs si47xx tuner (see hardware/libfmsilab), so tell the
-# application not to build the generic one.
+# TODO: This is dummy. Allow us to build fm radio via the flag above.
 BOARD_HAVE_SLSI_FM := true
 
 # Display
