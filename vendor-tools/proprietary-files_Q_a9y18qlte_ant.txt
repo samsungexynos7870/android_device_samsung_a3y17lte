@@ -1,0 +1,12 @@
+# A920FXXS7CVI6 (a9y18qlte, Android 10)
+# https://github.com/Exynos7870-labs/samsung_a9y18qlte_dump
+
+# ANT+ (system)
+system/system/lib/com.qualcomm.qti.ant@1.0.so:system/lib/com.qualcomm.qti.ant@1.0.so
+-system/system/lib/libantradio.so:system/lib/libantradio.so
+system/system/lib64/com.qualcomm.qti.ant@1.0.so:system/lib64/com.qualcomm.qti.ant@1.0.so
+-system/system/lib64/libantradio.so:system/lib64/libantradio.so
+
+# ANT+ (vendor)
+vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so
+vendor/lib64/com.qualcomm.qti.ant@1.0.so
