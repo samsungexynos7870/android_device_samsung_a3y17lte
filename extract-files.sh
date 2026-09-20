@@ -43,9 +43,26 @@ function blob_fixup() {
             "${PATCHELF}" --add-needed "libbauthtzcommon_shim.so" "${2}"
         ;;
 
-        # libantradio.so is source-built from external/ant-wireless/ant_native
-        # (qualcomm-hidl backend): no blob fixup needed, the extraction of
-        # the prebuilt is disabled in proprietary-files_a7y17lte.txt.
+
+        # ANT+ (a9y18qlte): the Q blob still carries DT_NEEDED entries
+        # for libhidltransport/libhwbinder, both gone since Android 11 (the
+        # glue moved into libhidlbase); its dynsym table needs no symbol
+        # exclusive to either, so dropping the entries is safe.
+        vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so | vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so)
+            "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
+            "${PATCHELF}" --remove-needed "libhwbinder.so" "${2}"
+        ;;
+
+        vendor/lib64/com.qualcomm.qti.ant@1.0 | vendor/lib/com.qualcomm.qti.ant@1.0)
+            "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
+            "${PATCHELF}" --remove-needed "libhwbinder.so" "${2}"
+        ;;
+
+        system/lib64/com.qualcomm.qti.ant@1.0 | system/lib/com.qualcomm.qti.ant@1.0)
+            "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
+            "${PATCHELF}" --remove-needed "libhwbinder.so" "${2}"
+        ;;
+
     esac
 }
 
