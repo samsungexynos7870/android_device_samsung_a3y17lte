@@ -48,6 +48,12 @@ function blob_fixup() {
         # for libhidltransport/libhwbinder, both gone since Android 11 (the
         # glue moved into libhidlbase); its dynsym table needs no symbol
         # exclusive to either, so dropping the entries is safe.
+
+        system/lib/libantradio.so | system/lib64/libantradio.so)
+            "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
+            "${PATCHELF}" --remove-needed "libhwbinder.so" "${2}"
+        ;;
+
         vendor/lib64/hw/com.qualcomm.qti.ant@1.0-impl.so | vendor/lib/hw/com.qualcomm.qti.ant@1.0-impl.so)
             "${PATCHELF}" --remove-needed "libhidltransport.so" "${2}"
             "${PATCHELF}" --remove-needed "libhwbinder.so" "${2}"
