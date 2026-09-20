@@ -184,7 +184,7 @@ PRODUCT_PACKAGES += \
 ifeq ($(TARGET_DEVICE_HAS_OSS_AUDIO_HAL),true)
 # Custom mixer_paths OSS
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/oss/mixer_paths_oss_a720s.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+    $(LOCAL_PATH)/configs/audio/mixer_paths_oss_a720s.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
 else
 # Custom mixer_paths
 PRODUCT_COPY_FILES += \
