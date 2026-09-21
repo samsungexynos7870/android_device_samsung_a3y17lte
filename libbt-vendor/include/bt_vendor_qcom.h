@@ -50,11 +50,6 @@ typedef enum {
     BT_VND_OP_FM_USERIAL_CLOSE,
 }bt_fm_serial;
 
-typedef enum {
-    BT_VND_OP_ANT_USERIAL_OPEN = 254,
-    BT_VND_OP_ANT_USERIAL_CLOSE
-}ant_serial;
-
 /* HW_NEED_END_WITH_HCI_RESET
 
     code implementation of sending a HCI_RESET command during the epilog
@@ -83,7 +78,6 @@ enum {
 #define BT_CMD_PWR_CTRL         0xbfad
 struct bt_qcom_struct {
     int fd[2];
-    int ant_fd;
     int fm_fd;
     bt_vendor_callbacks_t *cb;
     uint8_t bdaddr[6];

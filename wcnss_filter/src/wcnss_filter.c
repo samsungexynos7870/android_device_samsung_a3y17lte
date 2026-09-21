@@ -29,8 +29,6 @@
  *   - after that, HCI traffic flows through the abstract local sockets
  *     this daemon serves:
  *       "bt_sock"          Bluetooth HCI channel <-> UART
- *       "ant_sock"         ANT channel <-> UART (vendor .so via
- *                          BT_VND_OP_ANT_USERIAL_OPEN / close)
  *       "wcnssfilter_ctrl" control socket; byte 0xDD requests shutdown
  *   - init stops the service again when start_hci goes false.
  *
@@ -39,27 +37,15 @@
  * wake peer is hooked to UART0), so this daemon only owns the UART and the
  * bridge sockets.
  *
- * The UART stream is shared: the controller multiplexes Bluetooth and ANT
- * on the same H4 link. Packets are demuxed by their H4 type byte:
- *
- *   SoC -> host:  0x02/0x03/0x04 (HCI ACL/SCO/EVT) -> bt_sock client;
- *                 0x0c/0x0e (ANT CTL/DATA)        -> ant_sock client,
- *                 keeping the full [type][len][payload] frame so the ANT
- *                 HIDL shim can route control vs data events to the right
- *                 callback (the only ant_sock consumer on this tree).
- *   host -> SoC:  both client streams are forwarded as-is to the UART
- *                 (single-threaded, so writes are naturally serialized).
+ * Bluetooth is the only data client. Forward its H4 byte stream unchanged
+ * in both directions; packet framing is handled by the Bluetooth HAL.
  *
  * Lifecycle: the daemon exits through its normal shutdown path as soon as
- * its LAST data client disconnects (bt or ant). While an ANT client is
- * attached it survives a Bluetooth disable, which is exactly what keeps
- * libbt-vendor's ref_count/start_hci_filter() handshake alive across BT
- * toggles with ANT in use. Our init .rc cannot reliably SIGTERM-kill us on
- * vendor.wc_transport.start_hci=false (observed on-device), so dying with
- * the last client is what makes every start_hci=true spawn a pristine
- * bridge. If the ref_count accounting shows an abnormal disappearance
- * (clean_up != 1), the daemon decrements vendor.wc_transport.ref_count
- * the way Qualcomm's reference mux/demux does.
+ * the Bluetooth client disconnects. Our init .rc cannot reliably SIGTERM-
+ * kill us on vendor.wc_transport.start_hci=false (observed on-device), so
+ * dying with the client makes every start_hci=true spawn a pristine bridge.
+ * If the ref_count accounting shows an abnormal disappearance (clean_up
+ * != 1), reconcile vendor.wc_transport.ref_count as in Qualcomm's helper.
  */
 
 #define LOG_TAG "wcnss_filter"
@@ -84,7 +70,6 @@
 
 /* --- protocol constants (must match libbt-vendor src/bt_vendor_qcom.c) --- */
 #define BT_SOCK_NAME        "bt_sock"
-#define ANT_SOCK_NAME       "ant_sock"
 #define CTRL_SOCK_NAME      "wcnssfilter_ctrl"
 #define STOP_WCNSS_FILTER   0xDD /* stop request sent on the ctrl socket */
 
@@ -93,14 +78,6 @@
 #define PROP_REF_COUNT      "vendor.wc_transport.ref_count"
 #define PROP_CLEAN_UP       "vendor.wc_transport.clean_up"
 
-/* H4 packet type bytes on the UART link */
-#define PKT_HCI_CMD   0x01 /* host -> SoC only */
-#define PKT_HCI_ACL   0x02
-#define PKT_HCI_SCO   0x03
-#define PKT_HCI_EVT   0x04
-#define PKT_ANT_CTL   0x0c
-#define PKT_ANT_DATA  0x0e
-
 /* --- hardware specifics --- */
 #define BT_UART_DEV   "/dev/ttySAC0" /* Exynos 7870 UART0 <-> QCA9377 */
 #define BT_UART_SPEED B3000000       /* speed after rome_soc_init()   */
@@ -108,9 +85,7 @@
 #define TRANSPORT_OPEN_RETRIES  15
 #define RETRY_DELAY_MS          200
 
-/* Demux buffers whole H4 packets, so make the rings comfortably larger
- * than the theoretical H4 wire maximum (ACL: 5-byte header + 65535-byte
- * payload). Anything beyond RING_SIZE-1 is treated as link corruption. */
+/* Buffer the H4 stream while either endpoint is temporarily blocked. */
 #define RING_SIZE (128 * 1024)
 
 typedef struct {
@@ -245,10 +220,9 @@ static int listen_abstract(const char *name) {
 
 /*
  * Mirrors Qualcomm's reference handle_cleanup(): when the data-client
- * set changes, reconcile ref_count for abnormal disappearances and decide
- * whether the last client is gone.
+ * disconnects, reconcile ref_count for abnormal disappearances.
  *
- * Normal BT/ANT shutdowns already went through libbt-vendor, which sets
+ * Normal Bluetooth shutdowns already went through libbt-vendor, which sets
  * clean_up=1 *before* closing its socket fd (it already did its own
  * can_perform_action('0') ref_count decrement) - in that case we must not
  * count the departure again. Only clean_up==0 means nobody owed us a
@@ -277,83 +251,15 @@ static void reconcile_ref_count(void) {
     }
 }
 
-/*
- * A data client (bt or ant) disconnected. Returns true when no data client
- * is left and the daemon should exit for the next session.
- */
-static bool client_left(const char *which, int fd_bt_cli, int fd_ant_cli) {
-    reconcile_ref_count();
-
-    if (fd_bt_cli < 0 && fd_ant_cli < 0) {
-        ALOGI("%s client gone, no data clients left, exiting for a fresh"
-              " bridge on next enable", which);
-        return true;
-    }
-
-    ALOGI("%s client gone, staying up (%s still attached)", which,
-          fd_bt_cli >= 0 ? "bt" : "ant");
-    return false;
-}
-
-/*
- * Expect the H4 header for 'type' at the head of the uart_in ring and, if
- * the whole packet is available, its total wire length (type byte
- * included). Returns true when the complete packet is in the ring.
- */
-static bool packet_len(const ring_t *uart_in, size_t *total_out, bool *is_ant) {
-    uint8_t type, len8, hdr[5];
-    size_t paylen;
-
-    if (ring_peek(uart_in, &type, 1) != 1)
-        return false;
-
-    switch (type) {
-    case PKT_HCI_EVT:           /* [t][evt][len][pay...] */
-        if (ring_peek(uart_in, hdr, 3) < 3)
-            return false;
-        paylen = hdr[2];
-        *total_out = 3 + paylen;
-        *is_ant = false;
-        return true;
-    case PKT_HCI_ACL:           /* [t][hnd][len16LE][pay...] */
-        if (ring_peek(uart_in, hdr, 5) < 5)
-            return false;
-        paylen = (size_t)hdr[3] | ((size_t)hdr[4] << 8);
-        *total_out = 5 + paylen;
-        *is_ant = false;
-        return true;
-    case PKT_HCI_SCO:           /* [t][hnd][len][pay...] */
-        if (ring_peek(uart_in, hdr, 4) < 4)
-            return false;
-        paylen = hdr[3];
-        *total_out = 4 + paylen;
-        *is_ant = false;
-        return true;
-    case PKT_ANT_CTL:
-    case PKT_ANT_DATA:          /* [t][len][pay...] */
-        if (ring_peek(uart_in, &len8, 2) < 2)
-            return false;
-        *total_out = 2 + (size_t)len8;
-        *is_ant = true;
-        return true;
-    default:
-        return false; /* caller treats as unknown and re-syncs */
-    }
-}
-
 int main(void) {
-    int fd_uart = -1, fd_bt_srv = -1, fd_ant_srv = -1, fd_ctrl_srv = -1;
-    int fd_bt_cli = -1, fd_ant_cli = -1, fd_ctrl_cli = -1;
+    int fd_uart = -1, fd_bt_srv = -1, fd_ctrl_srv = -1;
+    int fd_bt_cli = -1, fd_ctrl_cli = -1;
     int ret = EXIT_FAILURE;
-    unsigned int dropped_uart_bytes = 0;
-    ring_t to_uart, to_client, to_ant, uart_in;
+    ring_t to_uart, to_client;
     static uint8_t io_buf[8192];
-    static uint8_t pkt_buf[65536 + 8];
 
     ring_reset(&to_uart);
     ring_reset(&to_client);
-    ring_reset(&to_ant);
-    ring_reset(&uart_in);
 
     signal(SIGTERM, on_signal);
     signal(SIGINT, on_signal);
@@ -370,10 +276,6 @@ int main(void) {
     if (fd_bt_srv < 0)
         goto out;
 
-    fd_ant_srv = listen_abstract(ANT_SOCK_NAME);
-    if (fd_ant_srv < 0)
-        goto out;
-
     fd_ctrl_srv = listen_abstract(CTRL_SOCK_NAME);
     if (fd_ctrl_srv < 0)
         goto out;
@@ -384,13 +286,13 @@ int main(void) {
         ALOGE("failed to set %s=1: %s", PROP_FILTER_STATUS, strerror(errno));
         goto out;
     }
-    ALOGI("bridge up: %s=1, waiting for clients on %s / %s / %s",
-          PROP_FILTER_STATUS, BT_SOCK_NAME, ANT_SOCK_NAME, CTRL_SOCK_NAME);
+    ALOGI("bridge up: %s=1, waiting for clients on %s / %s",
+          PROP_FILTER_STATUS, BT_SOCK_NAME, CTRL_SOCK_NAME);
 
     while (!stop_requested) {
-        struct pollfd fds[7];
+        struct pollfd fds[5];
         int nfd = 0, idx_ctrl_srv, idx_ctrl_cli = -1, idx_bt_srv,
-                  idx_ant_srv, idx_uart, idx_bt_cli = -1, idx_ant_cli = -1;
+                  idx_uart, idx_bt_cli = -1;
         int nready;
 
         idx_ctrl_srv = nfd;
@@ -405,29 +307,20 @@ int main(void) {
         idx_bt_srv = nfd;
         fds[nfd++] = (struct pollfd){ .fd = fd_bt_srv, .events = POLLIN };
 
-        idx_ant_srv = nfd;
-        fds[nfd++] = (struct pollfd){ .fd = fd_ant_srv, .events = POLLIN };
-
         idx_uart = nfd;
         fds[nfd] = (struct pollfd){ .fd = fd_uart, .events = POLLIN };
         if (ring_used(&to_uart) > 0)
             fds[nfd].events |= POLLOUT;
-        if (ring_free(&uart_in) == 0)
-            fds[nfd].events &= ~POLLIN; /* demux backlog full */
+        if (fd_bt_cli >= 0 && ring_free(&to_client) == 0)
+            fds[nfd].events &= ~POLLIN; /* client backlog full */
         nfd++;
 
         if (fd_bt_cli >= 0) {
             idx_bt_cli = nfd;
             fds[nfd] = (struct pollfd){ .fd = fd_bt_cli, .events = POLLIN };
+            if (ring_free(&to_uart) == 0)
+                fds[nfd].events &= ~POLLIN;
             if (ring_used(&to_client) > 0)
-                fds[nfd].events |= POLLOUT;
-            nfd++;
-        }
-
-        if (fd_ant_cli >= 0) {
-            idx_ant_cli = nfd;
-            fds[nfd] = (struct pollfd){ .fd = fd_ant_cli, .events = POLLIN };
-            if (ring_used(&to_ant) > 0)
                 fds[nfd].events |= POLLOUT;
             nfd++;
         }
@@ -478,21 +371,7 @@ int main(void) {
                 fd_bt_cli = n;
                 ring_reset(&to_uart);
                 ring_reset(&to_client);
-                ring_reset(&uart_in);
                 ALOGI("bt client connected (fd %d)", fd_bt_cli);
-                dropped_uart_bytes = 0;
-            }
-        }
-        if (fds[idx_ant_srv].revents & POLLIN) {
-            int n = accept(fd_ant_srv, NULL, NULL);
-            if (n >= 0) {
-                if (fd_ant_cli >= 0) {
-                    ALOGW("new ant client replaces old one (fd %d)", fd_ant_cli);
-                    close(fd_ant_cli);
-                }
-                fd_ant_cli = n;
-                ring_reset(&to_ant);
-                ALOGI("ant client connected (fd %d)", fd_ant_cli);
             }
         }
 
@@ -502,26 +381,21 @@ int main(void) {
             ALOGW("bt client error/hangup, closing (fd %d)", fd_bt_cli);
             close(fd_bt_cli);
             fd_bt_cli = -1;
-            /* Exit only when the LAST data client is gone: our init .rc
-             * cannot reliably SIGTERM-kill us on
-             * vendor.wc_transport.start_hci=false (observed on-device), and
-             * a daemon surviving across disables poisons the next
-             * BT_VND_OP_USERIAL_OPEN: start_hci_filter() resets
-             * hci_filter_status to 0 and waits for a fresh bridge that never
-             * comes if init reports the service "already running". With no
-             * ANT (the a3y17lte default today) ant_fd never exists, so this
-             * is the same die-with-the-BT-session semantics as before. */
-            if (client_left("bt", fd_bt_cli, fd_ant_cli))
-                stop_requested = 1;
+            /* Exit so the next enable starts a fresh bridge. */
+            reconcile_ref_count();
+            stop_requested = 1;
         } else if (idx_bt_cli >= 0) {
             if (fds[idx_bt_cli].revents & POLLIN) {
-                ssize_t rd = recv(fd_bt_cli, io_buf, sizeof(io_buf), 0);
+                size_t space = ring_free(&to_uart);
+                if (space > sizeof(io_buf))
+                    space = sizeof(io_buf);
+                ssize_t rd = recv(fd_bt_cli, io_buf, space, 0);
                 if (rd <= 0) {
                     ALOGI("bt client disconnected");
                     close(fd_bt_cli);
                     fd_bt_cli = -1;
-                    if (client_left("bt", fd_bt_cli, fd_ant_cli))
-                        stop_requested = 1;
+                    reconcile_ref_count();
+                    stop_requested = 1;
                 } else {
                     size_t pushed = ring_push(&to_uart, io_buf, (size_t)rd);
                     if (pushed < (size_t)rd)
@@ -541,55 +415,8 @@ int main(void) {
                         ALOGW("send to bt client failed: %s", strerror(errno));
                         close(fd_bt_cli);
                         fd_bt_cli = -1;
-                        if (client_left("bt", fd_bt_cli, fd_ant_cli))
-                            stop_requested = 1;
-                    }
-                }
-            }
-        }
-
-        /* ---- ANT client -> UART ----------------------------------------
-         * host->SoC needs no parsing: the ANT stack already writes fully
-         * framed [type][len][payload] H4-style packets and the single
-         * thread serializes writes with the Bluetooth stream.
-         */
-        if (idx_ant_cli >= 0 &&
-            (fds[idx_ant_cli].revents & (POLLERR | POLLHUP | POLLNVAL))) {
-            ALOGW("ant client error/hangup, closing (fd %d)", fd_ant_cli);
-            close(fd_ant_cli);
-            fd_ant_cli = -1;
-            if (client_left("ant", fd_bt_cli, fd_ant_cli))
-                stop_requested = 1;
-        } else if (idx_ant_cli >= 0) {
-            if (fds[idx_ant_cli].revents & POLLIN) {
-                ssize_t rd = recv(fd_ant_cli, io_buf, sizeof(io_buf), 0);
-                if (rd <= 0) {
-                    ALOGI("ant client disconnected");
-                    close(fd_ant_cli);
-                    fd_ant_cli = -1;
-                    if (client_left("ant", fd_bt_cli, fd_ant_cli))
+                        reconcile_ref_count();
                         stop_requested = 1;
-                } else {
-                    size_t pushed = ring_push(&to_uart, io_buf, (size_t)rd);
-                    if (pushed < (size_t)rd)
-                        ALOGW("to_uart ring full, dropped %zd byte(s)",
-                              (ssize_t)rd - (ssize_t)pushed);
-                }
-            }
-            if (idx_ant_cli >= 0 && fd_ant_cli >= 0 &&
-                (fds[idx_ant_cli].revents & POLLOUT)) {
-                size_t avail = ring_peek(&to_ant, io_buf, sizeof(io_buf));
-                if (avail > 0) {
-                    ssize_t wr = send(fd_ant_cli, io_buf, avail, MSG_NOSIGNAL);
-                    if (wr > 0) {
-                        ring_consume(&to_ant, (size_t)wr);
-                    } else if (wr < 0 && errno != EAGAIN &&
-                               errno != EWOULDBLOCK) {
-                        ALOGW("send to ant client failed: %s", strerror(errno));
-                        close(fd_ant_cli);
-                        fd_ant_cli = -1;
-                        if (client_left("ant", fd_bt_cli, fd_ant_cli))
-                            stop_requested = 1;
                     }
                 }
             }
@@ -601,72 +428,17 @@ int main(void) {
             break;
         }
         if (fds[idx_uart].revents & POLLIN) {
-            ssize_t rd = read(fd_uart, io_buf, sizeof(io_buf));
+            size_t space = fd_bt_cli >= 0 ? ring_free(&to_client) : sizeof(io_buf);
+            if (space > sizeof(io_buf))
+                space = sizeof(io_buf);
+            ssize_t rd = read(fd_uart, io_buf, space);
             if (rd > 0) {
-                size_t pushed = ring_push(&uart_in, io_buf, (size_t)rd);
-                if (pushed < (size_t)rd)
-                    ALOGW("uart_in ring full, dropped %zd byte(s)",
-                          (ssize_t)rd - (ssize_t)pushed);
+                /* Discard traffic until the Bluetooth client attaches. */
+                if (fd_bt_cli >= 0)
+                    ring_push(&to_client, io_buf, (size_t)rd);
             } else if (rd < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
                 ALOGE("UART read failed: %s", strerror(errno));
             }
-        }
-
-        /* ---- SoC -> host demux -----------------------------------------
-         * Pop complete H4 packets off uart_in and route them by type byte:
-         * HCI families to the bt client, ANT families to the ant client.
-         * Packets are delivered whole to their client: COM packet buffers
-         * and ANT frames keep the type byte so the ANT HIDL shim on the
-         * other end of ant_sock can split control vs data events (QCom's
-         * own reference mux stripped the type byte for its ANT
-         * extension-style consumer; our consumer is the source-built
-         * com.qualcomm.qti.ant@1.0-impl, which needs the distinction).
-         * Packets whose client is not attached are discarded (that keeps
-         * the stream aligned and, for ANT-class traffic arriving with no
-         * ANT stack enabled, perfectly quiet). Bytes that can never start
-         * a packet are dropped one at a time to re-sync after link
-         * corruption.
-         */
-        for (;;) {
-            size_t total;
-            bool is_ant;
-            ring_t *dst;
-            int dst_cli;
-
-            if (!packet_len(&uart_in, &total, &is_ant)) {
-                uint8_t junk;
-                if (ring_used(&uart_in) == 0)
-                    break;
-                ring_peek(&uart_in, &junk, 1);
-                ring_consume(&uart_in, 1);
-                if ((++dropped_uart_bytes & 0x3f) == 1)
-                    ALOGW("re-sync: dropping UART byte 0x%02x (%u dropped "
-                          "so far)", junk, dropped_uart_bytes);
-                continue;
-            }
-
-            if (total > RING_SIZE - 1) {
-                /* cannot ever fit in a ring: not a real packet, re-sync */
-                ring_consume(&uart_in, 1);
-                ALOGW("re-sync: implausible packet size %zu, dropping type "
-                      "byte", total);
-                continue;
-            }
-
-            dst = is_ant ? &to_ant : &to_client;
-            dst_cli = is_ant ? fd_ant_cli : fd_bt_cli;
-
-            if (dst_cli < 0) {
-                /* no consumer: swallow the packet, stay in the loop */
-                ring_consume(&uart_in, total);
-                continue;
-            }
-
-            if (ring_free(dst) < total)
-                break; /* backpressure: retry after draining */
-            ring_peek(&uart_in, pkt_buf, total);
-            ring_push(dst, pkt_buf, total);
-            ring_consume(&uart_in, total);
         }
 
         if (fds[idx_uart].revents & POLLOUT) {
@@ -692,14 +464,10 @@ out:
         close(fd_ctrl_cli);
     if (fd_bt_cli >= 0)
         close(fd_bt_cli);
-    if (fd_ant_cli >= 0)
-        close(fd_ant_cli);
     if (fd_ctrl_srv >= 0)
         close(fd_ctrl_srv);
     if (fd_bt_srv >= 0)
         close(fd_bt_srv);
-    if (fd_ant_srv >= 0)
-        close(fd_ant_srv);
     if (fd_uart >= 0)
         close(fd_uart);
 

@@ -68,17 +68,6 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-service \
     libbt-vendor
 
-# ANT+ (com.qualcomm.qti.ant@1.0::IAntHci) built from source: the QTI
-# AntHci impl on a small DataHandler shim that routes the ANT channel
-# through libbt-vendor's ANT userial ops over the wcnss_filter mux
-# daemon's ant_sock (see ant/ and interfaces/ant/1.0; interface package
-# also source-authored there).
-# Requires BOARD_ANT_WIRELESS_DEVICE (BoardConfig.mk) for -DENABLE_ANT.
-$(call inherit-product, device/samsung/a3y17lte/ant/ant.mk)
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/default-permissions/com.dsi.ant.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/default-permissions/com.dsi.ant.xml
-
 # Bluetooth audio
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0.vendor \

@@ -1,4 +1,0 @@
-# com.dsi.ant.server (AntHalService.apk / ANT-capable platform apps) talks
-# to the ANT HAL via libantradio.so.
-allow platform_app hal_ant_hwservice:hwservice_manager find;
-allow platform_app hal_bluetooth_default:binder { call transfer };

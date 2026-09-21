@@ -56,10 +56,6 @@
 
 #define CMD_TIMEOUT  0x22
 
-static void wait_for_patch_download(bool is_ant_req);
-#ifdef ENABLE_ANT
-static bool is_debug_force_special_bytes(void);
-#endif
 int connect_to_local_socket(char* name);
 /******************************************************************************
 **  Externs
@@ -649,7 +645,6 @@ static int init(const bt_vendor_callbacks_t *cb, unsigned char *bdaddr)
     temp->rfkill_id = -1;
     temp->enable_extldo = FALSE;
     temp->cb = (bt_vendor_callbacks_t*)cb;
-    temp->ant_fd = -1;
     temp->soc_type = get_bt_soc_type();
     soc_init(temp->soc_type);
 
@@ -756,7 +751,6 @@ static int __op(bt_vendor_opcode_t opcode, void *param)
 {
     int retval = BT_STATUS_SUCCESS;
     int nState = -1;
-    bool is_ant_req = false;
     bool is_fm_req = false;
     char wipower_status[PROPERTY_VALUE_MAX];
     char emb_wp_mode[PROPERTY_VALUE_MAX];
@@ -857,19 +851,13 @@ static int __op(bt_vendor_opcode_t opcode, void *param)
         case BT_VND_OP_SCO_CFG:
             q->cb->scocfg_cb(BT_VND_OP_RESULT_SUCCESS); //dummy
             break;
-#ifdef ENABLE_ANT
-        case BT_VND_OP_ANT_USERIAL_OPEN:
-                ALOGI("bt-vendor : BT_VND_OP_ANT_USERIAL_OPEN");
-                is_ant_req = true;
-                goto userial_open;
-#endif
 #ifdef FM_OVER_UART
         case BT_VND_OP_FM_USERIAL_OPEN:
                 ALOGI("bt-vendor : BT_VND_OP_FM_USERIAL_OPEN");
                 is_fm_req = true;
                 goto userial_open;
 #endif
-#if defined(ENABLE_ANT) || defined(FM_OVER_UART)
+#ifdef FM_OVER_UART
 userial_open:
 #endif
         case BT_VND_OP_USERIAL_OPEN:
@@ -923,10 +911,9 @@ userial_open:
                         break;
                     case BT_SOC_ROME:
                         {
-                            wait_for_patch_download(is_ant_req);
                             property_get("ro.vendor.bluetooth.emb_wp_mode", emb_wp_mode, false);
                             if (!is_soc_initialized()) {
-                                char* dlnd_inprog = is_ant_req ? "ant" : "bt";
+                                const char* dlnd_inprog = "bt";
                                 if (property_set("vendor.wc_transport.patch_dnld_inprog", dlnd_inprog) < 0) {
                                     ALOGE("%s: Failed to set dnld_inprog %s", __FUNCTION__, dlnd_inprog);
                                 }
@@ -1013,22 +1000,13 @@ userial_open:
                                     property_set("vendor.wc_transport.start_hci", "false");
                                     bt_powerup(0);
                                 } else {
-#ifdef ENABLE_ANT
-                                    if (is_ant_req) {
-                                        ALOGI("%s: connect to ant channel", __func__);
-                                        q->ant_fd = fd_filter = connect_to_local_socket("ant_sock");
-                                    }
-                                    else
-#endif
-                                    {
-                                        ALOGI("%s: connect to bt channel", __func__);
-                                        vnd_userial.fd = fd_filter = connect_to_local_socket("bt_sock");
-                                    }
+                                    ALOGI("%s: connect to bt channel", __func__);
+                                    vnd_userial.fd = fd_filter = connect_to_local_socket("bt_sock");
 
                                     if (fd_filter != -1) {
-                                        ALOGI("%s: received the socket fd: %d is_ant_req: %d is_fm_req: %d\n",
-                                                             __func__, fd_filter, is_ant_req,is_fm_req);
-                                        if((strcmp(emb_wp_mode, "true") == 0) && !is_ant_req && !is_fm_req) {
+                                        ALOGI("%s: received the socket fd: %d is_fm_req: %d\n",
+                                                             __func__, fd_filter, is_fm_req);
+                                        if((strcmp(emb_wp_mode, "true") == 0) && !is_fm_req) {
                                              if (chipset_ver >= ROME_VER_3_0) {
                                                 /* get rome supported feature request */
                                                 ALOGE("%s: %x08 %0x", __FUNCTION__,chipset_ver, ROME_VER_3_0);
@@ -1037,7 +1015,7 @@ userial_open:
                                         }
                                         if (!skip_init) {
                                             /*Skip if already sent*/
-                                            enable_controller_log(fd_filter, (is_ant_req || is_fm_req) );
+                                            enable_controller_log(fd_filter, is_fm_req);
                                             skip_init = true;
                                         }
                                         for (idx=0; idx < CH_MAX; idx++)
@@ -1045,10 +1023,7 @@ userial_open:
                                             retval = 1;
                                     }
                                     else {
-                                        if (is_ant_req)
-                                            ALOGE("Unable to connect to ANT Server Socket!!!");
-                                        else
-                                            ALOGE("Unable to connect to BT Server Socket!!!");
+                                        ALOGE("Unable to connect to BT Server Socket!!!");
                                         retval = -1;
                                     }
                                 }
@@ -1078,13 +1053,6 @@ userial_open:
                                 property_set("vendor.wc_transport.start_hci", "false");
                                 bt_powerup(0);
                             } else {
-#ifdef ENABLE_ANT
-                                if (is_ant_req) {
-                                    ALOGI("%s: connect to ant channel", __func__);
-                                    q->ant_fd = fd_filter = connect_to_local_socket("ant_sock");
-                                }
-                                else
-#endif
 #ifdef FM_OVER_UART
                                 if (is_fm_req && (q->soc_type >=BT_SOC_ROME && q->soc_type < BT_SOC_RESERVED)) {
                                     ALOGI("%s: connect to fm channel", __func__);
@@ -1107,11 +1075,6 @@ userial_open:
                                     retval = 1;
                                 }
                                 else {
-#ifdef ENABLE_ANT
-                                    if (is_ant_req)
-                                        ALOGE("Unable to connect to ANT Server Socket!!!");
-                                    else
-#endif
 #ifdef FM_OVER_UART
                                     if (is_fm_req)
                                         ALOGE("Unable to connect to FM Server Socket!!!");
@@ -1128,19 +1091,6 @@ userial_open:
                         break;
                   }
             } break;
-#ifdef ENABLE_ANT
-        case BT_VND_OP_ANT_USERIAL_CLOSE:
-            {
-                ALOGI("bt-vendor : BT_VND_OP_ANT_USERIAL_CLOSE");
-                property_set("vendor.wc_transport.clean_up","1");
-                if (q->ant_fd != -1) {
-                    ALOGE("closing ant_fd");
-                    close(q->ant_fd);
-                    q->ant_fd = -1;
-                }
-            }
-            break;
-#endif
 #ifdef FM_OVER_UART
         case BT_VND_OP_FM_USERIAL_CLOSE:
             {
@@ -1358,30 +1308,6 @@ static void cleanup(void)
 #endif /* WIFI_BT_STATUS_SYNC */
 }
 
-/* Check for one of the cients ANT/BT patch download is already in
-** progress if yes wait till complete
-*/
-void wait_for_patch_download(bool is_ant_req) {
-    ALOGV("%s:", __FUNCTION__);
-    char inProgress[PROPERTY_VALUE_MAX] = {'\0'};
-    while (1) {
-        property_get("vendor.wc_transport.patch_dnld_inprog", inProgress, "null");
-
-        if(is_ant_req && !(strcmp(inProgress,"bt"))) {
-           //ANT request, wait for BT to finish
-           usleep(50000);
-        }
-        else if(!is_ant_req && !(strcmp(inProgress,"ant"))) {
-          //BT request, wait for ANT to finish
-           usleep(50000);
-        }
-        else {
-           ALOGI("%s: patch download completed", __FUNCTION__);
-           break;
-        }
-    }
-}
-
 bool is_download_progress () {
     char inProgress[PROPERTY_VALUE_MAX] = {'\0'};
     bool retval = false;
@@ -1416,26 +1342,6 @@ bool is_download_progress () {
     return retval;
 }
 
-#ifdef ENABLE_ANT
-static bool is_debug_force_special_bytes() {
-    int ret = 0;
-    char value[PROPERTY_VALUE_MAX] = {'\0'};
-    bool enabled = false;
-#ifdef ENABLE_DBG_FLAGS
-    enabled = true;
-#endif
-
-    ret = property_get("vendor.wc_transport.force_special_byte", value, NULL);
-
-    if (ret) {
-        enabled = (strcmp(value, "false") ==0) ? false : true;
-        ALOGV("%s: vendor.wc_transport.force_special_byte: %s, enabled: %d ",
-            __func__, value, enabled);
-    }
-
-    return enabled;
-}
-#endif
 
 // Entry point of DLib
 const bt_vendor_interface_t BLUETOOTH_VENDOR_LIB_INTERFACE = {

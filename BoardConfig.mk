@@ -54,11 +54,6 @@ TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BOARD_HAS_QCA_BT_ROME := true
-# "qualcomm-hidl": libbt-vendor enables its ANT userial ops (-DENABLE_ANT)
-# and external/ant-wireless/ant_native builds libantradio from source with
-# the src/qualcomm-hidl backend (client of com.qualcomm.qti.ant@1.0::IAntHci,
-# see interfaces/ant/1.0 and ant/).
-BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 
 # Kernel

@@ -1,14 +1,6 @@
 # Generic AOSP android.hardware.bluetooth@1.0-service registers
-# android.hardware.bluetooth@1.0::IBluetoothHci. The same domain also
-# hosts the source-built com.qualcomm.qti.ant@1.0-service (see its
-# seclabel), so it registers the ANT hwservice as well.
+# android.hardware.bluetooth@1.0::IBluetoothHci.
 allow hal_bluetooth_default hal_bluetooth_hwservice:hwservice_manager { add find };
-allow hal_bluetooth_default hal_ant_hwservice:hwservice_manager { add find };
-
-# android.hardware.bluetooth@1.0.so is relabeled as a vendor public
-# library (it is a dependency of the app-side ANT client libantradio.so),
-# keep the bluetooth service able to link it.
-allow hal_bluetooth_default vendor_public_lib_file:file { execute read open getattr map };
 
 # QCA9377 open-source stack (CAF libbt-vendor): the vendor lib opens the
 # combo chip UART directly for power-up and rampatch/NV download.
@@ -18,9 +10,8 @@ allow hal_bluetooth_default bluetooth_device:chr_file { getattr ioctl open read 
 # via its rfkill node (labeled rfkill_device by u7870-common sepolicy).
 allow hal_bluetooth_default rfkill_device:chr_file rw_file_perms;
 
-# ...and then proxies all further HCI traffic (and, with BOARD_ANT_WIRELESS_DEVICE,
-# the ANT channel) through the wcnss_filter daemon's abstract local
-# sockets ("bt_sock", "ant_sock", "wcnssfilter_ctrl").
+# ...and then proxies all further HCI traffic through the wcnss_filter
+# daemon's abstract local sockets ("bt_sock", "wcnssfilter_ctrl").
 unix_socket_connect(hal_bluetooth_default, wcnss_filter, wcnss_filter)
 unix_socket_connect(hal_bluetooth_default, property, wcnss_filter)
 

@@ -1,7 +1,0 @@
-service vendor.com_qualcomm_qti_ant-1-0 /vendor/bin/hw/com.qualcomm.qti.ant@1.0-service
-    class hal
-    user bluetooth
-    group bluetooth bluetooth net_bt_admin system wakelock misc readproc
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
-    interface com.qualcomm.qti.ant@1.0::IAntHci default
-    seclabel u:r:hal_bluetooth_default:s0
