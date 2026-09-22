@@ -44,6 +44,10 @@ TARGET_BOARD_HAS_SILAB_FM := true
 # TODO: This is dummy. Allow us to build fm radio via the flag above.
 BOARD_HAVE_SLSI_FM := true
 
+SOONG_CONFIG_NAMESPACES += libfmjni
+SOONG_CONFIG_libfmjni += vendor
+SOONG_CONFIG_libfmjni_vendor := slsi
+
 # Display
 TARGET_SCREEN_DENSITY := 320
 

@@ -1,0 +1,15 @@
+filegroup {
+    name: "libfmjni-slsi-srcs",
+    srcs: [
+        "fmr_err.cpp",
+        "FmNative_silab_jni.cpp",
+        "FmRadioController_silab.cpp",
+        "FmRadioRDSParser.cpp",
+        "silab_ioctl.cpp",
+    ],
+}
+
+cc_library_headers {
+    name: "libfmjni-slsi-headers",
+    export_include_dirs: ["."],
+}
