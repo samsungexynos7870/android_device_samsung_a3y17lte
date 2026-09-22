@@ -40,6 +40,11 @@ TARGET_DEVICE_HAS_SEC_GNSS := true
 # prebuilt slsi
 TARGET_DEVICE_HAS_SAMSUNG_SLSI_EXYNOS7870 := false
 
+# qcom wlan
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/qcom/wlan \
+    hardware/qcom-caf/wlan
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.ese.xml \

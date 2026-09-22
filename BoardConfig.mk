@@ -47,6 +47,11 @@ BOARD_HAVE_SLSI_FM := true
 # Display
 TARGET_SCREEN_DENSITY := 320
 
+# build fixes
+BUILD_BROKEN_CLANG_PROPERTY := true
+BUILD_BROKEN_CLANG_CFLAGS := true
+BUILD_BROKEN_CLANG_ASFLAGS := true
+
 # Assert
 TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 
