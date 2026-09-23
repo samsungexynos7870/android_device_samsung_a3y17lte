@@ -38,8 +38,8 @@ PRODUCT_MANUFACTURER := samsung
 BUILD_FINGERPRINT := "samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys"
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=a3y17ltexc \
-    PRIVATE_BUILD_DESC="a3y17ltexc-user 8.0.0 R16NW A320FLXXS5CSL5 release-keys"
+    DeviceProduct=a3y17ltexc \
+    BuildDesc="a3y17ltexc-user 8.0.0 R16NW A320FLXXS5CSL5 release-keys"
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.PDA=A320FLXXS5CSL5 \
