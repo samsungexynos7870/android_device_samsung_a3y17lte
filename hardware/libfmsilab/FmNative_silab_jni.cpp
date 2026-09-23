@@ -43,7 +43,7 @@ static inline jfloat fmKHzToFloat(int freq_khz) {
     return (jfloat)(freq_khz / 1000.0f);
 }
 
-jboolean openDev(JNIEnv *env, jobject thiz) {
+jboolean openDev(JNIEnv *env __unused, jobject thiz __unused) {
     LOGI("%s entered\n", __func__);
     if (gRadioController == NULL) {
         gRadioController = new FmRadioController_silab();
@@ -55,7 +55,7 @@ jboolean openDev(JNIEnv *env, jobject thiz) {
     return JNI_TRUE;
 }
 
-jboolean closeDev(JNIEnv *env, jobject thiz) {
+jboolean closeDev(JNIEnv *env __unused, jobject thiz __unused) {
     LOGI("%s entered\n", __func__);
     if (gRadioController != NULL) {
         gRadioController->PowerOff();
@@ -65,7 +65,7 @@ jboolean closeDev(JNIEnv *env, jobject thiz) {
     return JNI_TRUE;
 }
 
-jboolean powerUp(JNIEnv *env, jobject thiz, jfloat freq) {
+jboolean powerUp(JNIEnv *env __unused, jobject thiz __unused, jfloat freq) {
     LOGI("%s entered (freq=%0.2f)\n", __func__, freq);
     if (gRadioController == NULL) {
         gRadioController = new FmRadioController_silab();
@@ -84,7 +84,7 @@ jboolean powerUp(JNIEnv *env, jobject thiz, jfloat freq) {
     return JNI_TRUE;
 }
 
-jboolean powerDown(JNIEnv *env, jobject thiz, jint type) {
+jboolean powerDown(JNIEnv *env __unused, jobject thiz __unused, jint type) {
     LOGI("%s entered (type=%d)\n", __func__, type);
     if (gRadioController != NULL) {
         gRadioController->DisableRDS();
@@ -93,7 +93,7 @@ jboolean powerDown(JNIEnv *env, jobject thiz, jint type) {
     return JNI_TRUE;
 }
 
-jboolean tune(JNIEnv *env, jobject thiz, jfloat freq) {
+jboolean tune(JNIEnv *env __unused, jobject thiz __unused, jfloat freq) {
     LOGI("%s entered (freq=%0.2f)\n", __func__, freq);
     if (gRadioController == NULL) return JNI_FALSE;
     int freq_khz = fmFloatToKHz(freq);
@@ -103,7 +103,7 @@ jboolean tune(JNIEnv *env, jobject thiz, jfloat freq) {
     return JNI_TRUE;
 }
 
-jfloat seek(JNIEnv *env, jobject thiz, jfloat freq, jboolean isUp) {
+jfloat seek(JNIEnv *env __unused, jobject thiz __unused, jfloat freq, jboolean isUp) {
     LOGI("%s entered (freq=%0.2f, isUp=%d)\n", __func__, freq, isUp);
     if (gRadioController == NULL) return 0.0f;
     int ret_khz = isUp ? gRadioController->SeekUp() : gRadioController->SeekDown();
@@ -113,7 +113,7 @@ jfloat seek(JNIEnv *env, jobject thiz, jfloat freq, jboolean isUp) {
     return 0.0f;
 }
 
-jshortArray autoScan(JNIEnv *env, jobject thiz) {
+jshortArray autoScan(JNIEnv *env, jobject thiz __unused) {
     LOGI("%s entered\n", __func__);
     if (gRadioController == NULL) return NULL;
 
@@ -136,7 +136,7 @@ jshortArray autoScan(JNIEnv *env, jobject thiz) {
     return scanlistings;
 }
 
-jboolean stopScan(JNIEnv *env, jobject thiz) {
+jboolean stopScan(JNIEnv *env __unused, jobject thiz __unused) {
     LOGI("%s entered\n", __func__);
     if (gRadioController == NULL) return JNI_FALSE;
     if (gRadioController->SeekCancel() < 0) {
@@ -145,7 +145,7 @@ jboolean stopScan(JNIEnv *env, jobject thiz) {
     return JNI_TRUE;
 }
 
-jint setRds(JNIEnv *env, jobject thiz, jboolean rdson) {
+jint setRds(JNIEnv *env __unused, jobject thiz __unused, jboolean rdson) {
     LOGI("%s entered (rdson=%d)\n", __func__, rdson);
     if (gRadioController == NULL) return JNI_FALSE;
     if (rdson) {
@@ -156,7 +156,7 @@ jint setRds(JNIEnv *env, jobject thiz, jboolean rdson) {
     return JNI_TRUE;
 }
 
-jshort readRds(JNIEnv *env, jobject thiz) {
+jshort readRds(JNIEnv *env __unused, jobject thiz __unused) {
     if (gRadioController == NULL) return 0;
     jshort status = 0;
     if (gRadioController->mRDSParser.IsPSUpdated()) {
@@ -174,7 +174,7 @@ jshort readRds(JNIEnv *env, jobject thiz) {
     return status;
 }
 
-jbyteArray getPs(JNIEnv *env, jobject thiz) {
+jbyteArray getPs(JNIEnv *env, jobject thiz __unused) {
     jbyteArray radiotext9 = env->NewByteArray(9);
     char ps_buf[16] = {0};
     if (gRadioController != NULL) {
@@ -184,7 +184,7 @@ jbyteArray getPs(JNIEnv *env, jobject thiz) {
     return radiotext9;
 }
 
-jbyteArray getLrText(JNIEnv *env, jobject thiz) {
+jbyteArray getLrText(JNIEnv *env, jobject thiz __unused) {
     jbyteArray radiotext65 = env->NewByteArray(65);
     char rt_buf[72] = {0};
     if (gRadioController != NULL) {
@@ -194,7 +194,7 @@ jbyteArray getLrText(JNIEnv *env, jobject thiz) {
     return radiotext65;
 }
 
-jshort activeAf(JNIEnv *env, jobject thiz) {
+jshort activeAf(JNIEnv *env __unused, jobject thiz __unused) {
     if (gRadioController != NULL) {
         char af_buf[64] = {0};
         int count = gRadioController->mRDSParser.GetAFList(af_buf);
@@ -207,7 +207,7 @@ jshort activeAf(JNIEnv *env, jobject thiz) {
     return -1;
 }
 
-jint setMute(JNIEnv *env, jobject thiz, jboolean mute) {
+jint setMute(JNIEnv *env __unused, jobject thiz __unused, jboolean mute) {
     LOGI("%s entered (mute=%d)\n", __func__, mute);
     if (gRadioController == NULL) return JNI_FALSE;
     if (mute) {
@@ -218,11 +218,11 @@ jint setMute(JNIEnv *env, jobject thiz, jboolean mute) {
     return JNI_TRUE;
 }
 
-jint isRdsSupport(JNIEnv *env, jobject thiz) {
+jint isRdsSupport(JNIEnv *env __unused, jobject thiz __unused) {
     return 1;
 }
 
-jint switchAntenna(JNIEnv *env, jobject thiz, jint antenna) {
+jint switchAntenna(JNIEnv *env __unused, jobject thiz __unused, jint antenna) {
     LOGI("%s entered (antenna=%d not supported on silab wrapper)\n", __func__, antenna);
     return 2;
 }
@@ -272,7 +272,7 @@ typedef union {
     void* venv;
 } UnionJNIEnvToVoid;
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+jint JNI_OnLoad(JavaVM* vm, void* reserved __unused) {
     UnionJNIEnvToVoid uenv;
     uenv.venv = NULL;
     jint result = -1;
