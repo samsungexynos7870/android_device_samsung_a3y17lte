@@ -95,6 +95,9 @@ BOARD_CAMERA2_API_SUPPORT := true
 BOARD_CAMERA_SAMSUNG_TN_FEATURE := true
 BOARD_CAMERA_HAL3_FEATURE := true
 
+# A/B
+AB_OTA_UPDATER := false
+
 ## USB
 $(call soong_config_set,samsungUsbGadgetVars,gadget_name,13600000.dwc3)
 
