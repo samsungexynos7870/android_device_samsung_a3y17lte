@@ -112,6 +112,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libnfc-nci \
     libnfc_nci_jni \
+    Tag \
+    com.android.nfc_extras \
     android.hardware.nfc@1.2.vendor \
     android.hardware.nfc@1.2-service.samsung
 
@@ -131,7 +133,7 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service \
+    android.hardware.wifi-service-legacy \
     hostapd \
     libcld80211 \
     libwifi-hal \
