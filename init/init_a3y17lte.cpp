@@ -79,9 +79,6 @@ void init_dsds() {
 
 void vendor_load_properties()
 {
-    // Init a dummy BT MAC address, will be overwritten later
-    SetProperty("ro.boot.btmacaddr", "00:00:00:00:00:00");
-
     std::string bootloader = GetProperty("ro.bootloader","");
 
     if (bootloader.find("A320FL") == 0) {
@@ -113,6 +110,7 @@ void vendor_load_properties()
     property_override_quad("ro.product.device", "ro.product.odm.device", "ro.product.system.device", "ro.product.vendor.device", "a3y17lte");
 
     std::string device = GetProperty("ro.product.device", "");
-    LOG(ERROR) << "Found bootloader id %s setting build properties for %s device\n" << bootloader.c_str() << device.c_str();
+    LOG(ERROR) << "Found bootloader id " << bootloader << " setting build properties for "
+               << device << " device";
 }
 

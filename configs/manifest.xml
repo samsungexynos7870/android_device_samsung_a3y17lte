@@ -93,11 +93,6 @@
         </interface>
         <fqname>@1.0::ISehWidevineKeyProvisioning/default</fqname>
     </hal>
-    <hal format="aidl">
-		<name>android.hardware.wifi</name>
-		<version>3</version>
-		<fqname>IWifi/default</fqname>
-	</hal>
     <hal format="hidl">
         <name>android.hardware.graphics.allocator</name>
         <transport>hwbinder</transport>
