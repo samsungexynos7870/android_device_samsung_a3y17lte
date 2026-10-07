@@ -9,10 +9,6 @@ allow hal_bluetooth_default bluetooth_device:chr_file { getattr ioctl open read 
 # Chip power toggle: bt_powerup() pokes the kernel bluetooth-power driver
 # via its rfkill node (labeled rfkill_device by u7870-common sepolicy).
 allow hal_bluetooth_default rfkill_device:chr_file rw_file_perms;
-
-# ...and then proxies all further HCI traffic through the wcnss_filter
-# daemon's abstract local sockets ("bt_sock", "wcnssfilter_ctrl").
-unix_socket_connect(hal_bluetooth_default, wcnss_filter, wcnss_filter)
 unix_socket_connect(hal_bluetooth_default, property, wcnss_filter)
 
 # libbt-vendor drives the vendor.wc_transport.* properties itself.
