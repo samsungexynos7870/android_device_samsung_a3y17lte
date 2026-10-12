@@ -1,0 +1,357 @@
+#!/bin/bash
+#
+# Copyright (C) 2026 samsungexynos7870
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# mkbootimg-dt - run mkbootimg with the "--dt <file>" option it does not have,
+# and check the image against the limits of the bootloader.
+#
+# The python mkbootimg of a 12.1 tree only knows --dtb, which AOSP writes for
+# boot image header version 2 and above; this device uses version 0, where the
+# option would be accepted and silently dropped. So the dt image (the Samsung
+# DTBH image the bootloader picks the blob from) is taken out of the arguments,
+# run through the real mkbootimg, and appended after kernel / ramdisk / second
+# stage, page aligned, with its size in the header word at offset 40 - the way
+# the mkbootimg patch LineageOS carries does it.
+#
+# Every image is then checked with tools/imginfo against --max-image-size (the
+# first 32 MiB of the recovery partition, all sboot reads) and
+# --expect-ramdisk-compression (lzma, the only format the kernel unpacks), both
+# set from BoardConfig.mk, and removed if it would not boot.
+#
+# Wired up through BOARD_CUSTOM_MKBOOTIMG, whose value is "this script" plus the
+# mkbootimg binary to wrap.
+#
+# usage: mkbootimg-dt <mkbootimg> [mkbootimg arguments ...] [--dt <file>]
+#                    [--max-image-size <bytes|none>]
+#                    [--expect-ramdisk-compression <lzma|gzip|xz|lz4|raw|any>]
+
+PROGNAME="mkbootimg-dt"
+
+# the window sboot reads of the recovery partition (32 MiB); BoardConfig.mk
+# passes the same number, this is the fallback for a caller that does not
+DEFAULT_MAX_IMAGE_SIZE=0x2000000
+
+die() {
+	echo "${PROGNAME}: $*" >&2
+	exit 1
+}
+
+file_size() {
+	stat -c "%s" "$1" 2>/dev/null || wc -c <"$1"
+}
+
+# what printf(1) needs to write a little endian u32: printf "$(le32_escapes 33)"
+le32_escapes() {
+	printf '\\x%02x\\x%02x\\x%02x\\x%02x' \
+		$(($1 & 0xff)) $((($1 >> 8) & 0xff)) \
+		$((($1 >> 16) & 0xff)) $((($1 >> 24) & 0xff))
+}
+
+# the image id mkbootimg computes: the sha1 over the sections in the order it
+# hashes them (kernel, ramdisk, second stage, dt), each followed by its size as
+# a little endian u32 - a section that was not given counts as four zero bytes.
+id_digest() {
+	for file in "${kernel}" "${ramdisk}" "${second}"; do
+		if [ -n "${file}" ] && [ -f "${file}" ]; then
+			cat "${file}"
+			printf "$(le32_escapes "$(file_size "${file}")")"
+		else
+			printf '\x00\x00\x00\x00'
+		fi
+	done
+	cat "${dt}"
+	printf "$(le32_escapes "$(file_size "${dt}")")"
+}
+
+mkbootimg="$1"
+
+if [ -z "${mkbootimg}" ]; then
+	die "usage: ${PROGNAME} <mkbootimg> [mkbootimg arguments ...] [--dt <file>]" \
+		"[--max-image-size <bytes|none>]" \
+		"[--expect-ramdisk-compression <lzma|gzip|xz|lz4|raw|any>]"
+fi
+shift
+
+have_dt=false
+dt=""
+output=""
+kernel=""
+ramdisk=""
+second=""
+pagesize=2048
+header_version=0
+max_image_size="${DEFAULT_MAX_IMAGE_SIZE}"
+expect_compression=""
+args=()
+
+while [ $# -gt 0 ]; do
+	arg="$1"
+	case "${arg}" in
+	--dt)
+		[ $# -ge 2 ] || die "--dt needs a file argument"
+		dt="$2"
+		have_dt=true
+		shift 2
+		continue
+		;;
+	--dt=*)
+		dt="${arg#--dt=}"
+		have_dt=true
+		shift
+		continue
+		;;
+	--max-image-size)
+		[ $# -ge 2 ] || die "--max-image-size needs a byte count"
+		max_image_size="$2"
+		shift 2
+		continue
+		;;
+	--max-image-size=*)
+		max_image_size="${arg#--max-image-size=}"
+		shift
+		continue
+		;;
+	--expect-ramdisk-compression)
+		[ $# -ge 2 ] || die "--expect-ramdisk-compression needs a format"
+		expect_compression="$2"
+		shift 2
+		continue
+		;;
+	--expect-ramdisk-compression=*)
+		expect_compression="${arg#--expect-ramdisk-compression=}"
+		shift
+		continue
+		;;
+	--output)
+		[ $# -ge 2 ] || die "--output needs a file argument"
+		output="$2"
+		;;
+	--output=*)
+		output="${arg#--output=}"
+		;;
+	-o)
+		[ $# -ge 2 ] || die "-o needs a file argument"
+		output="$2"
+		;;
+	-o?*)
+		output="${arg#-o}"
+		;;
+	--kernel)
+		[ $# -ge 2 ] || die "--kernel needs a file argument"
+		kernel="$2"
+		;;
+	--kernel=*)
+		kernel="${arg#--kernel=}"
+		;;
+	--ramdisk)
+		[ $# -ge 2 ] || die "--ramdisk needs a file argument"
+		ramdisk="$2"
+		;;
+	--ramdisk=*)
+		ramdisk="${arg#--ramdisk=}"
+		;;
+	--second)
+		[ $# -ge 2 ] || die "--second needs a file argument"
+		second="$2"
+		;;
+	--second=*)
+		second="${arg#--second=}"
+		;;
+	--pagesize)
+		[ $# -ge 2 ] || die "--pagesize needs an argument"
+		pagesize="$2"
+		;;
+	--pagesize=*)
+		pagesize="${arg#--pagesize=}"
+		;;
+	--header_version)
+		[ $# -ge 2 ] || die "--header_version needs an argument"
+		header_version="$2"
+		;;
+	--header_version=*)
+		header_version="${arg#--header_version=}"
+		;;
+	esac
+	args+=("${arg}")
+	shift
+done
+
+if [ -z "${output}" ]; then
+	die "--output is needed"
+fi
+
+# "none" (or 0) turns the size check off
+case "${max_image_size}" in
+none|off|no|0)
+	max_image_size=""
+	;;
+''|*[!0-9a-fA-FxX]*)
+	die "invalid --max-image-size '${max_image_size}'"
+	;;
+*)
+	max_image_size=$((max_image_size)) ||
+		die "invalid --max-image-size '${max_image_size}'"
+	[ "${max_image_size}" -gt 0 ] ||
+		die "invalid --max-image-size '${max_image_size}'"
+	;;
+esac
+
+case "${expect_compression}" in
+''|any|gzip|lzma|xz|lz4|zstd|raw)
+	;;
+*)
+	die "unknown --expect-ramdisk-compression '${expect_compression}'"
+	;;
+esac
+
+# The size and compression verdicts are made by tools/imginfo - the same tool a
+# human runs on an image, so there is only one implementation of the layout.
+imginfo="$(dirname "$0")/imginfo"
+[ -x "${imginfo}" ] ||
+	die "${imginfo} is missing or not executable (it is part of the device tree)"
+
+case "${pagesize}" in
+''|*[!0-9]*) die "invalid page size '${pagesize}'" ;;
+esac
+if [ "${pagesize}" -eq 0 ] || [ $((pagesize & (pagesize - 1))) -ne 0 ]; then
+	die "page size '${pagesize}' is not a power of two"
+fi
+
+if [ "${have_dt}" = true ]; then
+	if [ ! -f "${dt}" ]; then
+		die "dt image '${dt}' not found - is build/tasks/dtb.mk running and is the kernel being built inline (TARGET_KERNEL_SOURCE)?"
+	fi
+	# the slot that holds the dt size is only there in a version 0 header
+	if [ "${header_version}" != "0" ]; then
+		die "the dt image is only supported with header version 0 (got '${header_version}')"
+	fi
+fi
+
+"${mkbootimg}" "${args[@]}" || exit $?
+
+if [ "${have_dt}" = true ]; then
+	dt_size=$(file_size "${dt}")
+	[ -n "${dt_size}" ] && [ "${dt_size}" -gt 0 ] ||
+		die "dt image '${dt}' is empty"
+
+	# mkbootimg wrote a page aligned image, so the dt section starts on a page
+	# boundary, right where the bootloader looks for it
+	image_size=$(file_size "${output}")
+	[ $((image_size % pagesize)) -eq 0 ] ||
+		die "'${output}' is not a multiple of the page size (${image_size} % ${pagesize}), cannot append the dt image"
+
+	pad=$((pagesize - dt_size % pagesize))
+	[ "${pad}" -eq "${pagesize}" ] && pad=0
+	section_size=$((dt_size + pad))
+
+	{
+		cat "${dt}"
+		if [ "${pad}" -gt 0 ]; then
+			head -c "${pad}" /dev/zero
+		fi
+	} >>"${output}" || die "failed to append '${dt}' to '${output}'"
+
+	# put_le32(output + 40, section_size)
+	patch=$(mktemp "${TMPDIR:-/tmp}/mkbootimg-dt.XXXXXX") ||
+		die "failed to create a temporary file"
+	printf "$(le32_escapes "${section_size}")" >"${patch}" &&
+		dd if="${patch}" of="${output}" bs=1 count=4 seek=40 conv=notrunc status=none
+	rc=$?
+	rm -f "${patch}"
+	[ ${rc} -eq 0 ] || die "failed to patch the dt size into the header of '${output}'"
+
+	# The id mkbootimg wrote never saw the dt (the option was taken out of its
+	# arguments above), so recompute it the way it does (see id_digest).
+	id=$(id_digest | sha1sum | cut -d' ' -f1) ||
+		die "failed to compute the image id"
+	[ ${#id} -eq 40 ] || die "failed to compute the image id"
+	id_escapes=$(printf '%s' "${id}" | sed 's/\(..\)/\\x\1/g')
+	patch=$(mktemp "${TMPDIR:-/tmp}/mkbootimg-dt.XXXXXX") ||
+		die "failed to create a temporary file"
+	printf "${id_escapes}" >"${patch}" &&
+		dd if="${patch}" of="${output}" bs=1 count=20 seek=576 conv=notrunc status=none
+	rc=$?
+	rm -f "${patch}"
+	[ ${rc} -eq 0 ] || die "failed to write the image id into '${output}'"
+
+	echo "${PROGNAME}: appended dt image: ${dt_size} bytes at ${image_size} (${section_size} bytes, dt size written to header offset 40, image id recomputed)"
+fi
+
+report=("${imginfo}" --max-size "${max_image_size:-none}")
+if [ -n "${expect_compression}" ]; then
+	report+=(--expect-ramdisk-compression "${expect_compression}")
+fi
+report+=("${output}")
+
+rc=0
+"${report[@]}" || rc=$?
+
+# bit 3: the image could not be looked at at all (imginfo or the file it was
+# given is broken). That is a problem in the tree, not in the image, so the
+# image stays where it is - but the build still fails, an image that was never
+# checked must not slip through.
+if [ $((rc & 8)) -ne 0 ]; then
+	die "'${output}' could not be checked against the 32 MiB window sboot reads of the recovery partition (see the report above); it was left in place, but nothing says it boots"
+fi
+
+if [ $((rc & 1)) -ne 0 ]; then
+	image_size=$(file_size "${output}")
+	cat >&2 <<-EOF
+	${PROGNAME}: the image is $((image_size - max_image_size)) bytes over the
+	  ${max_image_size} byte (32 MiB) window sboot reads of the recovery
+	  partition. Flashing it only gets
+	      Could not do normal boot. INVALID RAMDISK LENGTH
+	  and TWRP never starts. The image has been removed, so a run that ends
+	  here cannot leave one behind that gets flashed by accident.
+	  The window is fixed and the kernel and the dt section take their share,
+	  so the ramdisk is what has to shrink:
+	   * it has to be lzma - BOARD_RAMDISK_USE_LZMA (BoardConfig.mk), ~25%
+	     smaller than gzip. The compression command is recipe text, so an
+	     existing ramdisk keeps its format; pack it again with
+	         rm -f ${ramdisk}
+	     (build/tasks/ramdisk.mk does that by itself when the flag changes.)
+	   * if it already is lzma, content has to go. The weight is fonts and
+	     binaries, not the theme; TW_EXTRA_LANGUAGES (BoardConfig.mk) is
+	     ~2 MB of it (CJK / Sinhala fonts), and then the tools
+	     TW_INCLUDE_NTFS_3G and TWRP_INCLUDE_LOGCAT pull in. Where it is,
+	     in the ramdisk that was just built:
+	         mkdir -p /tmp/rd && cd /tmp/rd && \\
+	             lzma -dc ${ramdisk} | cpio -idm --quiet && du -sk * | sort -n | tail -20
+	     (xz -dc unpacks it as well.)
+	EOF
+fi
+
+if [ $((rc & 2)) -ne 0 ]; then
+	cat >&2 <<-EOF
+	${PROGNAME}: the ramdisk is not compressed the way this device needs it
+	  (see the report above). The kernel is built with CONFIG_RD_LZMA only,
+	  so an xz / lz4 ramdisk does not unpack, and a gzip one is also too
+	  large for the 32 MiB window sboot reads.
+	  BOARD_RAMDISK_USE_LZMA (BoardConfig.mk) selects lzma, but the
+	  compression command is recipe text: the build system does not recompress
+	  an existing ramdisk. Remove it and pack it again:
+	      rm -f ${ramdisk}
+	  build/tasks/ramdisk.mk does that by itself whenever the setting
+	  changes.
+	EOF
+fi
+
+if [ ${rc} -ne 0 ]; then
+	rm -f "${output}"
+	die "'${output}' removed: it would not boot (see the report and the notes above)"
+fi
+
+exit 0

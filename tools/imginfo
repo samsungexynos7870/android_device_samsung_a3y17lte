@@ -1,0 +1,294 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2026 samsungexynos7870
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+"""Report the layout of a boot / recovery image and check it against the limits
+the Exynos7870 secondary bootloader (sboot) puts on a recovery image: only the
+first 32 MiB (0x2000000) of the recovery partition are read, and a larger image
+is refused with
+
+    Could not do normal boot. INVALID RAMDISK LENGTH
+
+before TWRP runs. tools/mkbootimg-dt runs the same checks on the image a build
+just produced.
+
+usage: imginfo [options] <image> [<image> ...]
+
+exit status: bit 0 set (1) when an image is over the size window, bit 1 set (2)
+when the ramdisk is not compressed the way --expect-ramdisk-compression says,
+bit 2 set (4) when an image does not fit --partition-size, and bit 3 set (8)
+when an image could not be looked at at all (not a boot image, no such file).
+0 means every check passed.
+"""
+
+import argparse
+import os
+import struct
+import sys
+import traceback
+
+BOOT_MAGIC = b'ANDROID!'
+
+# what sboot reads of the recovery partition of this device
+SBOOT_IMAGE_WINDOW = 0x2000000
+
+# boot image header version 0: magic, kernel size / load address, ramdisk size /
+# load address, second size / load address, tags address, page size
+HDR_V0 = struct.Struct('<8sIIIIIIII')
+
+# offset 40: the boot image header version in versions 1 and up, the size of the
+# dt section in version 0 (mkbootimg writes max(header_version, dt_size) there)
+HDR_DT_OR_VERSION = 40
+
+RAMDISK_MAGIC_SIZE = 8
+
+COMPRESSIONS = ('gzip', 'lzma', 'xz', 'lz4', 'zstd', 'raw', 'unknown')
+
+
+class ImageError(Exception):
+    pass
+
+
+def align(value, alignment):
+    return (value + alignment - 1) // alignment * alignment
+
+
+def sniff_compression(image, offset, size):
+    """Guess how a section is compressed from its first bytes."""
+    if size == 0:
+        return 'none'
+    with open(image, 'rb') as handle:
+        handle.seek(offset)
+        magic = handle.read(RAMDISK_MAGIC_SIZE)
+    if magic.startswith(b'\x1f\x8b'):
+        return 'gzip'
+    if magic.startswith(b'\x5d\x00'):
+        # LZMA1 "alone" format (properties byte 0x5d, then the dictionary
+        # size), what the lzma of xz-utils writes and CONFIG_RD_LZMA unpacks
+        return 'lzma'
+    if magic.startswith(b'\xfd7zXZ\x00'):
+        return 'xz'
+    if magic.startswith(b'\x02\x21\x4c\x18') or magic.startswith(b'\x04\x22\x4d\x18'):
+        return 'lz4'
+    if magic.startswith(b'\x28\xb5\x2f\xfd'):
+        return 'zstd'
+    if magic.startswith(b'07070'):
+        return 'raw'
+    return 'unknown'
+
+
+class Image:
+    """A boot / recovery image, parsed as far as its layout goes."""
+
+    def __init__(self, path):
+        self.path = path
+        self.size = os.path.getsize(path)
+        with open(path, 'rb') as handle:
+            head = handle.read(4096)
+        if len(head) < HDR_V0.size + 4 or head[:8] != BOOT_MAGIC:
+            raise ImageError('%s: no ANDROID! magic, not a boot image' % path)
+        (_, self.kernel_size, self.kernel_addr, self.ramdisk_size,
+         self.ramdisk_addr, self.second_size, self.second_addr,
+         self.tags_addr, self.page_size) = HDR_V0.unpack_from(head, 0)
+        if self.page_size == 0 or self.page_size & (self.page_size - 1):
+            raise ImageError('%s: page size %d is not a power of two'
+                             % (path, self.page_size))
+
+        field, = struct.unpack_from('<I', head, HDR_DT_OR_VERSION)
+        if field in (1, 2, 3, 4):
+            self.header_version = field
+            self.dt_size = 0
+        else:
+            self.header_version = 0
+            self.dt_size = field
+
+        # the sections in the order the mkbootimg of a 12.1 tree writes them;
+        # the dt section (the Samsung DTBH image the bootloader picks the blob
+        # from) follows the second stage, its size only in a version 0 header
+        self.sections = []
+        self.referenced_end = self.size
+        if self.header_version < 3:
+            offset = self.page_size
+            offset = self.add_section('kernel', offset, self.kernel_size,
+                                      self.kernel_addr)
+            self.ramdisk_offset = offset
+            offset = self.add_section('ramdisk', offset, self.ramdisk_size,
+                                      self.ramdisk_addr)
+            offset = self.add_section('second', offset, self.second_size,
+                                      self.second_addr)
+            if self.header_version in (1, 2):
+                recovery_dtbo_size, = struct.unpack_from('<I', head, 1632)
+                offset = self.add_section('recovery_dtbo', offset,
+                                          recovery_dtbo_size, None)
+            if self.header_version == 2:
+                dtb_size, = struct.unpack_from('<I', head, 1648)
+                offset = self.add_section('dtb', offset, dtb_size, None)
+            if self.header_version == 0 and self.dt_size:
+                self.add_section('dt', offset, self.dt_size, None)
+                offset += align(self.dt_size, self.page_size)
+            self.referenced_end = offset
+        self.ramdisk_compression = None
+        if hasattr(self, 'ramdisk_offset'):
+            self.ramdisk_compression = sniff_compression(
+                path, self.ramdisk_offset, self.ramdisk_size)
+
+    def add_section(self, name, offset, size, addr):
+        self.sections.append((name, offset, size, addr))
+        return offset + align(size, self.page_size)
+
+    def section(self, name):
+        for section in self.sections:
+            if section[0] == name:
+                return section
+        return None
+
+    def ramdisk_end(self):
+        ramdisk = self.section('ramdisk')
+        if not ramdisk:
+            return None
+        return ramdisk[1] + ramdisk[2]
+
+
+def print_image(image, max_size, partition_size, expect):
+    status = 0
+    print('== %s' % image.path)
+    if image.header_version >= 3:
+        print('   boot image header v%d, page size %d, %d bytes'
+              % (image.header_version, image.page_size, image.size))
+        print('   (this device uses a version 0 header, not analysed further)')
+        return status
+
+    print('   boot image header v%d, page size %d'
+          % (image.header_version, image.page_size))
+    for name, offset, size, addr in image.sections:
+        extra = ''
+        if addr:
+            extra = 'load %#010x' % addr
+        if name == 'ramdisk':
+            extra = 'load %#010x, %s' % (image.ramdisk_addr,
+                                         image.ramdisk_compression)
+        elif name == 'dt':
+            extra = 'end of the sections a v0 header refers to'
+        print('   %-12s %10d @ %-10d %s' % (name, size, offset, extra))
+    tail = image.size - image.referenced_end
+    if tail > 0:
+        print('   %-12s %10d @ %-10d %s'
+              % ('(trailing)', tail, image.referenced_end,
+                 'not referred to by a v%d header' % image.header_version))
+    print('   %-12s %10d (%#x)' % ('total', image.size, image.size))
+
+    if max_size:
+        if image.size > max_size:
+            status |= 1
+            print('   [FAIL] %d bytes (%.1f MiB) is over the %d byte (32 MiB, '
+                  '%#x) window sboot reads, by %d bytes'
+                  % (image.size, image.size / 1048576.0, max_size, max_size,
+                     image.size - max_size))
+            end = image.ramdisk_end()
+            if end is not None:
+                if end > max_size:
+                    print('          the ramdisk ends at %#x, %d bytes past the '
+                          'window - sboot reads this image as' % (end, end - max_size))
+                    print('          "Could not do normal boot. INVALID '
+                          'RAMDISK LENGTH" and TWRP never starts')
+                else:
+                    print('          the ramdisk ends at %#x, inside the '
+                          'window; the %d bytes after it'
+                          % (end, max_size - end))
+                    print('          (the dt section, if any, and section '
+                          'padding) are what push the image over')
+        else:
+            print('   [ok]   %d bytes fits the %d byte (32 MiB, %#x) window '
+                  'sboot reads, %d bytes spare'
+                  % (image.size, max_size, max_size, max_size - image.size))
+
+    if partition_size:
+        if image.size > partition_size:
+            status |= 4
+            print('   [FAIL] does not fit the %d byte partition, over by %d'
+                  % (partition_size, image.size - partition_size))
+        else:
+            print('   [ok]   fits the %d byte partition, %d bytes spare'
+                  % (partition_size, partition_size - image.size))
+
+    if expect != 'any':
+        got = image.ramdisk_compression
+        if got != expect:
+            status |= 2
+            print('   [FAIL] ramdisk is %s, expected %s' % (got, expect))
+        else:
+            print('   [ok]   ramdisk is %s' % got)
+    return status
+
+
+def parse_size(text):
+    if text is None or text.lower() in ('none', 'off', 'no'):
+        return 0
+    return int(text, 0)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Report the layout of a boot / recovery image and check it '
+                    'against the limits sboot puts on an Exynos7870 recovery '
+                    'image.',
+        epilog='exit status: 1 over the size window, 2 wrong ramdisk '
+               'compression, 4 over the partition size, 8 could not be looked '
+               'at (the bits combine).')
+    parser.add_argument('images', metavar='IMAGE', nargs='+',
+                        help='boot / recovery image to look at')
+    parser.add_argument('--max-size', metavar='BYTES|none',
+                        default='%#x' % SBOOT_IMAGE_WINDOW,
+                        help='fail when the image is larger than this; default '
+                             '%#x, the 32 MiB window sboot reads'
+                             % SBOOT_IMAGE_WINDOW)
+    parser.add_argument('--partition-size', metavar='BYTES',
+                        help='optionally fail when the image does not fit this '
+                             'partition size, i.e. '
+                             'BOARD_RECOVERYIMAGE_PARTITION_SIZE')
+    parser.add_argument('--expect-ramdisk-compression', metavar='FORMAT',
+                        default='any', choices=('any',) + COMPRESSIONS,
+                        help='fail when the ramdisk is not compressed with '
+                             'FORMAT; the kernel of this device unpacks lzma '
+                             'only (CONFIG_RD_LZMA), so lzma is what to expect')
+    args = parser.parse_args()
+
+    max_size = parse_size(args.max_size)
+    partition_size = parse_size(args.partition_size)
+
+    status = 0
+    for path in args.images:
+        if not os.path.isfile(path):
+            print('%s: no such file' % path, file=sys.stderr)
+            status |= 8
+            continue
+        try:
+            image = Image(path)
+        except ImageError as error:
+            print('%s' % error, file=sys.stderr)
+            status |= 8
+            continue
+        status |= print_image(image, max_size, partition_size,
+                              args.expect_ramdisk_compression)
+
+    return status
+
+
+if __name__ == '__main__':
+    try:
+        sys.exit(main())
+    except Exception:  # noqa: BLE001 - a bug here must not look like a verdict
+        traceback.print_exc()
+        sys.exit(8)

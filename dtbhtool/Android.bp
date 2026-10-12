@@ -1,0 +1,83 @@
+//
+// Copyright (C) 2026 samsungexynos7870
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// The DTBH ("Table of Device Tree") tooling of LineageOS hardware/samsung,
+// vendored from branch lineage-19.1 (see README.md): mkdtbimg.c (dtbhtoolExynos,
+// run by build/tasks/dtb.mk), dtbimg.c, libdtbimg/dtbimg.h, bootimg.h,
+// mkbootimg.c, unpackbootimg.c, unpackdtbhimg.c, dtbtool.txt, samsung_dtbh.h.
+//
+// Two differences against upstream:
+//
+//   * dtbimg.c includes <samsung_dtbh.h>, and the copy in this folder is the
+//     #if 0 skeleton with k3g example values. The values of this device are in
+//     include/samsung_dtbh.h and the modules below have that directory on their
+//     include path (upstream points TARGET_SPECIFIC_HEADER_PATH at it, which
+//     Soong of a TWRP 12.1 tree does not forward).
+//
+//   * mkdtbhbootimg (mkbootimg.c) is not built. It knows --dt / --dt_dir, but
+//     not the --os_version / --kernel_offset / ... this tree passes through
+//     BOARD_MKBOOTIMG_ARGS; the dt section is appended by tools/mkbootimg-dt
+//     instead.
+
+cc_binary_host {
+    name: "dtbhtoolExynos",
+    shared_libs: [
+        "libdtbimg",
+    ],
+    static_libs: [
+        "libfdt",
+    ],
+    srcs: [
+        "mkdtbimg.c",
+    ],
+    local_include_dirs: [
+        "include", // samsung_dtbh.h
+        "libdtbimg",
+    ],
+}
+
+cc_library {
+    name: "libdtbimg",
+    host_supported: true,
+    srcs: [
+        "dtbimg.c",
+    ],
+    static_libs: [
+        "libfdt",
+    ],
+    local_include_dirs: [
+        "include", // samsung_dtbh.h
+        "libdtbimg",
+    ],
+}
+
+// Work on an image that already exists, without a tree: unpackdtbhbootimg -i
+// recovery.img -o dir prints the boot header and writes the sections (kernel,
+// ramdisk, ..., <name>-dt); unpackdtbhimg -i dir/recovery.img-dt -o dtdir
+// -p 2048 prints the DTBH table and dumps the dtbs.
+cc_binary_host {
+    name: "unpackdtbhbootimg",
+    srcs: [
+        "unpackbootimg.c",
+    ],
+}
+
+cc_binary_host {
+    name: "unpackdtbhimg",
+    srcs: [
+        "unpackdtbhimg.c",
+    ],
+}
