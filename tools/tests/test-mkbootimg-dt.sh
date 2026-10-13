@@ -232,7 +232,7 @@ got_id=$(od -An -tx1 -j576 -N20 "${work}/dt.img" | tr -d ' \n')
 check "the image id covers the dt section (${got_id}, want ${expected_id})" \
 	test "${got_id}" = "${expected_id}"
 check_grep "the report shows the dt section" '   dt ' "${work}/out"
-check_grep "the report shows the window verdict" '(32 MiB' "${work}/out"
+check_grep "the report shows the configured cap" 'fits the configured' "${work}/out"
 
 # ---------------------------------------------------------------------------
 echo "== an unaligned dt section is padded, its section size is recorded"
@@ -248,34 +248,54 @@ check "offset 40 holds the padded section size (${field40}, want ${expected})" \
 	test "${field40}" -eq "${expected}"
 
 # ---------------------------------------------------------------------------
-echo "== an image over the 32 MiB window fails the build and is removed"
+echo "== the default A3 PIT cap accepts an image above 32 MiB that fits recovery"
+ramdisk_aligned=$(( (9005 + page - 1) / page * page ))
+kernel_between=$(( window + 1048576 - page - ramdisk_aligned ))
+head -c "${kernel_between}" /dev/zero >"${work}/between-kernel"
+"${mkbootimg_dt}" "${work}/mkbootimg" \
+	--kernel "${work}/between-kernel" --ramdisk "${work}/ramdisk-lzma" \
+	--output "${work}/between.img" >"${work}/out" 2>&1
+rc=$?
+between_size=$(stat -c %s "${work}/between.img" 2>/dev/null || echo 0)
+check "an image over 32 MiB but under the PIT size passes (rc=${rc}, size=${between_size})" \
+	test "${rc}" -eq 0
+check "the default-cap test image is between 32 MiB and the PIT size" \
+	test "${between_size}" -gt "${window}" -a "${between_size}" -lt "${partition}"
+check_grep "the default cap is the A3 PIT capacity" \
+	"fits the configured ${partition} byte image-size cap" "${work}/out"
+check_grep "images above 32 MiB get an A3 validation warning" \
+	'PIT fit does not establish that A3 sboot accepts it' "${work}/out"
+
+# ---------------------------------------------------------------------------
+echo "== an image over an explicit 32 MiB test cap fails the build and is removed"
 head -c $((window + 4096)) /dev/zero >"${work}/big-kernel"
 "${mkbootimg_dt}" "${work}/mkbootimg" \
 	--kernel "${work}/big-kernel" --ramdisk "${work}/ramdisk-lzma" \
-	--output "${work}/big.img" >"${work}/stdout" 2>"${work}/stderr"
+	--max-image-size "${window}" --output "${work}/big.img" \
+	>"${work}/stdout" 2>"${work}/stderr"
 rc=$?
 cat "${work}/stdout" "${work}/stderr" >"${work}/out"
 check "an over sized image fails (rc=${rc})" test "${rc}" -ne 0
 check "the image is removed" test ! -e "${work}/big.img"
 check_grep "the report says why" 'FAIL' "${work}/out"
 check_grep "the report goes to stdout" 'FAIL' "${work}/stdout"
-check_grep "the failure quotes the sboot message" \
-	'INVALID RAMDISK LENGTH' "${work}/stderr"
+check_grep "the report distinguishes partition fit from sboot limits" \
+	'does not prove sboot accepts' "${work}/stderr"
 check_grep "the failure names the ramdisk to repack" \
 	"rm -f ${work}/ramdisk-lzma" "${work}/stderr"
 check_grep "the failure names the levers" \
 	'TW_EXTRA_LANGUAGES' "${work}/stderr"
 
 # ---------------------------------------------------------------------------
-echo "== exactly the window is fine, one page over is not"
+echo "== exactly an explicit 32 MiB cap is fine, one page over is not"
 ramdisk_aligned=$(( (9005 + page - 1) / page * page ))
 kernel_fit=$(( window - page - ramdisk_aligned ))
 head -c "${kernel_fit}" /dev/zero >"${work}/fits-kernel"
 "${mkbootimg_dt}" "${work}/mkbootimg" \
 	--kernel "${work}/fits-kernel" --ramdisk "${work}/ramdisk-lzma" \
-	--output "${work}/fits.img" >"${work}/out" 2>&1
+	--max-image-size "${window}" --output "${work}/fits.img" >"${work}/out" 2>&1
 rc=$?
-check "an image of exactly 32 MiB builds (rc=${rc})" test "${rc}" -eq 0
+check "an image at the explicit 32 MiB cap builds (rc=${rc})" test "${rc}" -eq 0
 check "the image is $(stat -c %s "${work}/fits.img" 2>/dev/null) bytes, want ${window}" \
 	test "$(stat -c %s "${work}/fits.img")" -eq "${window}"
 check_grep "the report calls it a fit" 'fits the' "${work}/out"
@@ -286,15 +306,15 @@ kernel_tail=$(( window - page - ramdisk_aligned - page ))
 head -c "${kernel_tail}" /dev/zero >"${work}/tail-kernel"
 "${mkbootimg_dt}" "${work}/mkbootimg" \
 	--kernel "${work}/tail-kernel" --ramdisk "${work}/ramdisk-lzma" \
-	--dt "${work}/dt-aligned" --output "${work}/over.img" \
-	>"${work}/out" 2>&1
+	--dt "${work}/dt-aligned" --max-image-size "${window}" \
+	--output "${work}/over.img" >"${work}/out" 2>&1
 rc=$?
 check "an image a page over the window fails (rc=${rc})" test "${rc}" -ne 0
 check "and is removed" test ! -e "${work}/over.img"
 check_grep "the report points at what is behind the ramdisk" \
-	'inside the window' "${work}/out"
-check_grep "the report quotes the sboot message" \
-	'INVALID RAMDISK LENGTH' "${work}/out"
+	'within the configured cap' "${work}/out"
+check_grep "the report does not claim an unverified sboot limit" \
+	'does not prove sboot accepts' "${work}/out"
 
 # ---------------------------------------------------------------------------
 echo "== a ramdisk that is not compressed the way the device needs is caught"
@@ -403,11 +423,11 @@ check "an image larger than the partition is exit 4" test $? -eq 4
 head -c $((window + 4096)) /dev/zero >"${work}/huge-ramdisk"
 "${work}/mkbootimg" --kernel "${work}/kernel" \
 	--ramdisk "${work}/huge-ramdisk" --output "${work}/huge.img"
-"${imginfo}" "${work}/huge.img" >"${work}/out" 2>&1
+"${imginfo}" --max-size "${window}" "${work}/huge.img" >"${work}/out" 2>&1
 rc=$?
 check "an image over the window is exit 1 (rc=${rc})" test "${rc}" -eq 1
-check_grep "the report says the ramdisk itself is over the window" \
-	'bytes past the' "${work}/out"
+check_grep "the report says the ramdisk is past the configured cap" \
+	'bytes past the configured image-size cap' "${work}/out"
 "${imginfo}" --max-size none "${work}/huge.img" >"${work}/out" 2>&1
 check "'--max-size none' only reports" test $? -eq 0
 check_not_grep "and has no verdict" 'FAIL' "${work}/out"

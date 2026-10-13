@@ -61,12 +61,14 @@ TARGET_KERNEL_SOURCE := kernel/samsung/exynos7870
 TARGET_KERNEL_CLANG_COMPILE := false
 TARGET_KERNEL_ADDITIONAL_FLAGS := HOSTCFLAGS="-fuse-ld=lld -Wno-unused-command-line-argument"
 
+# Recovery is 77,824 512-byte blocks in the A3 stock PIT (39,845,888 bytes).
+# Setting this also makes the build system set BUILDING_RECOVERY_IMAGE.
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 39845888
+
 # Extracted with libbootimg; --dt is the Samsung DTBH image packed by
 # build/tasks/dtb.mk (the bootloader picks the dtb by chip / hw_rev).
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --dt $(OUT_DIR)/target/product/a3y17lte/obj/KERNEL_OBJ/arch/$(TARGET_ARCH)/boot/dtb.img
-# sboot reads only the first 32 MiB of the recovery partition and the kernel
-# unpacks an lzma ramdisk only; tools/mkbootimg-dt fails the build otherwise.
-BOARD_MKBOOTIMG_ARGS += --max-image-size 0x2000000 --expect-ramdisk-compression lzma
+BOARD_MKBOOTIMG_ARGS += --max-image-size $(BOARD_RECOVERYIMAGE_PARTITION_SIZE) --expect-ramdisk-compression lzma
 # Recursively expanded on purpose: BoardConfig.mk is read before
 # HOST_OUT_EXECUTABLES exists.
 BOARD_CUSTOM_MKBOOTIMG = $(DEVICE_PATH)/tools/mkbootimg-dt $(HOST_OUT_EXECUTABLES)/mkbootimg
@@ -79,10 +81,6 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-
-# Recovery is 77,824 512-byte blocks in the A3 stock PIT (39,845,888 bytes).
-# Setting this also makes the build system set BUILDING_RECOVERY_IMAGE.
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 39845888
 
 # Ramdisk compression (CONFIG_RD_LZMA, and ~25% smaller than gzip)
 BOARD_RAMDISK_USE_LZMA := true
@@ -101,7 +99,7 @@ TARGET_OTA_ASSERT_DEVICE := a3y17lte,a3y17ltexc,a3y17ltexx,a3y17ltelk
 RECOVERY_SDCARD_ON_DATA := true
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel/brightness"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
-# Off on purpose: the extra fonts and translations do not fit the 32 MiB window
+# Keep optional fonts and translations out to leave space in the recovery image.
 TW_EXTRA_LANGUAGES := false
 TW_DEFAULT_LANGUAGE := en
 TW_INCLUDE_NTFS_3G := true

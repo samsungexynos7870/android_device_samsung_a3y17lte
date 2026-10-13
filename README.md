@@ -41,7 +41,9 @@ and checks the recovery size and LZMA ramdisk before the image is accepted.
 
 `dtbhtool/` is based on the LineageOS `android_hardware_samsung` DTBH tooling
 (branch `lineage-19.1`). The A3-specific filter and identifiers are in
-`dtbhtool/include/samsung_dtbh.h`.
+`dtbhtool/include/samsung_dtbh.h`. The image-size guard uses the A3 PIT
+RECOVERY capacity (39,845,888 bytes); it checks partition fit, not any separate
+sboot limit. Images over 32 MiB need an A3 boot test before being treated as bootable.
 
 ## Credits
 2020 @Astrako

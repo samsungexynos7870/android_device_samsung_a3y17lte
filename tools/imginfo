@@ -14,20 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Report the layout of a boot / recovery image and check it against the limits
-the Exynos7870 secondary bootloader (sboot) puts on a recovery image: only the
-first 32 MiB (0x2000000) of the recovery partition are read, and a larger image
-is refused with
+"""Report a boot / recovery image's layout and check configured limits.
 
-    Could not do normal boot. INVALID RAMDISK LENGTH
-
-before TWRP runs. tools/mkbootimg-dt runs the same checks on the image a build
-just produced.
+The default maximum is the Galaxy A3 2017 RECOVERY partition capacity from its
+PIT: 77,824 512-byte blocks (39,845,888 bytes). This verifies physical partition
+fit; it does not prove that the device bootloader accepts an image of that size
+or that it has no smaller ramdisk limit. tools/mkbootimg-dt runs the same checks
+on the image a build just produced.
 
 usage: imginfo [options] <image> [<image> ...]
 
-exit status: bit 0 set (1) when an image is over the size window, bit 1 set (2)
-when the ramdisk is not compressed the way --expect-ramdisk-compression says,
+exit status: bit 0 set (1) when an image exceeds the configured size cap,
+bit 1 set (2) when the ramdisk is not compressed as requested,
 bit 2 set (4) when an image does not fit --partition-size, and bit 3 set (8)
 when an image could not be looked at at all (not a boot image, no such file).
 0 means every check passed.
@@ -41,8 +39,11 @@ import traceback
 
 BOOT_MAGIC = b'ANDROID!'
 
-# what sboot reads of the recovery partition of this device
-SBOOT_IMAGE_WINDOW = 0x2000000
+# A3 RECOVERY partition size from the stock PIT
+A3_RECOVERY_PARTITION_SIZE = 39845888
+
+# Warning only: the sibling J5 tree uses 32 MiB; A3 sboot has not been verified.
+UNVERIFIED_32_MIB_THRESHOLD = 0x2000000
 
 # boot image header version 0: magic, kernel size / load address, ramdisk size /
 # load address, second size / load address, tags address, page size
@@ -192,27 +193,28 @@ def print_image(image, max_size, partition_size, expect):
     if max_size:
         if image.size > max_size:
             status |= 1
-            print('   [FAIL] %d bytes (%.1f MiB) is over the %d byte (32 MiB, '
-                  '%#x) window sboot reads, by %d bytes'
+            print('   [FAIL] %d bytes (%.1f MiB) exceeds the configured %d byte '
+                  'image-size cap (%#x) by %d bytes'
                   % (image.size, image.size / 1048576.0, max_size, max_size,
                      image.size - max_size))
             end = image.ramdisk_end()
             if end is not None:
                 if end > max_size:
                     print('          the ramdisk ends at %#x, %d bytes past the '
-                          'window - sboot reads this image as' % (end, end - max_size))
-                    print('          "Could not do normal boot. INVALID '
-                          'RAMDISK LENGTH" and TWRP never starts')
+                          'configured image-size cap' % (end, end - max_size))
                 else:
-                    print('          the ramdisk ends at %#x, inside the '
-                          'window; the %d bytes after it'
+                    print('          the ramdisk ends at %#x, within the configured '
+                          'cap; the %d bytes after it'
                           % (end, max_size - end))
                     print('          (the dt section, if any, and section '
                           'padding) are what push the image over')
         else:
-            print('   [ok]   %d bytes fits the %d byte (32 MiB, %#x) window '
-                  'sboot reads, %d bytes spare'
+            print('   [ok]   %d bytes fits the configured %d byte image-size cap '
+                  '(%#x), %d bytes spare'
                   % (image.size, max_size, max_size, max_size - image.size))
+
+    if image.size > UNVERIFIED_32_MIB_THRESHOLD and image.size <= max_size:
+        print('   [WARN] image exceeds 32 MiB;')
 
     if partition_size:
         if image.size > partition_size:
@@ -241,19 +243,19 @@ def parse_size(text):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Report the layout of a boot / recovery image and check it '
-                    'against the limits sboot puts on an Exynos7870 recovery '
-                    'image.',
-        epilog='exit status: 1 over the size window, 2 wrong ramdisk '
+        description='Report a boot / recovery image layout and check configured '
+                    'size/compression limits. A passing size check does not '
+                    'prove sboot compatibility.',
+        epilog='exit status: 1 over the configured size cap, 2 wrong ramdisk '
                'compression, 4 over the partition size, 8 could not be looked '
                'at (the bits combine).')
     parser.add_argument('images', metavar='IMAGE', nargs='+',
                         help='boot / recovery image to look at')
     parser.add_argument('--max-size', metavar='BYTES|none',
-                        default='%#x' % SBOOT_IMAGE_WINDOW,
+                        default='%#x' % A3_RECOVERY_PARTITION_SIZE,
                         help='fail when the image is larger than this; default '
-                             '%#x, the 32 MiB window sboot reads'
-                             % SBOOT_IMAGE_WINDOW)
+                             '%#x, the A3 RECOVERY partition capacity from PIT'
+                             % A3_RECOVERY_PARTITION_SIZE)
     parser.add_argument('--partition-size', metavar='BYTES',
                         help='optionally fail when the image does not fit this '
                              'partition size, i.e. '

@@ -16,7 +16,7 @@
 #
 
 # mkbootimg-dt - run mkbootimg with the "--dt <file>" option it does not have,
-# and check the image against the limits of the bootloader.
+# and check the A3 recovery partition capacity and the kernel ramdisk format.
 #
 # The python mkbootimg of a 12.1 tree only knows --dtb, which AOSP writes for
 # boot image header version 2 and above; this device uses version 0, where the
@@ -26,10 +26,10 @@
 # stage, page aligned, with its size in the header word at offset 40 - the way
 # the mkbootimg patch LineageOS carries does it.
 #
-# Every image is then checked with tools/imginfo against --max-image-size (the
-# first 32 MiB of the recovery partition, all sboot reads) and
-# --expect-ramdisk-compression (lzma, the only format the kernel unpacks), both
-# set from BoardConfig.mk, and removed if it would not boot.
+# Every image is checked against --max-image-size (the A3 PIT partition
+# capacity by default) and --expect-ramdisk-compression (lzma, the only format
+# the kernel unpacks). The size check proves partition fit only; it does not
+# establish whether A3 sboot has an additional, smaller ramdisk limit.
 #
 # Wired up through BOARD_CUSTOM_MKBOOTIMG, whose value is "this script" plus the
 # mkbootimg binary to wrap.
@@ -40,9 +40,9 @@
 
 PROGNAME="mkbootimg-dt"
 
-# the window sboot reads of the recovery partition (32 MiB); BoardConfig.mk
-# passes the same number, this is the fallback for a caller that does not
-DEFAULT_MAX_IMAGE_SIZE=0x2000000
+# the A3 RECOVERY partition capacity from its stock PIT; BoardConfig.mk
+# passes the same value, and this is the fallback for a caller without one
+DEFAULT_MAX_IMAGE_SIZE=39845888
 
 die() {
 	echo "${PROGNAME}: $*" >&2
@@ -304,20 +304,22 @@ rc=0
 # image stays where it is - but the build still fails, an image that was never
 # checked must not slip through.
 if [ $((rc & 8)) -ne 0 ]; then
-	die "'${output}' could not be checked against the 32 MiB window sboot reads of the recovery partition (see the report above); it was left in place, but nothing says it boots"
+	die "'${output}' could not be checked against the configured A3 image-size cap (see the report above); it was left in place, but nothing says it boots"
 fi
 
 if [ $((rc & 1)) -ne 0 ]; then
 	image_size=$(file_size "${output}")
+	ramdisk_for_hint="${ramdisk}"
+	if [ -n "${ramdisk_for_hint}" ] && [ "${ramdisk_for_hint#/}" = "${ramdisk_for_hint}" ]; then
+		ramdisk_for_hint="${PWD}/${ramdisk_for_hint}"
+	fi
 	cat >&2 <<-EOF
 	${PROGNAME}: the image is $((image_size - max_image_size)) bytes over the
-	  ${max_image_size} byte (32 MiB) window sboot reads of the recovery
-	  partition. Flashing it only gets
-	      Could not do normal boot. INVALID RAMDISK LENGTH
-	  and TWRP never starts. The image has been removed, so a run that ends
-	  here cannot leave one behind that gets flashed by accident.
-	  The window is fixed and the kernel and the dt section take their share,
-	  so the ramdisk is what has to shrink:
+	  configured ${max_image_size} byte image-size cap. Exceeding the configured
+	  cap fails the build; passing it does not prove sboot accepts images above
+	  32 MiB or that there is no smaller ramdisk limit. The image was removed.
+	  Do not flash an over-limit image. If you need to reduce it, the ramdisk is
+	  the largest adjustable section:
 	   * it has to be lzma - BOARD_RAMDISK_USE_LZMA (BoardConfig.mk), ~25%
 	     smaller than gzip. The compression command is recipe text, so an
 	     existing ramdisk keeps its format; pack it again with
@@ -328,8 +330,8 @@ if [ $((rc & 1)) -ne 0 ]; then
 	     ~2 MB of it (CJK / Sinhala fonts), and then the tools
 	     TW_INCLUDE_NTFS_3G and TWRP_INCLUDE_LOGCAT pull in. Where it is,
 	     in the ramdisk that was just built:
-	         mkdir -p /tmp/rd && cd /tmp/rd && \\
-	             lzma -dc ${ramdisk} | cpio -idm --quiet && du -sk * | sort -n | tail -20
+	         tmp=\$(mktemp -d)
+	         (cd "\$tmp" && lzma -dc "${ramdisk_for_hint}" | cpio -idm --quiet && du -ah . | sort -h | tail -20)
 	     (xz -dc unpacks it as well.)
 	EOF
 fi
@@ -338,8 +340,8 @@ if [ $((rc & 2)) -ne 0 ]; then
 	cat >&2 <<-EOF
 	${PROGNAME}: the ramdisk is not compressed the way this device needs it
 	  (see the report above). The kernel is built with CONFIG_RD_LZMA only,
-	  so an xz / lz4 ramdisk does not unpack, and a gzip one is also too
-	  large for the 32 MiB window sboot reads.
+	  so gzip / xz / lz4 ramdisks do not unpack correctly on this kernel. The
+	  image-size cap is checked separately against the A3 PIT partition size.
 	  BOARD_RAMDISK_USE_LZMA (BoardConfig.mk) selects lzma, but the
 	  compression command is recipe text: the build system does not recompress
 	  an existing ramdisk. Remove it and pack it again:
