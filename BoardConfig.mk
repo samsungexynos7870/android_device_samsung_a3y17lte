@@ -75,8 +75,7 @@ DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/configs/manifest.xml
 BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(LOCAL_PATH):libinit_a3y17lte
-TARGET_RECOVERY_DEVICE_MODULES := libinit_a3y17lte
+$(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_a3y17lte)
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := $(LOCAL_PATH)/releasetools

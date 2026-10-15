@@ -14,10 +14,14 @@
 // limitations under the License.
 //
 
+// Vendor init library, selected in BoardConfig.mk through
+// $(call soong_config_set,libinit,vendor_init_lib,//device/samsung/a3y17lte:libinit_a3y17lte)
+// and linked into init by system/core/init/Android.bp. recovery_available
+// makes recovery's init pick it up the same way.
 cc_library_static {
     name: "libinit_a3y17lte",
     recovery_available: true,
-    srcs: ["init_a3y17lte.cpp"],
+    srcs: ["init/init_a3y17lte.cpp"],
     include_dirs: ["system/core/init"],
-    shared_libs: ["libbase"]
+    shared_libs: ["libbase"],
 }
