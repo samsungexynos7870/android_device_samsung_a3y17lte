@@ -53,3 +53,14 @@ PRODUCT_GMS_CLIENTID_BASE := android-samsung
 
 TARGET_BOOT_ANIMATION_RES := 720
 TARGET_GAPPS_ARCH := arm64
+
+# Updater: use the Exynos7870-labs OTA channel instead of the official
+# LineageOS servers. The stock Updater prefers the lineage.updater.uri
+# property over its built-in updater_server_url resource and replaces
+# {device} with ro.lineage.device, so it fetches:
+#   https://raw.githubusercontent.com/Exynos7870-labs/lineage_release/lineage-22.2/a3y17lte.json
+# The JSON (Updater v1 format) points at the OTA zip hosted in the
+# GitHub Releases of the same repository. OTA only works between
+# builds signed with the same (Exynos7870-labs) keys.
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    lineage.updater.uri=https://raw.githubusercontent.com/Exynos7870-labs/lineage_release/22.2/{device}.json
