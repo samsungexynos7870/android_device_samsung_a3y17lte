@@ -22,7 +22,4 @@ def FullOTA_InstallEnd(info):
   # info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/etc/nfc/sec_s3nrn81_rfreg.fl /vendor/etc/nfc/sec_s3nrn81_rfreg.bin"));')
   # info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "mv -f /vendor/firmware/nfc/sec_s3nrn81_firmware.fl /vendor/firmware/nfc/sec_s3nrn81_firmware.bin"));')
   info.script.AppendExtra('ifelse(is_mounted("/vendor"), unmount("/vendor"));')
-  info.script.AppendExtra('ui_print("INFO: Android 13 requires encryption to be disabled for recovery.");')
-  info.script.AppendExtra('ui_print("INFO: REMEMBER! Use a supported TWRP recovery image (https://github.com/samsungexynos7870/android_device_samsung_a3y17lte/releases/tag/3.7.0_9-0) or update inside LineageOS.");')
-  info.script.AppendExtra('ui_print("INFO: Recommended partition sizes are: SYSTEMSIZE=2804 VENDORSIZE=418 CACHESIZE=32");')
   # info.script.AppendExtra('ifelse(is_substring("A320FL", getprop("ro.bootloader")), run_program("/sbin/sh", "-c", "sed -i \'s:ro.multisim.simslotcount=.*:ro.multisim.simslotcount=1:\' /vendor/build.prop"));')
