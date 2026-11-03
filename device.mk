@@ -85,8 +85,11 @@ PRODUCT_PACKAGES += \
     AdvancedDisplay
 
 # Fingerprint
+# Android 17 removed the biometrics.fingerprint HIDL; use Samsung's AIDL
+# prebuilt service (vendor/bin/hw/android.hardware.biometrics.fingerprint-service.samsung)
+# instead of the source-built @2.3 HIDL service.
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.3-service.a3y17lte
+    android.hardware.biometrics.fingerprint-service.samsung
 
 # Radio (broadcastradio)
 PRODUCT_PACKAGES += \
