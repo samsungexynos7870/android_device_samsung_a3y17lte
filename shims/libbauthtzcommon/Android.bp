@@ -1,0 +1,14 @@
+//
+// Copyright (C) 2019 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+// Shim for the missing libbauthtzcommon, which the stock libbauthserver.so is
+// patched to depend on by extract-files.py (add_needed).
+cc_library_shared {
+    name: "libbauthtzcommon_shim",
+    srcs: ["libbauthtzcommon.c"],
+    shared_libs: ["liblog"],
+    vendor: true,
+}
