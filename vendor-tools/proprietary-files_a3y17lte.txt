@@ -1,26 +1,26 @@
 # mcRegistry a3y17lte
 
 # WiFi
-system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin
-system/etc/firmware/bdwlan32.bin:vendor/firmware/bdwlan32.bin
-system/etc/firmware/otp30.bin:vendor/firmware/otp30.bin
-system/etc/firmware/qwlan30.bin:vendor/firmware/qwlan30.bin
-system/etc/firmware/qwlan30_ibss.bin:vendor/firmware/qwlan30_ibss.bin
-system/etc/firmware/utf30.bin:vendor/firmware/utf30.bin
-system/etc/firmware/utfbd30.bin:vendor/firmware/utfbd30.bin
-system/etc/firmware/utfbd32.bin:vendor/firmware/utfbd32.bin
+system/etc/firmware/bdwlan30.bin:vendor/firmware/bdwlan30.bin|8cad7cca89ace1329392256dacc83de9a9238060
+system/etc/firmware/bdwlan32.bin:vendor/firmware/bdwlan32.bin|9b45cea1ca6493c0a4f045e856935bdec261865c
+system/etc/firmware/otp30.bin:vendor/firmware/otp30.bin|61b90ab084fbd938ac285bf480722134434f1d73
+system/etc/firmware/qwlan30.bin:vendor/firmware/qwlan30.bin|3caa6b1aa70285c80d573c6d69789bd038287983
+system/etc/firmware/qwlan30_ibss.bin:vendor/firmware/qwlan30_ibss.bin|832734ed8ae903a1ff52ae80d9841aaaafcdf8d8
+system/etc/firmware/utf30.bin:vendor/firmware/utf30.bin|a020b9450d40f1c0762b7eff94723a9dfcb76610
+system/etc/firmware/utfbd30.bin:vendor/firmware/utfbd30.bin|8cad7cca89ace1329392256dacc83de9a9238060
+system/etc/firmware/utfbd32.bin:vendor/firmware/utfbd32.bin|9b45cea1ca6493c0a4f045e856935bdec261865c
 
 # Bluetooth
-system/etc/firmware/nvm_tlv_tf_1.1.bin:vendor/etc/firmware/nvm_tlv_tf_1.1.bin
-system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv
+system/etc/firmware/nvm_tlv_tf_1.1.bin:vendor/etc/firmware/nvm_tlv_tf_1.1.bin|e714a7295b18eaed39fc5aa678dfe62e59a53a99
+system/etc/firmware/rampatch_tlv_tf_1.1.tlv:vendor/etc/firmware/rampatch_tlv_tf_1.1.tlv|57074ca7debc85d7bd1e903f4550f580a12387fd
 
 # Camera
-system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin
-system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin
-system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin
+system/vendor/firmware/fimc_is_lib.bin:vendor/firmware/fimc_is_lib.bin|7af58197edd677d7f50e558b06b9202b218c585a
+system/vendor/firmware/setfile_imx219.bin:vendor/firmware/setfile_imx219.bin|770aaea4871c9024ba6adc79426c3f596775b388
+system/vendor/firmware/setfile_imx258.bin:vendor/firmware/setfile_imx258.bin|6f9af2a5caa440c142d007d052362d6149f5cb0c
 
 # Sensors
--system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so
+-system/lib/hw/sensors.universal7870.so:vendor/lib/hw/sensors.universal7870.so|e19def67c1b2a748e166e4fd650e152962bfd9ba
 
 # Misc data
-system/etc/firmware/Data.msc:vendor/firmware/Data.msc
+system/etc/firmware/Data.msc:vendor/firmware/Data.msc|969c2b7cb67b9b5c222569b2e7e6db0ad1b5b6e4

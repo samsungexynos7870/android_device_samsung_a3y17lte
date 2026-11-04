@@ -32,10 +32,7 @@ def _proprietary_file(file_list_path: str, vendor_rel_sub_path: str = 'proprieta
 
 
 namespace_imports = [
-    'device/samsung/a3y17lte',
-    'device/samsung/universal7870-common',
     'hardware/samsung',
-    'hardware/lineage/compat',
     'vendor/samsung/a3y17lte',
 ]
 
