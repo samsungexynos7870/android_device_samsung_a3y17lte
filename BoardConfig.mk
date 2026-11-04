@@ -100,10 +100,6 @@ AB_OTA_UPDATER := false
 ## USB
 $(call soong_config_set,samsungUsbGadgetVars,gadget_name,13600000.dwc3)
 
-# Shims
-TARGET_LD_SHIM_LIBS += \
-    /vendor/lib/libbauthserver.so|/vendor/lib/libbauthtzcommon_shim.so
-
 # device sepolicy
 BOARD_SEPOLICY_DIRS := $(LOCAL_PATH)/sepolicy
 
