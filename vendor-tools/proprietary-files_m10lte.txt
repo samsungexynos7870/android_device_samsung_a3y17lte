@@ -1,0 +1,5 @@
+###FILE###:proprietary-files_m10lte.txt
+# M105GDXSACWA1
+
+# TFA9896 amplifier container for a3y17lte
+vendor/etc/Tfa9896.cnt|8e7c02b40c8ee4244a657e1c57c859b06bf7a39a
