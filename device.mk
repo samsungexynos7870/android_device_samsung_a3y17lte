@@ -86,7 +86,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.3-service.a3y17lte
+    android.hardware.biometrics.fingerprint-service.samsung
 
 # Radio (broadcastradio)
 PRODUCT_PACKAGES += \

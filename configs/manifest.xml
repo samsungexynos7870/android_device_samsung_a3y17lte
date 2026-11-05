@@ -54,15 +54,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.configstore</name>
-        <transport>hwbinder</transport>
-        <version>1.1</version>
-        <interface>
-            <name>ISurfaceFlingerConfigs</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.drm</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -147,15 +138,6 @@
         </interface>
         <interface>
             <name>IOmxStore</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.memtrack</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IMemtrack</name>
             <instance>default</instance>
         </interface>
     </hal>
