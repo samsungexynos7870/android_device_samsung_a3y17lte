@@ -133,7 +133,7 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi-service-legacy \
+    android.hardware.wifi-service \
     hostapd \
     libcld80211 \
     libwifi-hal \
