@@ -40,4 +40,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.log.tag.Choreographer=E
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.multisim.simslotcount=1
+    ro.vendor.multisim.simslotcount=1 \
+    ro.vendor.fingerprint.type=home \
+    ro.vendor.fingerprint.max_enrollments=4 \
+    ro.vendor.fingerprint.uses_percentage_samples=true
