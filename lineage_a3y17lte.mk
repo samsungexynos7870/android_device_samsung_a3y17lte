@@ -24,8 +24,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit from a3y17lte device
 $(call inherit-product, device/samsung/a3y17lte/device.mk)
 
+# Development builds: allow adb access without on-device authorization
+WITH_ADB_INSECURE := true
+
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+
+# Keep userdebug builds debuggable (ro.debuggable=1, adbd on by default)
+PRODUCT_NOT_DEBUGGABLE_IN_USERDEBUG := false
 
 # Device identifier. This must come after all inclusions
 
@@ -43,7 +49,9 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.build.PDA=A320FLXXS5CSL5 \
-    ro.build.fingerprint=samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys
+    ro.build.fingerprint=samsung/a3y17ltexc/a3y17lte:8.0.0/R16NW/A320FLXXS5CSL5:user/release-keys \
+    persist.sys.usb.config=adb \
+    persist.adb.notify=0
 
 TARGET_SUPPORTS_BLUR := false
 TARGET_FACE_UNLOCK_SUPPORTED := false
