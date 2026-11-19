@@ -69,7 +69,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 TARGET_KERNEL_CONFIG := exynos7870-a3y17lte_defconfig
 
 # Device Manifest
-DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/configs/manifest.xml
+DEVICE_MANIFEST_FILE += device/samsung/a3y17lte/configs/manifest.xml
 
 # misc
 BUILD_BROKEN_VINTF_PRODUCT_COPY_FILES := true
