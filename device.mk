@@ -43,7 +43,7 @@ TARGET_DEVICE_HAS_SAMSUNG_SLSI_EXYNOS7870 := false
 # qcom wlan
 PRODUCT_SOONG_NAMESPACES += \
     hardware/qcom/wlan \
-    hardware/qcom-caf/wlan
+    hardware/qcom/wlan/legacy
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -133,7 +133,7 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi-service-legacy \
+    android.hardware.wifi-service \
     hostapd \
     libcld80211 \
     libwifi-hal \
