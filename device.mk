@@ -194,3 +194,6 @@ $(call inherit-product, device/samsung/universal7870-common/device-common.mk)
 # $(call inherit-product, device/samsung/universal7870-common/device-prebuilt_bsp-vndk.mk)
 
 $(call inherit-product-if-exists, vendor/samsung/a3y17lte/a3y17lte-vendor.mk)
+
+# Local touch AIDL
+PRODUCT_PACKAGES += vendor.lineage.touch-service.a3y17lte

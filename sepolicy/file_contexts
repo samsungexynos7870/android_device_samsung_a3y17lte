@@ -14,3 +14,6 @@
 /dev/ttySAC0                                          u:object_r:bluetooth_device:s0
 # /dev/rfkill is already labeled rfkill_device by u7870-common sepolicy;
 # do not duplicate the spec here (checkfc rejects identical specs).
+
+# Local touch AIDL
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch-service\.a3y17lte u:object_r:hal_lineage_touch_default_exec:s0

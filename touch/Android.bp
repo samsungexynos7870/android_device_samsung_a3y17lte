@@ -1,0 +1,22 @@
+//
+// SPDX-FileCopyrightText: 2025 The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+cc_binary {
+    name: "vendor.lineage.touch-service.a3y17lte",
+    init_rc: ["vendor.lineage.touch-service.a3y17lte.rc"],
+    relative_install_path: "hw",
+    vendor: true,
+    srcs: [
+        "HighTouchPollingRate.cpp",
+        "KeyDisabler.cpp",
+        "service.cpp",
+    ],
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "liblog",
+        "vendor.lineage.touch-V1-ndk",
+    ],
+}

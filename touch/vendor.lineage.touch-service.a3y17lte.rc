@@ -1,0 +1,12 @@
+on early-init
+    chown system radio /sys/class/sec/tsp/cmd
+    chmod 0664 /sys/class/sec/tsp/cmd
+    chown system system /sys/class/sec/sec_touchkey/input/enabled
+    chmod 0664 /sys/class/sec/sec_touchkey/input/enabled
+
+service vendor.touch-hal.a3y17lte /vendor/bin/hw/vendor.lineage.touch-service.a3y17lte
+    class hal
+    user system
+    group system
+    interface aidl vendor.lineage.touch.IHighTouchPollingRate/default
+    interface aidl vendor.lineage.touch.IKeyDisabler/default
